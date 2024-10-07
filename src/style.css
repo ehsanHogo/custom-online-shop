@@ -5,6 +5,9 @@
 @layer base {
   @font-face {
     font-family: "iranYekan";
+    /* 
+    src: url(./assets/font/5db3ac5ea7935fc78d2897f7cce0c741.ttf)
+      format("truetype"); */
 
     src: url(./assets/font/5db3ac5ea7935fc78d2897f7cce0c741.ttf)
       format("truetype");
