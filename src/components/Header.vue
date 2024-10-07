@@ -1,12 +1,12 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="font-MyFont flex bg-slate-300 px-20 py-1">
-    <button class="flex justify-start items-center gap-1 w-1/6 text-gray9">
+  <div class="flex bg-slate-300 px-20 py-1">
+    <button class="flex justify-start items-center gap-1 w-1/6 text-myGray-9">
       <p class="text-sm">خرید</p>
       <img src="../assets/header/shopping-cart.png" alt="shopping cart" />
     </button>
-    <button class="flex justify-start items-center gap-1 w-1/6 text-gray9">
+    <button class="flex justify-start items-center gap-1 w-1/6 text-myGray-9">
       <p class="text-sm">ورود | ثبت نام</p>
       <img src="../assets/header/Login.png" alt="" />
     </button>
@@ -17,7 +17,7 @@
       <input type="text" class="w-[70%] outline-none" />
       <button class="text-redp">جستجو</button>
     </div>
-    <button class="flex justify-end items-center gap-2 w-1/6 text-gray9">
+    <button class="flex justify-end items-center gap-2 w-1/6 text-myGray-9">
       <div>
         <p>کاستومی</p>
         <p class="text-nowrap">فروشگاه اینترنتی</p>

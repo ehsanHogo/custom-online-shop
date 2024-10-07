@@ -11,10 +11,6 @@ export default {
       // medium: "500",
     },
 
-    colors: {
-      gray9: "#434343",
-      redp: "#A72F3B",
-    },
     borderRadius: {
       none: "0",
       xs: "4px",
@@ -26,7 +22,18 @@ export default {
 
       xl: "32px",
     },
-    extend: {},
+    extend: {
+      colors: {
+        myGray: {
+          9: "#434343",
+          6: "#AFAFAF",
+        },
+        // gray: "#434343",
+        redp: "#A72F3B",
+        primaryShade6: "#641C23",
+        // white: "#fff",
+      },
+    },
   },
   plugins: [],
 };
