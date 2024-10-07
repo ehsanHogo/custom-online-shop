@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <p class="">slaam</p>
+  <p class="font-MyFont">ثبت نام ورود</p>
 </template>
 
 <style scoped></style>
