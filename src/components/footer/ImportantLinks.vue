@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import LinkSection from "./LinkSection.vue";
 
-const withCustomeSectionLinks = [
+const withCustomeSectionLinks: string[] = [
   "فروش محصولات",
   "فرصت های همکاری",
   "تماس با ما",
   "نقشه سایت",
 ];
-const userServicesLinks = [
+const userServicesLinks: string[] = [
   "سوالات متداول",
   "حریم خصوصی",
   "ثبت شکایت",
   "ضمانت نامه محصول",
 ];
-const buyGuidelineLinks = [
+const buyGuidelineLinks: string[] = [
   "راهنمای ثبت سفارش",
   "شیوه های پرداخت",
   "نحوه ارسال سفارش ها",

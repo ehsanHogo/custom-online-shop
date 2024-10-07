@@ -14,9 +14,5 @@ const props = defineProps<Props>();
     <a v-for="(link, index) in props.linkList" :key="index" href="#">{{
       link
     }}</a>
-    <!-- <a href="#">فروش محصولات</a>
-    <a href="#">فرصت های همکاری</a>
-    <a href="#">تماس با ما</a>
-    <a href="#">نقشه سایت</a> -->
   </div>
 </template>
