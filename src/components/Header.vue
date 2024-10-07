@@ -14,13 +14,17 @@
       class="flex justify-between px-2 items-center gap-3 w-3/6 border border-[#AFAFAF] rounded-md"
     >
       <img src="../assets/header/search-normal.png" alt="search" />
-      <input type="text" class="w-[70%] outline-none" />
+      <input
+        type="text"
+        class="w-[70%] outline-none bg-inherit text-black"
+        dir="rtl"
+      />
       <button class="text-redp">جستجو</button>
     </div>
     <button class="flex justify-end items-center gap-2 w-1/6 text-myGray-9">
-      <div>
-        <p>کاستومی</p>
-        <p class="text-nowrap">فروشگاه اینترنتی</p>
+      <div class="flex flex-col">
+        <b>کاستومی</b>
+        <b class="text-nowrap">فروشگاه اینترنتی</b>
       </div>
       <img src="../assets/LOGO.png" alt="online shop logo" />
     </button>
