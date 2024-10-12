@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 interface CardData {
   name: string;
   price: string;
+  description: string;
 }
 
 const productImage = ref<string>("");
@@ -31,6 +32,22 @@ const fetchImage = async (itemName: string) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const extractTextFromString = (htmlString: string) => {
+  // Parse the string into a document
+  // Parse the string into a document
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, "text/html");
+
+  // Extract all <p> elements and get their text content
+  const paragraphs = doc.querySelectorAll("*");
+  const extractedText = Array.from(paragraphs)
+    .map((p) => p.textContent)
+    .join(" "); // Join all paragraphs' text with a space
+
+  // Store the extracted text in a variable and return it
+  return extractedText;
 };
 
 onMounted(() => {
@@ -77,7 +94,9 @@ onMounted(() => {
       <img src="../../assets/body/heart.png" alt="heart icon" />
     </div>
 
-    <!-- <p dir="rtl">{{ item.attributes.description }}</p> -->
+    <p class="truncate ...">
+      {{ extractTextFromString(props.description) }}
+    </p>
     <b>{{ props.price }} </b>
   </div>
 </template>

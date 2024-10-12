@@ -46,6 +46,7 @@ onBeforeMount(() => {
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
+          :description="item.attributes.description"
         ></ShowCards>
       </div>
 
