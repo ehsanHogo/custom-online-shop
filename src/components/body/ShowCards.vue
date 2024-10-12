@@ -22,10 +22,10 @@ const fetchImage = async (itemName: string) => {
     } else {
       const response = await res.json();
 
-      console.log(
-        `included ${itemName} : `,
-        response.included[0].attributes.original_url
-      );
+      //   console.log(
+      //     `included ${itemName} : `,
+      //     response.included[0].attributes.original_url
+      //   );
 
       productImage.value = response.included[0].attributes.original_url;
     }
@@ -35,49 +35,21 @@ const fetchImage = async (itemName: string) => {
 };
 
 const extractTextFromString = (htmlString: string) => {
-  // Parse the string into a document
-  // Parse the string into a document
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlString, "text/html");
 
-  // Extract all <p> elements and get their text content
   const paragraphs = doc.querySelectorAll("*");
+
   const extractedText = Array.from(paragraphs)
     .map((p) => p.textContent)
-    .join(" "); // Join all paragraphs' text with a space
+    .join(" ");
 
-  // Store the extracted text in a variable and return it
   return extractedText;
 };
 
 onMounted(() => {
   fetchImage(props.name);
-  //   console.log();
 });
-
-// const fetchData = async () => {
-//   try {
-//     const res = await fetch(
-//       "https://demo.spreecommerce.org/api/v2/storefront/products",
-//       { method: "GET" }
-//     );
-
-//     if (!res.ok) {
-//       throw Error("error in fetch");
-//     } else {
-//       const response = await res.json();
-//       console.log(response.data);
-
-//       dataFetched.value = response.data;
-//     }
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
-
-// onMounted(() => {
-//   fetchData();
-// });
 </script>
 
 <template>

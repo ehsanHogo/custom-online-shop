@@ -19,7 +19,7 @@ const categories: string[] = [
     >
       {{ cat }}
     </button>
-    <button class="bg-redp flex p-1 rounded-sm">
+    <button class="bg-redp flex p-2 rounded-sm">
       <p class="text-white">!خودت طراحیش کن</p>
       <img src="../assets/body/magicpen.png" alt="" />
     </button>
