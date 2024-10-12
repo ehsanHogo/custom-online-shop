@@ -1,42 +1,52 @@
 <script setup lang="ts">
 import Filter from "./Filter.vue";
-import { ref } from "vue";
+import ShowCards from "./ShowCards.vue";
+import { onBeforeMount, onMounted, ref } from "vue";
+
+import Cattegories from "./Cattegories.vue";
 
 const value1 = ref(false);
 const value2 = ref(false);
-const categories: string[] = [
-  "پوشاک",
-  "لوازم خانه",
-  "قاب موبایل",
-  "اکسسوری",
-  "مدرسه و اداره",
-  "کارت و پوستر",
-  "جشن و مهمانی",
-];
+
+const dataFetched = ref();
+
+const fetchData = async () => {
+  try {
+    const res = await fetch(
+      "https://demo.spreecommerce.org/api/v2/storefront/products",
+      { method: "GET" }
+    );
+
+    if (!res.ok) {
+      throw Error("error in fetch");
+    } else {
+      const response = await res.json();
+      console.log(response.data);
+
+      dataFetched.value = response.data;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+onBeforeMount(() => {
+  fetchData();
+});
 </script>
 
 <template>
   <div class="p-5">
-    <div class="flex justify-around">
-      <button
-        v-for="(cat, index) in categories"
-        :key="index"
-        class="text-myGray-9"
-      >
-        {{ cat }}
-      </button>
-      <button class="bg-redp flex p-1 rounded-sm">
-        <p class="text-white">!خودت طراحیش کن</p>
-        <img src="../assets/body/magicpen.png" alt="" />
-      </button>
-    </div>
+    <Cattegories></Cattegories>
 
     <div class="grid grid-cols-4 p-5 gap-4">
-      <div class="bg-blue-600 col-span-3">
-        <p>Lorem ipsum dolor sit amet.</p>
-        <p>Lorem ipsum dolor sit amet.</p>
-        <p>Lorem ipsum dolor sit amet.</p>
-        <p>Lorem ipsum dolor sit amet.</p>
+      <div class="col-span-3 grid grid-cols-3 gap-3">
+        <ShowCards
+          v-for="(item, index) in dataFetched"
+          :key="index"
+          :name="item.attributes.slug"
+          :price="item.attributes.display_price"
+        ></ShowCards>
       </div>
 
       <Filter></Filter>
