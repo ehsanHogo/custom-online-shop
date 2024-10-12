@@ -20,7 +20,7 @@ const filterButtons: string[] = [
 </script>
 
 <template>
-  <div class="">
+  <div class="p-5">
     <div class="flex justify-around">
       <button
         v-for="(cat, index) in categories"
@@ -35,7 +35,7 @@ const filterButtons: string[] = [
       </button>
     </div>
 
-    <div class="grid grid-cols-4">
+    <div class="grid grid-cols-4 p-5 gap-4">
       <div class="bg-blue-600 col-span-3">
         <p>Lorem ipsum dolor sit amet.</p>
         <p>Lorem ipsum dolor sit amet.</p>
@@ -43,17 +43,17 @@ const filterButtons: string[] = [
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
 
-      <div class="col-span-1">
-        <div class="flex justify-around">
+      <div class="col-span-1 border rounded-sm p-3 flex flex-col gap-3">
+        <div class="flex justify-between">
           <p>حذف فیلتر ها</p>
           <p>فیلتر ها</p>
         </div>
 
-        <div class="flex flex-col">
+        <div class="flex flex-col gap-3">
           <button
             v-for="(filterButton, index) in filterButtons"
             :key="index"
-            class="flex justify-between px-16"
+            class="flex justify-between border-b last:border-none"
           >
             <img src="../assets/body/arrow-down.png" alt="" />
             <p>{{ filterButton }}</p>
