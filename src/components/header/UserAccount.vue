@@ -1,6 +1,6 @@
 <template>
   <button class="flex justify-start items-center gap-1 text-myGray-9">
-    <b class="text-sm">خرید</b>
+    <b class="text-sm">سبد خرید</b>
 
     <div class="flex items-center">
       <img src="../../assets/header/shopping-cart.png" alt="shopping cart" />
@@ -13,6 +13,6 @@
   </button>
   <button class="flex justify-start items-center gap-1 text-myGray-9">
     <b class="text-sm">ورود | ثبت نام</b>
-    <img src="../../assets/header/Login.png" alt="" />
+    <img src="../../assets/header/Login.png" alt="login logo" />
   </button>
 </template>

@@ -15,7 +15,7 @@ const changeItem = (index: number) => {
 </script>
 
 <template>
-  <div class="flex gap-5 col-span-3 mb-3" dir="rtl">
+  <div class="justify-start flex gap-5 col-span-3 mb-3 items-start" dir="rtl">
     <button
       @click="changeItem(index)"
       v-for="(item, index) in sortItems"

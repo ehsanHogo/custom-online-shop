@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 
-// const dataFetched = ref();
 interface CardData {
   name: string;
   price: string;
   description: string;
-  // currentPage: number;
 }
 
 const productImage = ref<string>("");

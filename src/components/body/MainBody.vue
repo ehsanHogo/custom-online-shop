@@ -7,10 +7,15 @@ import Pagination from "./Pagination.vue";
 
 import Cattegories from "./Cattegories.vue";
 
-const value1 = ref(false);
-const value2 = ref(false);
-
-const dataFetched = ref([]);
+interface DataFetchType {
+  attributes: {
+    name: string;
+    slug: string;
+    description: string;
+    display_price: string;
+  };
+}
+const dataFetched = ref<DataFetchType[]>([]);
 
 const fetchData = async () => {
   try {
@@ -32,10 +37,10 @@ const fetchData = async () => {
   }
 };
 
-const currentPage = ref(1); // Create a reactive variable for parent data
+const currentPage = ref(1); // recieve update from child
 
 const receiveData = (data: number) => {
-  currentPage.value = data; // Handle the data from the child
+  currentPage.value = data;
 };
 
 onBeforeMount(() => {
@@ -68,10 +73,8 @@ onBeforeMount(() => {
     <Pagination
       :pagesNum="5"
       :stepNum="2"
-      @data-sent="receiveData"
+      @data-page="receiveData"
     ></Pagination>
-
-    {{ currentPage }}
   </div>
 </template>
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import leftArrow from "../../assets/body/arrow-left.png";
 
 interface MyProps {
   pagesNum: number;
@@ -8,12 +7,12 @@ interface MyProps {
 }
 const props = defineProps<MyProps>();
 
-const emit = defineEmits(["data-sent"]); // Declare emitted events
+const emit = defineEmits(["data-page"]);
 
 const sendDataToParent = (pageData: number) => {
-  emit("data-sent", pageData); // Emit the event with data
+  emit("data-page", pageData);
 };
-// manual set
+// manual setting
 const currentPage = ref(1);
 const totalPage = props.pagesNum;
 const stepSize = props.stepNum;
@@ -30,7 +29,6 @@ const firstPageIndex = computed(() => {
   }
 });
 
-// Generate pages excluding the first and last for central pages
 const pages = [...Array(totalPage - 2)].map((_, i) => i + 2);
 
 const changePage = (page: number) => {
@@ -47,8 +45,6 @@ const changePage = (page: number) => {
 };
 
 watch(currentPage, (newval, _) => {
-  // console.log("here", newval);
-
   sendDataToParent(newval);
 });
 
