@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Contact from "./Contact.vue";
-import ImportantLinks from "./ImportantInfo.vue"
+import ImportantInfo from "./ImportantInfo.vue";
 </script>
 
 <template>
   <div class="flex flex-col">
     <Contact></Contact>
 
-    <ImportantLinks></ImportantLinks>
+    <ImportantInfo></ImportantInfo>
   </div>
 </template>
 
