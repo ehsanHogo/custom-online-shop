@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Filter from "./Filter.vue";
 import ShowCards from "./ShowCards.vue";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 
