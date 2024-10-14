@@ -14,13 +14,26 @@ interface DataFetchType {
     description: string;
     display_price: string;
   };
+  relationships: {
+    images: {
+      data: { id: string; type: string }[];
+    };
+  };
+}
+
+interface IncludedFetchType {
+  attributes: {
+    original_url: string;
+  };
+  id: string;
 }
 const dataFetched = ref<DataFetchType[]>([]);
+const includedFetched = ref<IncludedFetchType[]>([]);
 
 const fetchData = async () => {
   try {
     const res = await fetch(
-      "https://demo.spreecommerce.org/api/v2/storefront/products",
+      "https://demo.spreecommerce.org/api/v2/storefront/products?include=images",
       { method: "GET" }
     );
 
@@ -29,6 +42,8 @@ const fetchData = async () => {
     } else {
       const response = await res.json();
       console.log(response.data);
+      console.log(response);
+      includedFetched.value = response.included;
 
       dataFetched.value = response.data;
     }
@@ -41,6 +56,14 @@ const currentPage = ref(1); // recieve update from child
 
 const receiveData = (data: number) => {
   currentPage.value = data;
+};
+
+const findImageUrl = (imageId: string) => {
+  // console.log("sdfjksj : ", includedFetched);
+  const resultItem = includedFetched.value.filter((item) => {
+    return item.id === imageId;
+  });
+  return resultItem[0].attributes.original_url;
 };
 
 onBeforeMount(() => {
@@ -64,6 +87,7 @@ onBeforeMount(() => {
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
           :description="item.attributes.description"
+          :imageUrl="findImageUrl(item.relationships.images.data[0].id)"
         ></ShowCards>
       </div>
 

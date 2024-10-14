@@ -1,32 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
-
 interface CardData {
   name: string;
   price: string;
   description: string;
+  imageUrl: string;
 }
 
-const productImage = ref<string>("");
-
 const props = defineProps<CardData>();
-
-const fetchImage = async (itemName: string) => {
-  try {
-    const res = await fetch(
-      `https://demo.spreecommerce.org/api/v2/storefront/products/${itemName}?include=images`
-    );
-    if (!res.ok) {
-      throw Error("error in fetch");
-    } else {
-      const response = await res.json();
-
-      productImage.value = response.included[0].attributes.original_url;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const extractTextFromString = (htmlString: string) => {
   const parser = new DOMParser();
@@ -40,14 +20,6 @@ const extractTextFromString = (htmlString: string) => {
 
   return extractedText;
 };
-
-onMounted(() => {
-  fetchImage(props.name);
-});
-
-watch(props, (newVal) => {
-  fetchImage(newVal.name);
-});
 </script>
 
 <template>
@@ -56,7 +28,7 @@ watch(props, (newVal) => {
   >
     <img
       class="rounded-sm h-[200px]"
-      :src="productImage"
+      :src="props.imageUrl"
       alt="product picture"
     />
     <div class="flex justify-between">
