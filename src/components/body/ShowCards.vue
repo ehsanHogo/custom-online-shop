@@ -63,7 +63,9 @@ onMounted(() => {
     />
     <div class="flex justify-between">
       <b>{{ props.name }}</b>
-      <img src="../../assets/body/heart.png" alt="heart icon" />
+      <button>
+        <img src="../../assets/body/heart.png" alt="heart icon" />
+      </button>
     </div>
 
     <p class="truncate ...">

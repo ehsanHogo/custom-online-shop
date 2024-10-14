@@ -1,1 +1,7 @@
 how to make reusable component ex : filter
+
+
+
+
+pagination 
+سبد خرید

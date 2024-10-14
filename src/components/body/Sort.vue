@@ -26,6 +26,7 @@ const changeItem = (index: number) => {
       <p
         :class="{
           'text-redp pb-1': index + 1 === selectedSortItem,
+          'text-myGray-10': index + 1 !== selectedSortItem,
         }"
       >
         {{ item }}

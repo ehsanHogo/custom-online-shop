@@ -18,9 +18,9 @@ const filterButtons: string[] = [
 </script>
 
 <template>
-  <div class="col-span-1 border rounded-sm p-5 flex flex-col gap-5">
+  <div class="col-span-1 border rounded-sm p-5 flex flex-col gap-5 h-fit">
     <div class="flex justify-between">
-      <b class="text-redp">حذف فیلتر ها</b>
+      <button><b class="text-redp">حذف فیلتر ها</b></button>
       <b>فیلتر ها</b>
     </div>
 
@@ -28,7 +28,7 @@ const filterButtons: string[] = [
       <button
         v-for="(filterButton, index) in filterButtons"
         :key="index"
-        class="flex justify-between border-b last:border-none"
+        class="flex justify-between border-b last:border-none pb-2"
       >
         <VaSwitch size="small" v-if="index === 3" v-model="value1" />
         <VaSwitch size="small" v-else-if="index === 4" v-model="value2" />

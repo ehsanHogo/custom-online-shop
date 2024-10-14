@@ -25,8 +25,14 @@ export default {
     extend: {
       colors: {
         myGray: {
+          4: "#D6D6D6",
+          8: "#656565",
           9: "#434343",
           6: "#AFAFAF",
+          10: "#242424",
+        },
+        Tint: {
+          5: "#DCACB1",
         },
         // gray: "#434343",
         redp: "#A72F3B",

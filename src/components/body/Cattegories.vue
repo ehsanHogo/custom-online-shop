@@ -17,7 +17,7 @@ const categories: string[] = [
       :key="index"
       class="text-myGray-9"
     >
-      {{ cat }}
+      <b> {{ cat }}</b>
     </button>
     <button class="bg-redp flex p-2 rounded-sm">
       <p class="text-white">!خودت طراحیش کن</p>

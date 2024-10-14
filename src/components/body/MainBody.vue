@@ -3,6 +3,7 @@ import Filter from "./Filter.vue";
 import ShowCards from "./ShowCards.vue";
 import { onBeforeMount, onMounted, ref } from "vue";
 import Sort from "./Sort.vue";
+import Pagination from "./Pagination.vue";
 
 import Cattegories from "./Cattegories.vue";
 
@@ -42,7 +43,7 @@ onBeforeMount(() => {
 
     <div class="grid grid-cols-4 p-5 gap-4">
       <div class="col-span-3 grid grid-cols-3 gap-3">
-        <Sort ></Sort>
+        <Sort></Sort>
         <ShowCards
           v-for="(item, index) in dataFetched"
           :key="index"
@@ -54,6 +55,8 @@ onBeforeMount(() => {
 
       <Filter></Filter>
     </div>
+
+    <Pagination></Pagination>
   </div>
 </template>
 
