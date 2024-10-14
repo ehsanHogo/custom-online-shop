@@ -10,7 +10,7 @@ import Cattegories from "./Cattegories.vue";
 const value1 = ref(false);
 const value2 = ref(false);
 
-const dataFetched = ref();
+const dataFetched = ref([]);
 
 const fetchData = async () => {
   try {
@@ -32,6 +32,12 @@ const fetchData = async () => {
   }
 };
 
+const currentPage = ref(1); // Create a reactive variable for parent data
+
+const receiveData = (data: number) => {
+  currentPage.value = data; // Handle the data from the child
+};
+
 onBeforeMount(() => {
   fetchData();
 });
@@ -45,7 +51,10 @@ onBeforeMount(() => {
       <div class="col-span-3 grid grid-cols-3 gap-3">
         <Sort></Sort>
         <ShowCards
-          v-for="(item, index) in dataFetched"
+          v-for="(item, index) in dataFetched.slice(
+            (currentPage - 1) * 6,
+            (currentPage - 1) * 6 + 6
+          )"
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
@@ -56,7 +65,13 @@ onBeforeMount(() => {
       <Filter></Filter>
     </div>
 
-    <Pagination></Pagination>
+    <Pagination
+      :pagesNum="5"
+      :stepNum="2"
+      @data-sent="receiveData"
+    ></Pagination>
+
+    {{ currentPage }}
   </div>
 </template>
 

@@ -1,67 +1,80 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import leftArrow from "../../assets/body/arrow-left.png";
 
-const currentPage = ref(1);
-const totalPage = 50;
-const firstPageIndex = ref(0);
-const firstPage = ref(1);
-const lastPageIndex = ref(8);
-const lastPage = ref(10);
+interface MyProps {
+  pagesNum: number;
+  stepNum: number;
+}
+const props = defineProps<MyProps>();
 
+const emit = defineEmits(["data-sent"]); // Declare emitted events
+
+const sendDataToParent = (pageData: number) => {
+  emit("data-sent", pageData); // Emit the event with data
+};
+// manual set
+const currentPage = ref(1);
+const totalPage = props.pagesNum;
+const stepSize = props.stepNum;
+
+// general
+const firstPage = ref(1);
+const lastPage = ref(Math.min(stepSize, totalPage));
+const lastPageIndex = computed(() => lastPage.value - 1);
+const firstPageIndex = computed(() => {
+  if (firstPage.value === 1) {
+    return firstPage.value - 1;
+  } else {
+    return firstPage.value - 2;
+  }
+});
+
+// Generate pages excluding the first and last for central pages
 const pages = [...Array(totalPage - 2)].map((_, i) => i + 2);
-console.log(pages);
 
 const changePage = (page: number) => {
   if (page === 1) {
+    // Reset to the first set of pages
     firstPage.value = 1;
-    lastPage.value = 10;
-    firstPageIndex.value = 0;
-    lastPageIndex.value = 8;
-  } else if (page === 50) {
-    firstPage.value = 41;
-    lastPage.value = 50;
-    firstPageIndex.value = 39;
-    lastPageIndex.value = 48;
+    lastPage.value = Math.min(stepSize, totalPage);
+  } else if (page === totalPage) {
+    // Show the last set of pages
+    firstPage.value = Math.max(1, totalPage - stepSize + 1);
+    lastPage.value = totalPage;
   }
   currentPage.value = page;
 };
 
-const nextPage = () => {
-  if (currentPage.value !== totalPage) {
-    if (currentPage.value === lastPage.value) {
-      firstPageIndex.value = lastPageIndex.value + 1;
-      lastPageIndex.value = lastPageIndex.value + 10;
+watch(currentPage, (newval, _) => {
+  // console.log("here", newval);
 
-      firstPage.value = lastPage.value + 1;
-      lastPage.value = lastPage.value + 10;
+  sendDataToParent(newval);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPage) {
+    currentPage.value++;
+    if (currentPage.value > lastPage.value) {
+      firstPage.value += stepSize;
+      lastPage.value = Math.min(totalPage, lastPage.value + stepSize);
     }
-    currentPage.value = currentPage.value + 1;
   }
 };
 
 const prevPage = () => {
-  console.log("current : ", currentPage.value);
-  console.log("firstIndex : ", firstPageIndex.value);
-
-  if (currentPage.value !== 1) {
-    if (currentPage.value === firstPage.value) {
-      lastPageIndex.value = firstPageIndex.value - 1;
-      if (firstPage.value === 11) {
-        firstPageIndex.value = firstPageIndex.value - 9;
-      } else {
-        firstPageIndex.value = firstPageIndex.value - 10;
-      }
-
-      lastPage.value = firstPage.value - 1;
-      firstPage.value = firstPage.value - 10;
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    if (currentPage.value < firstPage.value) {
+      firstPage.value = Math.max(1, firstPage.value - stepSize);
+      lastPage.value = firstPage.value + stepSize - 1;
     }
-    currentPage.value = currentPage.value - 1;
   }
 };
 
+// Slice pages to display in pagination bar
 const slicePages = computed(() =>
-  pages.slice(firstPageIndex.value, lastPageIndex.value + 1)
+  pages.slice(firstPageIndex.value, lastPageIndex.value)
 );
 </script>
 

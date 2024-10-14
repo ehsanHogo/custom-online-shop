@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 // const dataFetched = ref();
 interface CardData {
   name: string;
   price: string;
   description: string;
+  // currentPage: number;
 }
 
 const productImage = ref<string>("");
@@ -21,11 +22,6 @@ const fetchImage = async (itemName: string) => {
       throw Error("error in fetch");
     } else {
       const response = await res.json();
-
-      //   console.log(
-      //     `included ${itemName} : `,
-      //     response.included[0].attributes.original_url
-      //   );
 
       productImage.value = response.included[0].attributes.original_url;
     }
@@ -49,6 +45,10 @@ const extractTextFromString = (htmlString: string) => {
 
 onMounted(() => {
   fetchImage(props.name);
+});
+
+watch(props, (newVal) => {
+  fetchImage(newVal.name);
 });
 </script>
 
