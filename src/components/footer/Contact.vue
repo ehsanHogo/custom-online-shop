@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div class="flex bg-primaryShade6 w-full h-36 justify-around">
+  <div class="flexbg-primaryShade6 w-full h-35 justify-around">
     <div class="flex flex-col justify-center gap-4">
       <p class="text-white">ما را در شبکه های اجتماعی دنبال کنید</p>
       <div class="flex justify-center items-center gap-3">
