@@ -7,6 +7,7 @@ import Pagination from "./Pagination.vue";
 
 import Cattegories from "./Cattegories.vue";
 
+type SortType = "price" | "created" | "none";
 interface DataFetchType {
   attributes: {
     name: string;
@@ -29,13 +30,22 @@ interface IncludedFetchType {
 }
 const dataFetched = ref<DataFetchType[]>([]);
 const includedFetched = ref<IncludedFetchType[]>([]);
+const holeQuery = ref(
+  "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
+);
 
-const fetchData = async () => {
+const fetchData = async (sort: SortType) => {
+  let query = "";
+  if (sort === "none") {
+    query =
+      "https://demo.spreecommerce.org/api/v2/storefront/products?include=images";
+  } else if (sort === "price") {
+    query =
+      "https://demo.spreecommerce.org/api/v2/storefront/products?sort=price&include=images";
+  }
+
   try {
-    const res = await fetch(
-      "https://demo.spreecommerce.org/api/v2/storefront/products?include=images",
-      { method: "GET" }
-    );
+    const res = await fetch(`${query}`, { method: "GET" });
 
     if (!res.ok) {
       throw Error("error in fetch");
@@ -59,15 +69,22 @@ const receiveData = (data: number) => {
 };
 
 const findImageUrl = (imageId: string) => {
+  if (imageId === null || imageId === undefined) {
+    return "";
+  }
   // console.log("sdfjksj : ", includedFetched);
   const resultItem = includedFetched.value.filter((item) => {
     return item.id === imageId;
   });
-  return resultItem[0].attributes.original_url;
+  if (resultItem !== null || resultItem !== undefined) {
+    return resultItem[0].attributes.original_url;
+  } else {
+    return "";
+  }
 };
 
 onBeforeMount(() => {
-  fetchData();
+  fetchData("price");
 });
 </script>
 
@@ -87,7 +104,7 @@ onBeforeMount(() => {
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
           :description="item.attributes.description"
-          :imageUrl="findImageUrl(item.relationships.images.data[0].id)"
+          :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
         ></ShowCards>
       </div>
 

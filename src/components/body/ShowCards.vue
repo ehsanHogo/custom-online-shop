@@ -1,12 +1,17 @@
 <script setup lang="ts">
 interface CardData {
-  name: string;
-  price: string;
-  description: string;
-  imageUrl: string;
+  name?: string;
+  price?: string;
+  description?: string;
+  imageUrl?: string;
 }
 
-const props = defineProps<CardData>();
+const props = withDefaults(defineProps<CardData>(), {
+  name: "",
+  price: "",
+  description: "",
+  imageUrl: "",
+});
 
 const extractTextFromString = (htmlString: string) => {
   const parser = new DOMParser();
