@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 const categories: string[] = [
   "پوشاک",
   "لوازم خانه",

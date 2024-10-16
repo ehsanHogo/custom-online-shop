@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { SortType } from "./MainBody.vue";
 
-const sortItems = [
-  "پربازدیدترین",
-  "جدیدترین",
-  "پرفروش ترین",
-  "گران ترین",
-  "ارزان ترین",
+const emit = defineEmits(["data-sort"]);
+
+interface SortItems {
+  name: string;
+  sortName: SortType;
+}
+const sortItems: SortItems[] = [
+  // "پربازدیدترین",
+  { name: "پرفروش ترین", sortName: "none" },
+  { name: "جدیدترین", sortName: "new-created" },
+  { name: "گران ترین", sortName: "price-expensive" },
+  { name: "ارزان ترین", sortName: "price-cheap" },
 ];
 const selectedSortItem = ref(1);
 const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
+  sendDataToParrent(sortItems[index]);
+};
+
+const sendDataToParrent = (newSortItem: SortItems) => {
+  emit("data-sort", newSortItem.sortName);
 };
 </script>
 
@@ -29,7 +41,7 @@ const changeItem = (index: number) => {
           'text-myGray-10': index + 1 !== selectedSortItem,
         }"
       >
-        {{ item }}
+        {{ item.name }}
       </p>
     </button>
   </div>

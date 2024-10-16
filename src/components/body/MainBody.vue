@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import Filter from "./Filter.vue";
 import ShowCards from "./ShowCards.vue";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 
 import Cattegories from "./Cattegories.vue";
 
-type SortType = "price" | "created" | "none";
+export type SortType =
+  | "price-cheap"
+  | "price-expensive"
+  | "new-created"
+  | "none";
 interface DataFetchType {
   attributes: {
     name: string;
@@ -39,9 +43,15 @@ const fetchData = async (sort: SortType) => {
   if (sort === "none") {
     query =
       "https://demo.spreecommerce.org/api/v2/storefront/products?include=images";
-  } else if (sort === "price") {
+  } else if (sort === "price-cheap") {
     query =
       "https://demo.spreecommerce.org/api/v2/storefront/products?sort=price&include=images";
+  } else if (sort === "price-expensive") {
+    query =
+      "https://demo.spreecommerce.org/api/v2/storefront/products?sort=-price&include=images";
+  } else if (sort === "new-created") {
+    query =
+      "https://demo.spreecommerce.org/api/v2/storefront/products?sort=-created_at&include=images";
   }
 
   try {
@@ -64,7 +74,7 @@ const fetchData = async (sort: SortType) => {
 
 const currentPage = ref(1); // recieve update from child
 
-const receiveData = (data: number) => {
+const receivePageData = (data: number) => {
   currentPage.value = data;
 };
 
@@ -83,8 +93,17 @@ const findImageUrl = (imageId: string) => {
   }
 };
 
+const sortField = ref<SortType>("none");
+const receiveSortData = (data: SortType) => {
+  sortField.value = data;
+};
+
 onBeforeMount(() => {
-  fetchData("price");
+  fetchData(sortField.value);
+});
+
+watch(sortField, (newVal) => {
+  fetchData(newVal);
 });
 </script>
 
@@ -94,7 +113,7 @@ onBeforeMount(() => {
 
     <div class="grid grid-cols-4 p-5 gap-4">
       <div class="col-span-3 grid grid-cols-3 gap-3">
-        <Sort></Sort>
+        <Sort @data-sort="receiveSortData"></Sort>
         <ShowCards
           v-for="(item, index) in dataFetched.slice(
             (currentPage - 1) * 6,
@@ -114,7 +133,7 @@ onBeforeMount(() => {
     <Pagination
       :pagesNum="5"
       :stepNum="2"
-      @data-page="receiveData"
+      @data-page="receivePageData"
     ></Pagination>
   </div>
 </template>
