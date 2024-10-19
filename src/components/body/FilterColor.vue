@@ -8,32 +8,50 @@ const props = defineProps<MyProps>();
 const filterList = ref(
   props.filterColorData.map((item) => ({
     ...item,
-    open: false, // default value for the new property
+    open: false,
   }))
 );
 
-const emit = defineEmits(["data-fetched"]);
+const emit = defineEmits(["data-criteria"]);
 
-const sendDatatoParrent = (data: DataFetchType[]) => {
-  emit("data-fetched", data);
+// const sendDatatoParrent = (data: DataFetchType[]) => {
+//   emit("data-fetched", data);
+// };
+const sendDatatoParrent = (
+  criteria: string,
+  criteriaType: string,
+  criteriaId: string,
+  action: string
+) => {
+  emit("data-criteria", criteria, criteriaType, criteriaId, action);
 };
-const fetchFilteredData = async (filterName: string) => {
-  const res = await fetch(
-    `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][color]=${filterName}`
-  );
 
-  const data = await res.json();
-
-  console.log(data);
-  sendDatatoParrent(data.data);
-};
 
 const updateOpenFlag = (index: number, event: Event) => {
-  console.log((event.target as HTMLInputElement).checked);
+//   console.log((event.target as HTMLInputElement).checked);
+//   if ((event.target as HTMLInputElement).checked)
+//     fetchFilteredData(filterList.value[index].name);
+//   console.log(index);
+// };
+
+console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
-    fetchFilteredData(filterList.value[index].name);
+    sendDatatoParrent(
+      filterList.value[index].name,
+      "color",
+      filterList.value[index].id,
+      "add"
+    );
+  else {
+    sendDatatoParrent(
+      filterList.value[index].name,
+      "color",
+      filterList.value[index].id,
+      "remove"
+    );
+  }
   console.log(index);
-};
+}
 // const text = ref(true);
 </script>
 

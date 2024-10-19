@@ -23,6 +23,11 @@ const sendDatatoParrent = (
   emit("data-criteria", criteria, criteriaType, criteriaId, action);
 };
 
+
+
+
+
+
 const updateOpenFlag = (index: number, event: Event) => {
   console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
