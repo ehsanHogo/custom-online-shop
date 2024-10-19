@@ -29,6 +29,7 @@ export interface IncludedFetchType {
 export interface FilterItem {
   name: string;
   presentation: string;
+  id: string;
 }
 
 export interface FilterType {

@@ -19,18 +19,29 @@ const emit = defineEmits(["data-criteria"]);
 const sendDatatoParrent = (
   criteria: string,
   criteriaType: string,
+  criteriaId: string,
   action: string
 ) => {
-  emit("data-criteria", criteria, criteriaType, action);
+  emit("data-criteria", criteria, criteriaType, criteriaId, action);
 };
 
 const updateOpenFlag = (index: number, event: Event) => {
   console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
     // fetchFilteredData(filterList.value[index].name);
-    sendDatatoParrent(filterList.value[index].name, "size", "add");
+    sendDatatoParrent(
+      filterList.value[index].name,
+      "size",
+      filterList.value[index].id,
+      "add"
+    );
   else {
-    sendDatatoParrent(filterList.value[index].name, "size", "remove");
+    sendDatatoParrent(
+      filterList.value[index].name,
+      "size",
+      filterList.value[index].id,
+      "remove"
+    );
   }
   console.log(index);
 };

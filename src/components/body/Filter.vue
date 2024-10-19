@@ -39,20 +39,21 @@ const setOpen = (index: number) => {
   filterButtons[index].open.value = !filterButtons[index].open.value;
 };
 
-interface CriteriaItemType {
-  name: string;
-  data: DataFetchType[];
-}
+// interface CriteriaItemType {
+//   name: string;
+//   data: DataFetchType[];
+// }
 interface FilterCriteriaType {
-  filterType: string;
-  options: CriteriaItemType[];
+  criteriaId: string;
+  data: DataFetchType[];
 }
 const filterCriterias = ref<FilterCriteriaType[]>([]);
 // const filteredData = ref<DataFetchType[]>([]);
 const filterList = ref<DataFetchType[]>([]);
 const fetchFilteredData = async (
   filterType: string,
-  filterCriteria: string
+  filterCriteria: string,
+  criteriaId: string
 ) => {
   const res = await fetch(
     `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][${filterType}]=${filterCriteria}`
@@ -62,45 +63,51 @@ const fetchFilteredData = async (
 
   console.log(data.data);
 
-  let prevOptions: CriteriaItemType[] = [];
-  prevOptions = filterCriterias.value.map((item) => {
-    if (item.filterType === filterType) {
-      if (item.options.length !== 0) return item.options;
-    }
-  });
-  if (prevOptions.length === 0) {
-    filterCriterias.value.push({
-      filterType: filterType,
-      options: [
-        {
-          name: filterCriteria,
-          data: data.data,
-        },
-      ],
-    });
-  } else {
-    filterCriterias.value.push({
-      filterType: filterType,
-      options: prevOptions.concat([
-        {
-          name: filterCriteria,
-          data: data.data,
-        },
-      ]),
-    });
-  }
+  // let prevOptions: CriteriaItemType[] = []
+  //    prevOptions  = filterCriterias.value.map((item) => {
+  //   if (item.filterType === filterType) {
+  //     if (item.options.length !== 0) return item.options;
+  //   }
+  // });
+  // if (prevOptions.length === 0) {
+  //   filterCriterias.value.push({
+  //     filterType: filterType,
+  //     options: [
+  //       {
+  //         name: filterCriteria,
+  //         data: data.data,
+  //       },
+  //     ],
+  //   });
+  // } else {
+  //   filterCriterias.value.push({
+  //     filterType: filterType,
+  //     options: prevOptions.concat([
+  //       {
+  //         name: filterCriteria,
+  //         data: data.data,
+  //       },
+  //     ]),
+  //   });
+  // }
 
-  console.log(filterCriterias.value);
+  // console.log(filterCriterias.value);
 
   // filteredData.value = filteredData.value.concat(data.data);
   // console.log(filteredData.value);
 
-  filterCriterias.value.forEach((item) => {
-    filterList.value = filterList.value.concat(item.options.
-      
-    );
+  // filterCriterias.value.forEach((item) => {
+  //   filterList.value = filterList.value.concat(item.options.data);
+  // });
+
+  filterCriterias.value.push({
+    criteriaId: criteriaId,
+    data: data.data,
   });
 
+  filterCriterias.value.forEach((item) => {
+    filterList.value = filterList.value.concat(item.data);
+  });
   console.log(filterList.value);
 
   emit("data-fetched", filterList.value);
@@ -109,14 +116,24 @@ const fetchFilteredData = async (
 const recieveCriteria = (
   criteria: string,
   criteriaType: string,
+  criteriaId: string,
   action: string
 ) => {
   // filterCriterias.value.push('');
-  if (action === "add") fetchFilteredData(criteriaType, criteria);
+  if (action === "add") fetchFilteredData(criteriaType, criteria, criteriaId);
   else if (action === "remove") {
-    filterList.value = filterCriterias.value.filter((item) => {
-      return item.filterType !== criteriaType && item.options;
+    filterCriterias.value = filterCriterias.value.filter((item) => {
+      return item.criteriaId !== criteriaId;
     });
+
+    console.log(filterCriterias.value);
+    filterList.value = [];
+    filterCriterias.value.forEach((item) => {
+      filterList.value = filterList.value.concat(item.data);
+    });
+    // console.log(filterList.value);
+
+    emit("data-fetched", filterList.value);
   }
 };
 </script>
