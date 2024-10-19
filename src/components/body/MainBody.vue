@@ -32,6 +32,8 @@ interface IncludedFetchType {
   };
   id: string;
 }
+
+const loading = ref(true);
 const dataFetched = ref<DataFetchType[]>([]);
 const includedFetched = ref<IncludedFetchType[]>([]);
 const holeQuery = ref(
@@ -54,6 +56,8 @@ const fetchData = async (sort: SortType) => {
       "https://demo.spreecommerce.org/api/v2/storefront/products?sort=-created_at&include=images";
   }
 
+  console.log(query);
+
   try {
     const res = await fetch(`${query}`, { method: "GET" });
 
@@ -61,11 +65,12 @@ const fetchData = async (sort: SortType) => {
       throw Error("error in fetch");
     } else {
       const response = await res.json();
-      console.log(response.data);
-      console.log(response);
+      // console.log(response.data);
+      // console.log(response);
       includedFetched.value = response.included;
 
       dataFetched.value = response.data;
+      loading.value = false;
     }
   } catch (e) {
     console.log(e);
@@ -112,8 +117,13 @@ watch(sortField, (newVal) => {
     <Cattegories></Cattegories>
 
     <div class="grid grid-cols-4 p-5 gap-4">
-      <div class="col-span-3 grid grid-cols-3 gap-3">
+      <div v-if="loading" class="grid col-span-3 p-5">
+        <VaInnerLoading loading :size="60" />
+      </div>
+
+      <div class="col-span-3 grid grid-cols-3 gap-3" v-if="!loading">
         <Sort @data-sort="receiveSortData"></Sort>
+
         <ShowCards
           v-for="(item, index) in dataFetched.slice(
             (currentPage - 1) * 6,
