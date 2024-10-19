@@ -20,6 +20,9 @@ const fetchFilteredData = async (filterName: string) => {
   const data = await res.json();
 
   console.log(data);
+
+
+  
 };
 
 const updateOpenFlag = (index: number, event: Event) => {

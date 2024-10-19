@@ -13,41 +13,6 @@ import {
   SortType,
 } from "../../types/interfaces";
 
-// export type SortType =
-//   | "price-cheap"
-//   | "price-expensive"
-//   | "new-created"
-//   | "none";
-// interface DataFetchType {
-//   attributes: {
-//     name: string;
-//     slug: string;
-//     description: string;
-//     display_price: string;
-//   };
-//   relationships: {
-//     images: {
-//       data: { id: string; type: string }[];
-//     };
-//   };
-// }
-
-// interface IncludedFetchType {
-//   attributes: {
-//     original_url: string;
-//   };
-//   id: string;
-// }
-
-// interface FilterItem {
-//   name: string;
-//   presentation: string;
-// }
-
-// interface FilterType {
-//   name: string;
-//   option_values: FilterItem[];
-// }
 const filters = ref<FilterType[]>([]);
 const loading = ref(true);
 const dataFetched = ref<DataFetchType[]>([]);
@@ -88,6 +53,8 @@ const fetchData = async (sort: SortType) => {
       includedFetched.value = response.included;
 
       dataFetched.value = response.data;
+      // console.log(dataFetched.value);
+
       loading.value = false;
     }
   } catch (e) {
