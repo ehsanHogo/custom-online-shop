@@ -12,28 +12,26 @@ const filterList = ref(
   }))
 );
 
-const emit = defineEmits(["data-fetched"]);
+// const filterCriterias = ref<string[]>([])
 
-const sendDatatoParrent = (data: DataFetchType[]) => {
-  emit("data-fetched", data);
-};
+const emit = defineEmits(["data-criteria"]);
 
-const fetchFilteredData = async (filterName: string) => {
-  const res = await fetch(
-    `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][size]=${filterName}`
-  );
-
-  const data = await res.json();
-
-  console.log(data.data);
-
-  sendDatatoParrent(data.data);
+const sendDatatoParrent = (
+  criteria: string,
+  criteriaType: string,
+  action: string
+) => {
+  emit("data-criteria", criteria, criteriaType, action);
 };
 
 const updateOpenFlag = (index: number, event: Event) => {
   console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
-    fetchFilteredData(filterList.value[index].name);
+    // fetchFilteredData(filterList.value[index].name);
+    sendDatatoParrent(filterList.value[index].name, "size", "add");
+  else {
+    sendDatatoParrent(filterList.value[index].name, "size", "remove");
+  }
   console.log(index);
 };
 </script>

@@ -15,9 +15,9 @@ interface MyProps {
 
 const emit = defineEmits(["data-fetched"]);
 
-const passUpward = (data: DataFetchType[]) => {
-  emit("data-fetched", data);
-};
+// const passUpward = (data: DataFetchType[]) => {
+//   emit("data-fetched", data);
+// };
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
@@ -37,6 +37,87 @@ const filterButtons: FilterItemOptions[] = [
 
 const setOpen = (index: number) => {
   filterButtons[index].open.value = !filterButtons[index].open.value;
+};
+
+interface CriteriaItemType {
+  name: string;
+  data: DataFetchType[];
+}
+interface FilterCriteriaType {
+  filterType: string;
+  options: CriteriaItemType[];
+}
+const filterCriterias = ref<FilterCriteriaType[]>([]);
+// const filteredData = ref<DataFetchType[]>([]);
+const filterList = ref<DataFetchType[]>([]);
+const fetchFilteredData = async (
+  filterType: string,
+  filterCriteria: string
+) => {
+  const res = await fetch(
+    `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][${filterType}]=${filterCriteria}`
+  );
+
+  const data = await res.json();
+
+  console.log(data.data);
+
+  let prevOptions: CriteriaItemType[] = [];
+  prevOptions = filterCriterias.value.map((item) => {
+    if (item.filterType === filterType) {
+      if (item.options.length !== 0) return item.options;
+    }
+  });
+  if (prevOptions.length === 0) {
+    filterCriterias.value.push({
+      filterType: filterType,
+      options: [
+        {
+          name: filterCriteria,
+          data: data.data,
+        },
+      ],
+    });
+  } else {
+    filterCriterias.value.push({
+      filterType: filterType,
+      options: prevOptions.concat([
+        {
+          name: filterCriteria,
+          data: data.data,
+        },
+      ]),
+    });
+  }
+
+  console.log(filterCriterias.value);
+
+  // filteredData.value = filteredData.value.concat(data.data);
+  // console.log(filteredData.value);
+
+  filterCriterias.value.forEach((item) => {
+    filterList.value = filterList.value.concat(item.options.
+      
+    );
+  });
+
+  console.log(filterList.value);
+
+  emit("data-fetched", filterList.value);
+};
+
+const recieveCriteria = (
+  criteria: string,
+  criteriaType: string,
+  action: string
+) => {
+  // filterCriterias.value.push('');
+  if (action === "add") fetchFilteredData(criteriaType, criteria);
+  else if (action === "remove") {
+    filterList.value = filterCriterias.value.filter((item) => {
+      return item.filterType !== criteriaType && item.options;
+    });
+  }
 };
 </script>
 
@@ -61,7 +142,7 @@ const setOpen = (index: number) => {
           <p>{{ filterButton.name }}</p>
         </button>
         <FilterSize
-          @data-fetched="passUpward"
+          @data-criteria="recieveCriteria"
           :filterSizeData="props.filterData[1].option_values"
           v-if="
             filterButtons[index].name === 'اندازه' &&
@@ -70,6 +151,7 @@ const setOpen = (index: number) => {
         ></FilterSize>
 
         <FilterColor
+          @data-criteria="recieveCriteria"
           :filterColorData="props.filterData[0].option_values"
           v-if="
             filterButtons[index].name === 'رنگ' &&
