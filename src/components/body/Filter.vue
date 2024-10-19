@@ -5,6 +5,7 @@ import FilterSize from "./FilterSize.vue";
 import FilterColor from "./FilterColor.vue";
 import {
   DataFetchType,
+  FilterCriteriaType,
   FilterItemOptions,
   FilterType,
 } from "../../types/interfaces";
@@ -14,10 +15,6 @@ interface MyProps {
 }
 
 const emit = defineEmits(["data-fetched"]);
-
-// const passUpward = (data: DataFetchType[]) => {
-//   emit("data-fetched", data);
-// };
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
@@ -39,16 +36,8 @@ const setOpen = (index: number) => {
   filterButtons[index].open.value = !filterButtons[index].open.value;
 };
 
-// interface CriteriaItemType {
-//   name: string;
-//   data: DataFetchType[];
-// }
-interface FilterCriteriaType {
-  criteriaId: string;
-  data: DataFetchType[];
-}
 const filterCriterias = ref<FilterCriteriaType[]>([]);
-// const filteredData = ref<DataFetchType[]>([]);
+
 const filterList = ref<DataFetchType[]>([]);
 const fetchFilteredData = async (
   filterType: string,
@@ -63,51 +52,14 @@ const fetchFilteredData = async (
 
   console.log(data.data);
 
-  // let prevOptions: CriteriaItemType[] = []
-  //    prevOptions  = filterCriterias.value.map((item) => {
-  //   if (item.filterType === filterType) {
-  //     if (item.options.length !== 0) return item.options;
-  //   }
-  // });
-  // if (prevOptions.length === 0) {
-  //   filterCriterias.value.push({
-  //     filterType: filterType,
-  //     options: [
-  //       {
-  //         name: filterCriteria,
-  //         data: data.data,
-  //       },
-  //     ],
-  //   });
-  // } else {
-  //   filterCriterias.value.push({
-  //     filterType: filterType,
-  //     options: prevOptions.concat([
-  //       {
-  //         name: filterCriteria,
-  //         data: data.data,
-  //       },
-  //     ]),
-  //   });
-  // }
-
-  // console.log(filterCriterias.value);
-
-  // filteredData.value = filteredData.value.concat(data.data);
-  // console.log(filteredData.value);
-
-  // filterCriterias.value.forEach((item) => {
-  //   filterList.value = filterList.value.concat(item.options.data);
-  // });
-
   filterCriterias.value.push({
     criteriaId: criteriaId,
     data: data.data,
   });
 
-  filterCriterias.value.forEach((item) => {
-    filterList.value = filterList.value.concat(item.data);
-  });
+
+  filterList.value = filterList.value.concat(data.data);
+
   console.log(filterList.value);
 
   emit("data-fetched", filterList.value);
@@ -119,7 +71,7 @@ const recieveCriteria = (
   criteriaId: string,
   action: string
 ) => {
-  // filterCriterias.value.push('');
+
   if (action === "add") fetchFilteredData(criteriaType, criteria, criteriaId);
   else if (action === "remove") {
     filterCriterias.value = filterCriterias.value.filter((item) => {
@@ -131,7 +83,7 @@ const recieveCriteria = (
     filterCriterias.value.forEach((item) => {
       filterList.value = filterList.value.concat(item.data);
     });
-    // console.log(filterList.value);
+
 
     emit("data-fetched", filterList.value);
   }

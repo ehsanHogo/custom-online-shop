@@ -41,3 +41,8 @@ export interface FilterItemOptions {
   name: string;
   open: Ref<boolean>;
 }
+
+export interface FilterCriteriaType {
+  criteriaId: string;
+  data: DataFetchType[];
+}

@@ -8,11 +8,9 @@ const props = defineProps<MyProps>();
 const filterList = ref(
   props.filterSizeData.map((item) => ({
     ...item,
-    open: false, // default value for the new property
+    open: false,
   }))
 );
-
-// const filterCriterias = ref<string[]>([])
 
 const emit = defineEmits(["data-criteria"]);
 
@@ -28,7 +26,6 @@ const sendDatatoParrent = (
 const updateOpenFlag = (index: number, event: Event) => {
   console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
-    // fetchFilteredData(filterList.value[index].name);
     sendDatatoParrent(
       filterList.value[index].name,
       "size",
