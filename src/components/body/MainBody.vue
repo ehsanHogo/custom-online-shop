@@ -139,9 +139,11 @@ watch(sortField, (newVal) => {
         <VaInnerLoading loading :size="60" />
       </div>
 
-      <div class="col-span-3 grid grid-cols-3 gap-3" v-if="!loading">
+      <div
+        class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
+        v-if="!loading"
+      >
         <Sort @data-sort="receiveSortData"></Sort>
-
         <ShowCards
           v-for="(item, index) in dataFetched.slice(
             (currentPage - 1) * 6,
