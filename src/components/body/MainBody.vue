@@ -6,33 +6,49 @@ import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 
 import Cattegories from "./Cattegories.vue";
+import {
+  FilterType,
+  DataFetchType,
+  IncludedFetchType,
+  SortType,
+} from "../../types/interfaces";
 
-export type SortType =
-  | "price-cheap"
-  | "price-expensive"
-  | "new-created"
-  | "none";
-interface DataFetchType {
-  attributes: {
-    name: string;
-    slug: string;
-    description: string;
-    display_price: string;
-  };
-  relationships: {
-    images: {
-      data: { id: string; type: string }[];
-    };
-  };
-}
+// export type SortType =
+//   | "price-cheap"
+//   | "price-expensive"
+//   | "new-created"
+//   | "none";
+// interface DataFetchType {
+//   attributes: {
+//     name: string;
+//     slug: string;
+//     description: string;
+//     display_price: string;
+//   };
+//   relationships: {
+//     images: {
+//       data: { id: string; type: string }[];
+//     };
+//   };
+// }
 
-interface IncludedFetchType {
-  attributes: {
-    original_url: string;
-  };
-  id: string;
-}
+// interface IncludedFetchType {
+//   attributes: {
+//     original_url: string;
+//   };
+//   id: string;
+// }
 
+// interface FilterItem {
+//   name: string;
+//   presentation: string;
+// }
+
+// interface FilterType {
+//   name: string;
+//   option_values: FilterItem[];
+// }
+const filters = ref<FilterType[]>([]);
 const loading = ref(true);
 const dataFetched = ref<DataFetchType[]>([]);
 const includedFetched = ref<IncludedFetchType[]>([]);
@@ -65,7 +81,9 @@ const fetchData = async (sort: SortType) => {
       throw Error("error in fetch");
     } else {
       const response = await res.json();
-      // console.log(response.data);
+      console.log(response.meta.filters.option_types);
+
+      filters.value = response.meta.filters.option_types;
       // console.log(response);
       includedFetched.value = response.included;
 
@@ -137,7 +155,7 @@ watch(sortField, (newVal) => {
         ></ShowCards>
       </div>
 
-      <Filter></Filter>
+      <Filter :filterData="filters"></Filter>
     </div>
 
     <Pagination

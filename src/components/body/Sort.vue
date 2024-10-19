@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { SortType } from "./MainBody.vue";
+import { SortType } from "../../types/interfaces";
+// import { SortType } from "./MainBody.vue";
 
 const emit = defineEmits(["data-sort"]);
 
@@ -27,7 +28,10 @@ const sendDataToParrent = (newSortItem: SortItems) => {
 </script>
 
 <template>
-  <div class="justify-start flex gap-5 col-span-3 mb-3 items-start" dir="rtl">
+  <div
+    class="justify-start flex gap-5 col-span-3 mb-3 items-start h-min"
+    dir="rtl"
+  >
     <button
       @click="changeItem(index)"
       v-for="(item, index) in sortItems"
