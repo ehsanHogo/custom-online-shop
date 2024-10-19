@@ -38,6 +38,7 @@ const includedFetched = ref<IncludedFetchType[]>([]);
 // );
 
 const fetchData = async (sort: SortType) => {
+  loading.value = true;
   let query = "";
   if (sort === "none") {
     query =
@@ -123,16 +124,15 @@ watch(sortField, (newVal) => {
     <Cattegories></Cattegories>
 
     <div class="grid grid-cols-4 p-5 gap-4">
-      <div v-if="loading" class="grid col-span-3 p-5">
-        <VaInnerLoading loading :size="60" />
-      </div>
-
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
-        v-if="!loading"
       >
         <Sort @data-sort="receiveSortData"></Sort>
+        <div v-if="loading" class="grid col-span-3 p-5 h-96">
+          <VaInnerLoading loading :size="60" />
+        </div>
         <ShowCards
+          v-if="!loading"
           v-for="(item, index) in ShowData.slice(
             (currentPage - 1) * 6,
             (currentPage - 1) * 6 + 6

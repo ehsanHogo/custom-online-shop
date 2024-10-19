@@ -55,6 +55,7 @@ const updateOpenFlag = (index: number, event: Event) => {
 </script>
 
 <template>
+  <!-- <transition-group name="fade" mode="out-in"> -->
   <div class="h-[200px] overflow-y-auto pr-4">
     <ul>
       <li
@@ -71,4 +72,6 @@ const updateOpenFlag = (index: number, event: Event) => {
       </li>
     </ul>
   </div>
+
+  <!-- </transition-group> -->
 </template>
