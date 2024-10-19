@@ -23,11 +23,6 @@ const sendDatatoParrent = (
   emit("data-criteria", criteria, criteriaType, criteriaId, action);
 };
 
-
-
-
-
-
 const updateOpenFlag = (index: number, event: Event) => {
   console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
@@ -50,7 +45,7 @@ const updateOpenFlag = (index: number, event: Event) => {
 </script>
 
 <template>
-  <div>
+  <div class="h-[200px] overflow-y-auto pr-4">
     <ul>
       <li
         v-for="(item, index) in filterList"
