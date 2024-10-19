@@ -16,6 +16,11 @@ import {
 const filters = ref<FilterType[]>([]);
 const loading = ref(true);
 const dataFetched = ref<DataFetchType[]>([]);
+
+const recieveDataFetched = (data: DataFetchType[]) => {
+  dataFetched.value = data;
+};
+
 const includedFetched = ref<IncludedFetchType[]>([]);
 const holeQuery = ref(
   "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
@@ -76,10 +81,14 @@ const findImageUrl = (imageId: string) => {
   const resultItem = includedFetched.value.filter((item) => {
     return item.id === imageId;
   });
-  if (resultItem !== null || resultItem !== undefined) {
-    return resultItem[0].attributes.original_url;
-  } else {
+  console.log("result : ", resultItem[0]);
+
+  if (resultItem.length === 0) {
     return "";
+  } else {
+    console.log("here");
+
+    return resultItem[0].attributes.original_url;
   }
 };
 
@@ -124,7 +133,7 @@ watch(sortField, (newVal) => {
         ></ShowCards>
       </div>
 
-      <Filter :filterData="filters"></Filter>
+      <Filter @data-fetched="recieveDataFetched" :filterData="filters"></Filter>
     </div>
 
     <Pagination

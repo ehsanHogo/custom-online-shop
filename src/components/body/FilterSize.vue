@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { FilterItem } from "../../types/interfaces";
+import { DataFetchType, FilterItem } from "../../types/interfaces";
 interface MyProps {
   filterSizeData: FilterItem[];
 }
@@ -12,6 +12,12 @@ const filterList = ref(
   }))
 );
 
+const emit = defineEmits(["data-fetched"]);
+
+const sendDatatoParrent = (data: DataFetchType[]) => {
+  emit("data-fetched", data);
+};
+
 const fetchFilteredData = async (filterName: string) => {
   const res = await fetch(
     `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][size]=${filterName}`
@@ -19,10 +25,9 @@ const fetchFilteredData = async (filterName: string) => {
 
   const data = await res.json();
 
-  console.log(data);
+  console.log(data.data);
 
-
-  
+  sendDatatoParrent(data.data);
 };
 
 const updateOpenFlag = (index: number, event: Event) => {
