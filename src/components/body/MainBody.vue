@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Filter from "./Filter.vue";
 import ShowCards from "./ShowCards.vue";
-import { onBeforeMount, Ref, ref, watch } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 
@@ -50,24 +50,11 @@ import {
 // }
 const filters = ref<FilterType[]>([]);
 const loading = ref(true);
-// const dataFetched = ref<DataFetchType[]>([]);
-// const includedFetched = ref<IncludedFetchType[]>([]);
-interface ApiCallType {
-  dataFetched: Ref<DataFetchType[]>;
-  includedFetched: Ref<IncludedFetchType[]>;
-}
-const apiCall: ApiCallType = {
-  dataFetched: ref([]),
-  includedFetched: ref([]),
-};
-
-const recieveDataFetched = (data: DataFetchType[]) => {
-  apiCall.dataFetched.value = data;
-};
-
-// const holeQuery = ref(
-//   "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
-// );
+const dataFetched = ref<DataFetchType[]>([]);
+const includedFetched = ref<IncludedFetchType[]>([]);
+const holeQuery = ref(
+  "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
+);
 
 const fetchData = async (sort: SortType) => {
   let query = "";
@@ -98,11 +85,9 @@ const fetchData = async (sort: SortType) => {
 
       filters.value = response.meta.filters.option_types;
       // console.log(response);
-      apiCall.includedFetched.value = response.included;
+      includedFetched.value = response.included;
 
-      apiCall.dataFetched.value = response.data;
-      console.log(apiCall.dataFetched.value);
-
+      dataFetched.value = response.data;
       loading.value = false;
     }
   } catch (e) {
@@ -121,12 +106,10 @@ const findImageUrl = (imageId: string) => {
     return "";
   }
   // console.log("sdfjksj : ", includedFetched);
-  const resultItem = apiCall.includedFetched.value.filter((item) => {
+  const resultItem = includedFetched.value.filter((item) => {
     return item.id === imageId;
   });
   if (resultItem !== null || resultItem !== undefined) {
-    console.log("result item ", resultItem[0]);
-
     return resultItem[0].attributes.original_url;
   } else {
     return "";
@@ -162,7 +145,7 @@ watch(sortField, (newVal) => {
       >
         <Sort @data-sort="receiveSortData"></Sort>
         <ShowCards
-          v-for="(item, index) in apiCall.dataFetched.value.slice(
+          v-for="(item, index) in dataFetched.slice(
             (currentPage - 1) * 6,
             (currentPage - 1) * 6 + 6
           )"
@@ -174,7 +157,7 @@ watch(sortField, (newVal) => {
         ></ShowCards>
       </div>
 
-      <Filter @data-fetched="recieveDataFetched" :filterData="filters"></Filter>
+      <Filter :filterData="filters"></Filter>
     </div>
 
     <Pagination

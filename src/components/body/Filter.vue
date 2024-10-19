@@ -3,22 +3,11 @@ import { Ref, ref } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
-import {
-  DataFetchType,
-  FilterItemOptions,
-  FilterType,
-} from "../../types/interfaces";
+import { FilterItemOptions, FilterType } from "../../types/interfaces";
 
 interface MyProps {
   filterData: FilterType[];
 }
-
-const emit = defineEmits(["data-fetched"]);
-
-const passUpwards = (data: DataFetchType[]) => {
-  emit("data-fetched", data);
-};
-
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 const onlyExist = ref(false);
@@ -61,7 +50,6 @@ const setOpen = (index: number) => {
           <p>{{ filterButton.name }}</p>
         </button>
         <FilterSize
-          @data-fetched="passUpwards"
           :filterSizeData="props.filterData[1].option_values"
           v-if="
             filterButtons[index].name === 'اندازه' &&
