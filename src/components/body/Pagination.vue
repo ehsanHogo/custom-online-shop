@@ -75,7 +75,7 @@ const slicePages = computed(() =>
 </script>
 
 <template>
-  <div class="flex justify-center items-center gap-5">
+  <div class="flex justify-center items-center gap-5 col-span-3">
     <button @click="nextPage">
       <img src="../../assets/body/arrow-left.png" alt="left arrow" />
     </button>

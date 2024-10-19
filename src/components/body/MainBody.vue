@@ -24,7 +24,7 @@ const recieveHaveFilter = (data: boolean) => {
 const dataFetched = ref<DataFetchType[]>([]);
 const ShowData = ref<DataFetchType[]>([]);
 
-const recieveDataFetched = (data: DataFetchType[], hasFilter : boolean) => {
+const recieveDataFetched = (data: DataFetchType[], hasFilter: boolean) => {
   if (hasFilter) {
     ShowData.value = data;
   } else {
@@ -143,6 +143,12 @@ watch(sortField, (newVal) => {
           :description="item.attributes.description"
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
         ></ShowCards>
+
+        <Pagination
+          :pagesNum="5"
+          :stepNum="2"
+          @data-page="receivePageData"
+        ></Pagination>
       </div>
 
       <Filter
@@ -151,12 +157,6 @@ watch(sortField, (newVal) => {
         :filterData="filters"
       ></Filter>
     </div>
-
-    <Pagination
-      :pagesNum="5"
-      :stepNum="2"
-      @data-page="receivePageData"
-    ></Pagination>
   </div>
 </template>
 
