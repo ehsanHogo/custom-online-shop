@@ -14,7 +14,7 @@ interface MyProps {
   filterData: FilterType[];
 }
 
-const emit = defineEmits(["data-fetched"]);
+const emit = defineEmits(["data-fetched", "data-have-filter"]);
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
@@ -57,12 +57,14 @@ const fetchFilteredData = async (
     data: data.data,
   });
 
-
   filterList.value = filterList.value.concat(data.data);
 
   console.log(filterList.value);
 
-  emit("data-fetched", filterList.value);
+  // if (filterCriterias.value.length !== 0) {
+  //   emit("data-have-filter", true);
+  // }
+  emit("data-fetched", filterList.value, filterCriterias.value.length !== 0);
 };
 
 const recieveCriteria = (
@@ -71,7 +73,6 @@ const recieveCriteria = (
   criteriaId: string,
   action: string
 ) => {
-
   if (action === "add") fetchFilteredData(criteriaType, criteria, criteriaId);
   else if (action === "remove") {
     filterCriterias.value = filterCriterias.value.filter((item) => {
@@ -84,8 +85,15 @@ const recieveCriteria = (
       filterList.value = filterList.value.concat(item.data);
     });
 
+    // if (filterCriterias.value.length === 0) {
+    //   emit("data-have-filter", false);
+    // }
 
-    emit("data-fetched", filterList.value);
+    emit(
+      "data-fetched",
+      filterList.value,
+      !(filterCriterias.value.length === 0)
+    );
   }
 };
 </script>

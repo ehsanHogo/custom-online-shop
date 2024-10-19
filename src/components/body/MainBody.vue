@@ -15,16 +15,27 @@ import {
 
 const filters = ref<FilterType[]>([]);
 const loading = ref(true);
-const dataFetched = ref<DataFetchType[]>([]);
+const haveFilter = ref(false);
+const recieveHaveFilter = (data: boolean) => {
+  console.log("hjsdhfjksadfhkj");
 
-const recieveDataFetched = (data: DataFetchType[]) => {
-  dataFetched.value = data;
+  haveFilter.value = data;
+};
+const dataFetched = ref<DataFetchType[]>([]);
+const ShowData = ref<DataFetchType[]>([]);
+
+const recieveDataFetched = (data: DataFetchType[], hasFilter : boolean) => {
+  if (hasFilter) {
+    ShowData.value = data;
+  } else {
+    ShowData.value = dataFetched.value;
+  }
 };
 
 const includedFetched = ref<IncludedFetchType[]>([]);
-const holeQuery = ref(
-  "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
-);
+// const holeQuery = ref(
+//   "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
+// );
 
 const fetchData = async (sort: SortType) => {
   let query = "";
@@ -58,6 +69,7 @@ const fetchData = async (sort: SortType) => {
       includedFetched.value = response.included;
 
       dataFetched.value = response.data;
+      ShowData.value = response.data;
       // console.log(dataFetched.value);
 
       loading.value = false;
@@ -121,7 +133,7 @@ watch(sortField, (newVal) => {
       >
         <Sort @data-sort="receiveSortData"></Sort>
         <ShowCards
-          v-for="(item, index) in dataFetched.slice(
+          v-for="(item, index) in ShowData.slice(
             (currentPage - 1) * 6,
             (currentPage - 1) * 6 + 6
           )"
@@ -133,7 +145,11 @@ watch(sortField, (newVal) => {
         ></ShowCards>
       </div>
 
-      <Filter @data-fetched="recieveDataFetched" :filterData="filters"></Filter>
+      <Filter
+        @data-have-filter="recieveHaveFilter"
+        @data-fetched="recieveDataFetched"
+        :filterData="filters"
+      ></Filter>
     </div>
 
     <Pagination
