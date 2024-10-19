@@ -4,6 +4,9 @@ import { FilterItem } from "../../types/interfaces";
 interface MyProps {
   filterSizeData: FilterItem[];
 }
+
+const emit = defineEmits(["data-fetched"]);
+
 const props = defineProps<MyProps>();
 const filterList = ref(
   props.filterSizeData.map((item) => ({
@@ -14,12 +17,14 @@ const filterList = ref(
 
 const fetchFilteredData = async (filterName: string) => {
   const res = await fetch(
-    `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][size]=${filterName}`
+    `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][size]=${filterName}&include=images`
   );
 
   const data = await res.json();
 
   console.log(data);
+
+  emit("data-fetched", data.data);
 };
 
 const updateOpenFlag = (index: number, event: Event) => {
