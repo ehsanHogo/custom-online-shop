@@ -76,7 +76,7 @@ const fetchData = async (sort: SortType) => {
       // console.log(response);
       includedFetched.value = includedFetched.value.concat(response.included);
 
-      dataFetched.value = response.data;
+      dataFetched.value = dataFetched.value.concat(response.data);
       // if (ShowData.value.length === 0) {
       ShowData.value = ShowData.value.concat(response.data);
       // includedFetched
