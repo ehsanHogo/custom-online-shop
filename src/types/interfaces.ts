@@ -43,6 +43,8 @@ export interface FilterItemOptions {
 }
 
 export interface FilterCriteriaType {
+  criteriaName: string;
+  criteriaType: string;
   criteriaId: string;
   data: DataFetchType[];
 }
@@ -51,5 +53,4 @@ export interface FilterItemType {
   filterType: string;
   filterCriteria: string;
   criteriaId: string;
-
 }

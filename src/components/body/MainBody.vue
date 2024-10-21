@@ -32,8 +32,8 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
   // console.log(filterData);
 
   if (action === "add") {
-    haveFilter.value = true;
-    fetchData(sortField.value, filterData);
+    // haveFilter.value = true;
+    fetchData(sortField.value, filterData, fetchPage.value);
   } else if (action === "remove") {
     filterCriterias.value = filterCriterias.value.filter((item) => {
       return item.criteriaId !== filterData.criteriaId;
@@ -45,7 +45,7 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
     });
 
     if (filterCriterias.value.length === 0) {
-      haveFilter.value = false;
+      // haveFilter.value = false;
       ShowData.value = dataFetched.value;
     } else {
       ShowData.value = filteredfetchData.value;
@@ -53,21 +53,29 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
   }
 };
 
+//page
+
 const fetchPage = ref(1);
 
 const numberOfPage = ref(5);
 
-const fetchData = async (sort: SortType, filter: FilterItemType) => {
+const haveNewItems = ref(false);
+
+const fetchData = async (
+  sort: SortType,
+  filter: FilterItemType,
+  nextPage: number
+) => {
   loading.value = true;
 
-  console.log(filter);
+  console.log(nextPage);
 
   let query = "";
 
-  if (fetchPage.value === 1) {
+  if (nextPage === 1) {
     query = "https://demo.spreecommerce.org/api/v2/storefront/products?";
   } else {
-    query = `https://demo.spreecommerce.org/api/v2/storefront/products?page=${fetchPage.value}&`;
+    query = `https://demo.spreecommerce.org/api/v2/storefront/products?page=${nextPage}&`;
   }
   if (sort === "none") {
     query += "include=images";
@@ -81,7 +89,11 @@ const fetchData = async (sort: SortType, filter: FilterItemType) => {
 
   if (filter.filterType !== "none") {
     query += `&filter[options][${filter.filterType}]=${filter.filterCriteria}`;
-    console.log(query);
+    // console.log(query);
+  } else if (filterCriterias.value.length !== 0) {
+    filterCriterias.value.forEach((item) => {
+      query += `&filter[options][${item.criteriaType}]=${item.criteriaName}`;
+    });
   }
   try {
     const res = await fetch(`${query}`, { method: "GET" });
@@ -90,11 +102,20 @@ const fetchData = async (sort: SortType, filter: FilterItemType) => {
     if (!res.ok) {
       throw Error("error in fetch");
     } else {
+      if (response.data.length === 0) {
+        console.log("hereee");
+
+        haveNewItems.value = false;
+      } else {
+        haveNewItems.value = true;
+      }
       if (filter.filterType !== "none") {
         console.log(response.data);
 
         filters.value = response.meta.filters.option_types;
         filterCriterias.value.push({
+          criteriaName: filter.filterCriteria,
+          criteriaType: filter.filterType,
           criteriaId: filter.criteriaId,
           data: response.data,
         });
@@ -125,21 +146,30 @@ const currentPage = ref(1); // recieve update from child
 
 const receivePageData = (data: number) => {
   currentPage.value = data;
-  if (haveFilter.value) {
-  } else {
-    if (currentPage.value === numberOfPage.value) {
-      if ((fetchPage.value * 25 + 25) % 6 === 0) {
-        numberOfPage.value = (fetchPage.value * 25 + 25) / 6;
-      } else {
-        numberOfPage.value = Math.floor((fetchPage.value * 25 + 25) / 6) + 1;
-      }
-      fetchPage.value += 1;
 
-      fetchData(sortField.value, {
+  if (currentPage.value === numberOfPage.value) {
+    fetchData(
+      sortField.value,
+      {
         filterType: "none",
         filterCriteria: "a",
         criteriaId: "a",
-      });
+      },
+      fetchPage.value + 1
+    );
+
+    if (!haveNewItems.value) {
+      return;
+    } else {
+      fetchPage.value += 1;
+      if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
+        numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
+      } else {
+        numberOfPage.value =
+          Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
+      }
+
+      console.log(numberOfPage.value);
     }
   }
 };
@@ -166,19 +196,27 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-  fetchData(sortField.value, {
-    filterType: "none",
-    filterCriteria: "fdfgs",
-    criteriaId: "fjksdhg",
-  });
+  fetchData(
+    sortField.value,
+    {
+      filterType: "none",
+      filterCriteria: "fdfgs",
+      criteriaId: "fjksdhg",
+    },
+    1
+  );
 });
 
 watch(sortField, (newVal) => {
-  fetchData(newVal, {
-    filterType: "none",
-    filterCriteria: "fdfgs",
-    criteriaId: "fjksdhg",
-  });
+  fetchData(
+    newVal,
+    {
+      filterType: "none",
+      filterCriteria: "fdfgs",
+      criteriaId: "fjksdhg",
+    },
+    1
+  );
 });
 </script>
 
