@@ -11,40 +11,67 @@ import {
   DataFetchType,
   IncludedFetchType,
   SortType,
+  FilterItemType,
+  FilterCriteriaType,
 } from "../../types/interfaces";
 import { useCurrentPageProp } from "vuestic-ui/dist/types/components/va-data-table/hooks/useCommonProps.js";
 
 const filters = ref<FilterType[]>([]);
 const loading = ref(true);
-const haveFilter = ref(false);
-
-const fetchPage = ref(1);
-
-const numberOfPage = ref(5);
-// const recieveHaveFilter = (data: boolean) => {
-//   // console.log("hjsdhfjksadfhkj");
-
-//   haveFilter.value = data;
-// };
 const dataFetched = ref<DataFetchType[]>([]);
 const ShowData = ref<DataFetchType[]>([]);
 
-const recieveDataFetched = (data: DataFetchType[], hasFilter: boolean) => {
-  haveFilter.value = hasFilter;
-  if (hasFilter) {
-    ShowData.value = data;
-  } else {
-    ShowData.value = dataFetched.value;
+const includedFetched = ref<IncludedFetchType[]>([]);
+
+//filter
+const haveFilter = ref(false);
+const filterCriterias = ref<FilterCriteriaType[]>([]);
+
+const filteredfetchData = ref<DataFetchType[]>([]);
+
+const recieveDataFetched = (filterData: FilterItemType, action: string) => {
+  // console.log(filterData);
+
+  if (action === "add") {
+    // console.log("here");
+
+    fetchData(sortField.value, filterData);
+    //   haveFilter.value = hasFilter;
+    // if (hasFilter) {
+    //   ShowData.value = data;
+    // } else {
+    //   ShowData.value = dataFetched.value;
+    // }
+  } else if (action === "remove") {
+    filterCriterias.value = filterCriterias.value.filter((item) => {
+      return item.criteriaId !== filterData.criteriaId;
+    });
+
+    // console.log(filterCriterias.value);
+    filteredfetchData.value = [];
+    filterCriterias.value.forEach((item) => {
+      filteredfetchData.value = filteredfetchData.value.concat(item.data);
+    });
+
+    if (filterCriterias.value.length === 0) {
+      ShowData.value = dataFetched.value;
+    } else {
+      ShowData.value = filteredfetchData.value;
+    }
   }
 };
+//sort
 
-const includedFetched = ref<IncludedFetchType[]>([]);
-// const holeQuery = ref(
-//   "https://demo.spreecommerce.org/api/v2/storefront/products?include=images"
-// );
+//pagination
+const fetchPage = ref(1);
 
-const fetchData = async (sort: SortType) => {
+const numberOfPage = ref(5);
+
+const fetchData = async (sort: SortType, filter: FilterItemType) => {
   loading.value = true;
+
+  console.log(filter);
+
   let query = "";
 
   if (fetchPage.value === 1) {
@@ -62,33 +89,44 @@ const fetchData = async (sort: SortType) => {
     query += "sort=-created_at&include=images";
   }
 
-  // console.log(query);
-
+  if (filter.filterType !== "none") {
+    query += `&filter[options][${filter.filterType}]=${filter.filterCriteria}`;
+    console.log(query);
+  }
   try {
     const res = await fetch(`${query}`, { method: "GET" });
+    const response = await res.json();
 
     if (!res.ok) {
       throw Error("error in fetch");
     } else {
-      const response = await res.json();
-      // console.log(response.meta.filters.option_types);
+      if (filter.filterType !== "none") {
+        // console.log("HERE1");
 
-      filters.value = response.meta.filters.option_types;
-      // console.log(response);
-      includedFetched.value = includedFetched.value.concat(response.included);
+        console.log(response.data);
 
-      dataFetched.value = dataFetched.value.concat(response.data);
-      // if (ShowData.value.length === 0) {
-      ShowData.value = ShowData.value.concat(response.data);
-      // includedFetched
-      console.log("meta ", response.meta);
+        filters.value = response.meta.filters.option_types;
+        filterCriterias.value.push({
+          criteriaId: filter.criteriaId,
+          data: response.data,
+        });
 
-      // }else{\
+        includedFetched.value = includedFetched.value.concat(response.included);
 
-      // }
+        filteredfetchData.value = filteredfetchData.value.concat(response.data);
 
-      // console.log(dataFetched.value);
+        ShowData.value = filteredfetchData.value;
+      } else {
+        filters.value = response.meta.filters.option_types;
 
+        includedFetched.value = includedFetched.value.concat(response.included);
+
+        dataFetched.value = dataFetched.value.concat(response.data);
+
+        ShowData.value = ShowData.value.concat(response.data);
+      }
+
+      // console.log("meta ", response.meta);
       loading.value = false;
     }
   } catch (e) {
@@ -110,7 +148,11 @@ const receivePageData = (data: number) => {
       }
       fetchPage.value += 1;
 
-      fetchData(sortField.value);
+      fetchData(sortField.value, {
+        filterType: "none",
+        filterCriteria: "a",
+        criteriaId: "a",
+      });
     }
   }
 };
@@ -119,17 +161,14 @@ const findImageUrl = (imageId: string) => {
   if (imageId === null || imageId === undefined) {
     return "";
   }
-  // console.log("sdfjksj : ", includedFetched);
+
   const resultItem = includedFetched.value.filter((item) => {
     return item.id === imageId;
   });
-  // console.log("result : ", resultItem[0]);
 
   if (resultItem.length === 0) {
     return "";
   } else {
-    // console.log("here");
-
     return resultItem[0].attributes.original_url;
   }
 };
@@ -140,11 +179,19 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-  fetchData(sortField.value);
+  fetchData(sortField.value, {
+    filterType: "none",
+    filterCriteria: "fdfgs",
+    criteriaId: "fjksdhg",
+  });
 });
 
 watch(sortField, (newVal) => {
-  fetchData(newVal);
+  fetchData(newVal, {
+    filterType: "none",
+    filterCriteria: "fdfgs",
+    criteriaId: "fjksdhg",
+  });
 });
 </script>
 

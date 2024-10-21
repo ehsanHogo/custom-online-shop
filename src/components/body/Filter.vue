@@ -14,7 +14,7 @@ interface MyProps {
   filterData: FilterType[];
 }
 
-const emit = defineEmits(["data-fetched", "data-have-filter"]);
+const emit = defineEmits(["data-fetched"]);
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
@@ -36,36 +36,33 @@ const setOpen = (index: number) => {
   filterButtons[index].open.value = !filterButtons[index].open.value;
 };
 
-const filterCriterias = ref<FilterCriteriaType[]>([]);
+// const filterCriterias = ref<FilterCriteriaType[]>([]);
 
-const filterList = ref<DataFetchType[]>([]);
-const fetchFilteredData = async (
-  filterType: string,
-  filterCriteria: string,
-  criteriaId: string
-) => {
-  const res = await fetch(
-    `https://demo.spreecommerce.org/api/v2/storefront/products?filter[options][${filterType}]=${filterCriteria}`
-  );
+// const filterList = ref<DataFetchType[]>([]);
+// const fetchFilteredData = async (
+//   filterType: string,
+//   filterCriteria: string,
+//   criteriaId: string
+// ) => {
+//   const res = await fetch(
+//     `  `
+//   );
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  console.log(data.data);
+//   console.log(data.data);
 
-  filterCriterias.value.push({
-    criteriaId: criteriaId,
-    data: data.data,
-  });
+//   filterCriterias.value.push({
+//     criteriaId: criteriaId,
+//     data: data.data,
+//   });
 
-  filterList.value = filterList.value.concat(data.data);
+//   filterList.value = filterList.value.concat(data.data);
 
-  console.log(filterList.value);
+//   // console.log(filterList.value);
 
-  // if (filterCriterias.value.length !== 0) {
-  //   emit("data-have-filter", true);
-  // }
-  emit("data-fetched", filterList.value, filterCriterias.value.length !== 0);
-};
+//   emit("data-fetched", filterList.value, filterCriterias.value.length !== 0);
+// };
 
 const recieveCriteria = (
   criteria: string,
@@ -73,28 +70,22 @@ const recieveCriteria = (
   criteriaId: string,
   action: string
 ) => {
-  if (action === "add") fetchFilteredData(criteriaType, criteria, criteriaId);
-  else if (action === "remove") {
-    filterCriterias.value = filterCriterias.value.filter((item) => {
-      return item.criteriaId !== criteriaId;
-    });
+  console.log(criteria);
 
-    console.log(filterCriterias.value);
-    filterList.value = [];
-    filterCriterias.value.forEach((item) => {
-      filterList.value = filterList.value.concat(item.data);
-    });
+  // if (action === "add")
+  emit(
+    "data-fetched",
+    {
+      filterType: criteriaType,
+      filterCriteria: criteria,
+      criteriaId: criteriaId,
+    },
+    action
+  );
+  // else if (action === "remove") {
 
-    // if (filterCriterias.value.length === 0) {
-    //   emit("data-have-filter", false);
-    // }
-
-    emit(
-      "data-fetched",
-      filterList.value,
-      !(filterCriterias.value.length === 0)
-    );
-  }
+  // emit("data-fetched", filterList.value, !(filterCriterias.value.length === 0));
+  // }
 };
 </script>
 

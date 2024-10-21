@@ -46,3 +46,10 @@ export interface FilterCriteriaType {
   criteriaId: string;
   data: DataFetchType[];
 }
+
+export interface FilterItemType {
+  filterType: string;
+  filterCriteria: string;
+  criteriaId: string;
+
+}
