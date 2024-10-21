@@ -21,15 +21,16 @@ const haveFilter = ref(false);
 const fetchPage = ref(1);
 
 const numberOfPage = ref(5);
-const recieveHaveFilter = (data: boolean) => {
-  // console.log("hjsdhfjksadfhkj");
+// const recieveHaveFilter = (data: boolean) => {
+//   // console.log("hjsdhfjksadfhkj");
 
-  haveFilter.value = data;
-};
+//   haveFilter.value = data;
+// };
 const dataFetched = ref<DataFetchType[]>([]);
 const ShowData = ref<DataFetchType[]>([]);
 
 const recieveDataFetched = (data: DataFetchType[], hasFilter: boolean) => {
+  haveFilter.value = hasFilter;
   if (hasFilter) {
     ShowData.value = data;
   } else {
@@ -99,16 +100,18 @@ const currentPage = ref(1); // recieve update from child
 
 const receivePageData = (data: number) => {
   currentPage.value = data;
+  if (haveFilter.value) {
+  } else {
+    if (currentPage.value === numberOfPage.value) {
+      if ((fetchPage.value * 25 + 25) % 6 === 0) {
+        numberOfPage.value = (fetchPage.value * 25 + 25) / 6;
+      } else {
+        numberOfPage.value = Math.floor((fetchPage.value * 25 + 25) / 6) + 1;
+      }
+      fetchPage.value += 1;
 
-  if (currentPage.value === numberOfPage.value) {
-    if ((fetchPage.value * 25 + 25) % 6 === 0) {
-      numberOfPage.value = (fetchPage.value * 25 + 25) / 6;
-    } else {
-      numberOfPage.value = Math.floor((fetchPage.value * 25 + 25) / 6) + 1;
+      fetchData(sortField.value);
     }
-    fetchPage.value += 1;
-
-    fetchData(sortField.value);
   }
 };
 
@@ -178,11 +181,7 @@ watch(sortField, (newVal) => {
         ></Pagination>
       </div>
 
-      <Filter
-        @data-have-filter="recieveHaveFilter"
-        @data-fetched="recieveDataFetched"
-        :filterData="filters"
-      ></Filter>
+      <Filter @data-fetched="recieveDataFetched" :filterData="filters"></Filter>
     </div>
   </div>
 </template>
