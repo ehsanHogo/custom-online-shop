@@ -29,7 +29,7 @@ const extractTextFromString = (htmlString: string) => {
 
 <template>
   <div
-    class="max-w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-min"
+    class="max-w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[400px]"
   >
     <img
       class="rounded-sm h-[200px]"
