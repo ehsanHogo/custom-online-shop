@@ -101,8 +101,13 @@ const receivePageData = (data: number) => {
   currentPage.value = data;
 
   if (currentPage.value === numberOfPage.value) {
+    if ((fetchPage.value * 25 + 25) % 6 === 0) {
+      numberOfPage.value = (fetchPage.value * 25 + 25) / 6;
+    } else {
+      numberOfPage.value = Math.floor((fetchPage.value * 25 + 25) / 6) + 1;
+    }
     fetchPage.value += 1;
-    numberOfPage.value += 5;
+
     fetchData(sortField.value);
   }
 };
@@ -166,7 +171,7 @@ watch(sortField, (newVal) => {
         ></ShowCards>
 
         <Pagination
-          :pagesNum="numberOfPage"
+          :numberOfPages="numberOfPage"
           :stepNum="3"
           :startPage="fetchPage"
           @data-page="receivePageData"

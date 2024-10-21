@@ -2,7 +2,7 @@
 import { computed, ref, toRef, watch } from "vue";
 
 interface MyProps {
-  pagesNum: number;
+  numberOfPages: number;
   stepNum: number;
   startPage: number;
 }
@@ -14,8 +14,8 @@ const sendDataToParent = (pageData: number) => {
   emit("data-page", pageData);
 };
 // manual setting
-const currentPage = ref(1 + (props.startPage - 1) * 5);
-const totalPage = toRef(props, "pagesNum");
+const currentPage = ref(1);
+const totalPage = toRef(props, "numberOfPages");
 // const totalPage = ref(5);
 const stepSize = props.stepNum;
 
@@ -25,13 +25,13 @@ const stepSize = props.stepNum;
 // const lastPage = ref(2);
 
 const lastPageIndex = ref(stepSize + (props.startPage - 1) * 5);
-const firstPageIndex = ref(Math.max(0, 0 + (props.startPage - 1) * 5 - 1));
+const firstPageIndex = ref(Math.max(0, currentPage.value - 1));
 
 watch(
   () => props.startPage,
-  (newVal) => {
-    firstPageIndex.value = 0 + (newVal - 1) * 5 - 1;
-    lastPageIndex.value = stepSize + (newVal - 1) * 5 - 1;
+  () => {
+    firstPageIndex.value = Math.max(0, currentPage.value - 1);
+    lastPageIndex.value = stepSize + currentPage.value - 1;
   }
 );
 const pages = computed(() => {
@@ -49,8 +49,8 @@ const changePage = (page: number) => {
     lastPageIndex.value = Math.min(stepSize + 1, totalPage.value);
   } else if (page === totalPage.value) {
     // Show the last set of pages
-    // firstPage.value = Math.max(1, totalPage.value - stepSize + 1);
-    // lastPage.value = totalPage.value;
+    firstPageIndex.value = Math.max(1, totalPage.value - stepSize - 1);
+    lastPageIndex.value = totalPage.value;
   }
   currentPage.value = page;
 };
