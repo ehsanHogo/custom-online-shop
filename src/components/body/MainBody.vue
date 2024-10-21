@@ -14,9 +14,7 @@ import {
   FilterItemType,
   FilterCriteriaType,
 } from "../../types/interfaces";
-import { useCurrentPageProp } from "vuestic-ui/dist/types/components/va-data-table/hooks/useCommonProps.js";
 
-const filters = ref<FilterType[]>([]);
 const loading = ref(true);
 const dataFetched = ref<DataFetchType[]>([]);
 const ShowData = ref<DataFetchType[]>([]);
@@ -24,6 +22,7 @@ const ShowData = ref<DataFetchType[]>([]);
 const includedFetched = ref<IncludedFetchType[]>([]);
 
 //filter
+const filters = ref<FilterType[]>([]);
 const haveFilter = ref(false);
 const filterCriterias = ref<FilterCriteriaType[]>([]);
 
@@ -33,36 +32,27 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
   // console.log(filterData);
 
   if (action === "add") {
-    // console.log("here");
-
+    haveFilter.value = true;
     fetchData(sortField.value, filterData);
-    //   haveFilter.value = hasFilter;
-    // if (hasFilter) {
-    //   ShowData.value = data;
-    // } else {
-    //   ShowData.value = dataFetched.value;
-    // }
   } else if (action === "remove") {
     filterCriterias.value = filterCriterias.value.filter((item) => {
       return item.criteriaId !== filterData.criteriaId;
     });
 
-    // console.log(filterCriterias.value);
     filteredfetchData.value = [];
     filterCriterias.value.forEach((item) => {
       filteredfetchData.value = filteredfetchData.value.concat(item.data);
     });
 
     if (filterCriterias.value.length === 0) {
+      haveFilter.value = false;
       ShowData.value = dataFetched.value;
     } else {
       ShowData.value = filteredfetchData.value;
     }
   }
 };
-//sort
 
-//pagination
 const fetchPage = ref(1);
 
 const numberOfPage = ref(5);
@@ -101,8 +91,6 @@ const fetchData = async (sort: SortType, filter: FilterItemType) => {
       throw Error("error in fetch");
     } else {
       if (filter.filterType !== "none") {
-        // console.log("HERE1");
-
         console.log(response.data);
 
         filters.value = response.meta.filters.option_types;
@@ -126,7 +114,6 @@ const fetchData = async (sort: SortType, filter: FilterItemType) => {
         ShowData.value = ShowData.value.concat(response.data);
       }
 
-      // console.log("meta ", response.meta);
       loading.value = false;
     }
   } catch (e) {

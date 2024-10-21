@@ -84,10 +84,10 @@ const prevPage = () => {
 
 // Slice pages to display in pagination bar
 const slicePages = computed(() => {
-  console.log(firstPageIndex.value);
+  // console.log(firstPageIndex.value);
 
-  console.log(lastPageIndex.value);
-  console.log(currentPage.value);
+  // console.log(lastPageIndex.value);
+  // console.log(currentPage.value);
   return pages.value.slice(firstPageIndex.value, lastPageIndex.value);
   // if (firstPageIndex.value === 0) {
   //   return pages.value.slice(1, lastPageIndex.value - 1);

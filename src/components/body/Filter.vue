@@ -36,34 +36,6 @@ const setOpen = (index: number) => {
   filterButtons[index].open.value = !filterButtons[index].open.value;
 };
 
-// const filterCriterias = ref<FilterCriteriaType[]>([]);
-
-// const filterList = ref<DataFetchType[]>([]);
-// const fetchFilteredData = async (
-//   filterType: string,
-//   filterCriteria: string,
-//   criteriaId: string
-// ) => {
-//   const res = await fetch(
-//     `  `
-//   );
-
-//   const data = await res.json();
-
-//   console.log(data.data);
-
-//   filterCriterias.value.push({
-//     criteriaId: criteriaId,
-//     data: data.data,
-//   });
-
-//   filterList.value = filterList.value.concat(data.data);
-
-//   // console.log(filterList.value);
-
-//   emit("data-fetched", filterList.value, filterCriterias.value.length !== 0);
-// };
-
 const recieveCriteria = (
   criteria: string,
   criteriaType: string,
@@ -82,10 +54,6 @@ const recieveCriteria = (
     },
     action
   );
-  // else if (action === "remove") {
-
-  // emit("data-fetched", filterList.value, !(filterCriterias.value.length === 0));
-  // }
 };
 </script>
 
