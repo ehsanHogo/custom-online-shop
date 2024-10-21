@@ -144,11 +144,13 @@ const fetchData = async (
 
 const currentPage = ref(1); // recieve update from child
 
-const receivePageData = (data: number) => {
+
+
+const receivePageData = async (data: number) => {
   currentPage.value = data;
 
   if (currentPage.value === numberOfPage.value) {
-    fetchData(
+    await fetchData(
       sortField.value,
       {
         filterType: "none",
@@ -159,6 +161,8 @@ const receivePageData = (data: number) => {
     );
 
     if (!haveNewItems.value) {
+      console.log("herrre2");
+
       return;
     } else {
       fetchPage.value += 1;

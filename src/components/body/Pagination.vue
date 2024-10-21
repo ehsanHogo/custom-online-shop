@@ -50,7 +50,7 @@ const changePage = (page: number) => {
   } else if (page === totalPage.value) {
     // Show the last set of pages
     firstPageIndex.value = Math.max(1, totalPage.value - stepSize - 1);
-    lastPageIndex.value = totalPage.value;
+    lastPageIndex.value = totalPage.value - 1;
   }
   currentPage.value = page;
 };
@@ -125,6 +125,7 @@ const slicePages = computed(() => {
       <div v-if="pages[lastPageIndex] !== totalPage"><b>...</b></div>
 
       <button
+        v-if="currentPage !== totalPage"
         @click="changePage(totalPage)"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
         :class="{ 'bg-Tint-5': totalPage === currentPage }"
