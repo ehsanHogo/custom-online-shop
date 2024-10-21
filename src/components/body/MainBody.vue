@@ -12,12 +12,17 @@ import {
   IncludedFetchType,
   SortType,
 } from "../../types/interfaces";
+import { useCurrentPageProp } from "vuestic-ui/dist/types/components/va-data-table/hooks/useCommonProps.js";
 
 const filters = ref<FilterType[]>([]);
 const loading = ref(true);
 const haveFilter = ref(false);
+
+const fetchPage = ref(1);
+
+const numberOfPage = ref(5);
 const recieveHaveFilter = (data: boolean) => {
-  console.log("hjsdhfjksadfhkj");
+  // console.log("hjsdhfjksadfhkj");
 
   haveFilter.value = data;
 };
@@ -40,21 +45,23 @@ const includedFetched = ref<IncludedFetchType[]>([]);
 const fetchData = async (sort: SortType) => {
   loading.value = true;
   let query = "";
+
+  if (fetchPage.value === 1) {
+    query = "https://demo.spreecommerce.org/api/v2/storefront/products?";
+  } else {
+    query = `https://demo.spreecommerce.org/api/v2/storefront/products?page=${fetchPage.value}&`;
+  }
   if (sort === "none") {
-    query =
-      "https://demo.spreecommerce.org/api/v2/storefront/products?include=images";
+    query += "include=images";
   } else if (sort === "price-cheap") {
-    query =
-      "https://demo.spreecommerce.org/api/v2/storefront/products?sort=price&include=images";
+    query += "sort=price&include=images";
   } else if (sort === "price-expensive") {
-    query =
-      "https://demo.spreecommerce.org/api/v2/storefront/products?sort=-price&include=images";
+    query += "sort=-price&include=images";
   } else if (sort === "new-created") {
-    query =
-      "https://demo.spreecommerce.org/api/v2/storefront/products?sort=-created_at&include=images";
+    query += "sort=-created_at&include=images";
   }
 
-  console.log(query);
+  // console.log(query);
 
   try {
     const res = await fetch(`${query}`, { method: "GET" });
@@ -63,14 +70,22 @@ const fetchData = async (sort: SortType) => {
       throw Error("error in fetch");
     } else {
       const response = await res.json();
-      console.log(response.meta.filters.option_types);
+      // console.log(response.meta.filters.option_types);
 
       filters.value = response.meta.filters.option_types;
       // console.log(response);
-      includedFetched.value = response.included;
+      includedFetched.value = includedFetched.value.concat(response.included);
 
       dataFetched.value = response.data;
-      ShowData.value = response.data;
+      // if (ShowData.value.length === 0) {
+      ShowData.value = ShowData.value.concat(response.data);
+      // includedFetched
+      console.log("meta ", response.meta);
+
+      // }else{\
+
+      // }
+
       // console.log(dataFetched.value);
 
       loading.value = false;
@@ -84,6 +99,12 @@ const currentPage = ref(1); // recieve update from child
 
 const receivePageData = (data: number) => {
   currentPage.value = data;
+
+  if (currentPage.value === numberOfPage.value) {
+    fetchPage.value += 1;
+    numberOfPage.value += 5;
+    fetchData(sortField.value);
+  }
 };
 
 const findImageUrl = (imageId: string) => {
@@ -94,12 +115,12 @@ const findImageUrl = (imageId: string) => {
   const resultItem = includedFetched.value.filter((item) => {
     return item.id === imageId;
   });
-  console.log("result : ", resultItem[0]);
+  // console.log("result : ", resultItem[0]);
 
   if (resultItem.length === 0) {
     return "";
   } else {
-    console.log("here");
+    // console.log("here");
 
     return resultItem[0].attributes.original_url;
   }
@@ -145,8 +166,9 @@ watch(sortField, (newVal) => {
         ></ShowCards>
 
         <Pagination
-          :pagesNum="5"
-          :stepNum="2"
+          :pagesNum="numberOfPage"
+          :stepNum="3"
+          :startPage="fetchPage"
           @data-page="receivePageData"
         ></Pagination>
       </div>

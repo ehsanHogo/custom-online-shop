@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, toRef, watch } from "vue";
 
 interface MyProps {
   pagesNum: number;
   stepNum: number;
+  startPage: number;
 }
 const props = defineProps<MyProps>();
 
@@ -13,33 +14,43 @@ const sendDataToParent = (pageData: number) => {
   emit("data-page", pageData);
 };
 // manual setting
-const currentPage = ref(1);
-const totalPage = props.pagesNum;
+const currentPage = ref(1 + (props.startPage - 1) * 5);
+const totalPage = toRef(props, "pagesNum");
+// const totalPage = ref(5);
 const stepSize = props.stepNum;
 
 // general
-const firstPage = ref(1);
-const lastPage = ref(Math.min(stepSize, totalPage));
-const lastPageIndex = computed(() => lastPage.value - 1);
-const firstPageIndex = computed(() => {
-  if (firstPage.value === 1) {
-    return firstPage.value - 1;
-  } else {
-    return firstPage.value - 2;
-  }
-});
+// const firstPage = ref(1);
+// const lastPage = ref(Math.min(stepSize, totalPage.value));
+// const lastPage = ref(2);
 
-const pages = [...Array(totalPage - 2)].map((_, i) => i + 2);
+const lastPageIndex = ref(stepSize + (props.startPage - 1) * 5);
+const firstPageIndex = ref(Math.max(0, 0 + (props.startPage - 1) * 5 - 1));
+
+watch(
+  () => props.startPage,
+  (newVal) => {
+    firstPageIndex.value = 0 + (newVal - 1) * 5 - 1;
+    lastPageIndex.value = stepSize + (newVal - 1) * 5 - 1;
+  }
+);
+const pages = computed(() => {
+  console.log([...Array(totalPage.value)].map((_, i) => i + 1));
+  return [...Array(totalPage.value)].map((_, i) => i + 1);
+});
+//  pages = ref([...Array(totalPage.value)].map((_, i) => i + 1));
+// pages = computed(() => [...Array(totalPage.value)].map((_, i) => i + 1));
+// console.log(pages.value);
 
 const changePage = (page: number) => {
   if (page === 1) {
     // Reset to the first set of pages
-    firstPage.value = 1;
-    lastPage.value = Math.min(stepSize, totalPage);
-  } else if (page === totalPage) {
+    firstPageIndex.value = 0;
+    lastPageIndex.value = Math.min(stepSize + 1, totalPage.value);
+  } else if (page === totalPage.value) {
     // Show the last set of pages
-    firstPage.value = Math.max(1, totalPage - stepSize + 1);
-    lastPage.value = totalPage;
+    // firstPage.value = Math.max(1, totalPage.value - stepSize + 1);
+    // lastPage.value = totalPage.value;
   }
   currentPage.value = page;
 };
@@ -49,11 +60,14 @@ watch(currentPage, (newval, _) => {
 });
 
 const nextPage = () => {
-  if (currentPage.value < totalPage) {
+  if (currentPage.value < totalPage.value) {
     currentPage.value++;
-    if (currentPage.value > lastPage.value) {
-      firstPage.value += stepSize;
-      lastPage.value = Math.min(totalPage, lastPage.value + stepSize);
+    if (currentPage.value >= pages.value[lastPageIndex.value]) {
+      firstPageIndex.value += stepSize;
+      lastPageIndex.value = Math.min(
+        totalPage.value - 1,
+        lastPageIndex.value + stepSize
+      );
     }
   }
 };
@@ -61,17 +75,26 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    if (currentPage.value < firstPage.value) {
-      firstPage.value = Math.max(1, firstPage.value - stepSize);
-      lastPage.value = firstPage.value + stepSize - 1;
+    if (currentPage.value < pages.value[firstPageIndex.value]) {
+      firstPageIndex.value = Math.max(0, firstPageIndex.value - stepSize);
+      lastPageIndex.value = firstPageIndex.value + stepSize;
     }
   }
 };
 
 // Slice pages to display in pagination bar
-const slicePages = computed(() =>
-  pages.slice(firstPageIndex.value, lastPageIndex.value)
-);
+const slicePages = computed(() => {
+  console.log(firstPageIndex.value);
+
+  console.log(lastPageIndex.value);
+  console.log(currentPage.value);
+  return pages.value.slice(firstPageIndex.value, lastPageIndex.value);
+  // if (firstPageIndex.value === 0) {
+  //   return pages.value.slice(1, lastPageIndex.value - 1);
+  // } else {
+  //   return pages.value.slice(firstPageIndex.value, lastPageIndex.value);
+  // }
+});
 </script>
 
 <template>
@@ -80,15 +103,15 @@ const slicePages = computed(() =>
       <img src="../../assets/body/arrow-left.png" alt="left arrow" />
     </button>
     <div class="flex gap-3 border border-myGray-4 rounded-lg p-3" dir="rtl">
-      <button
-        @click="changePage(1)"
+      <!-- <button
+        @click="changePage(pages[0])"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
         :class="{ 'bg-Tint-5': 1 === currentPage }"
       >
         <b> 1</b>
-      </button>
+      </button> -->
 
-      <div v-if="firstPage !== 1"><b>...</b></div>
+      <!-- <div v-if="currentPage !== 1"><b>...</b></div> -->
 
       <button
         @click="changePage(page)"
@@ -99,8 +122,8 @@ const slicePages = computed(() =>
       >
         <b> {{ page }}</b>
       </button>
+      <div v-if="pages[lastPageIndex] !== totalPage"><b>...</b></div>
 
-      <div v-if="lastPage !== totalPage"><b>...</b></div>
       <button
         @click="changePage(totalPage)"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
