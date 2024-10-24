@@ -22,24 +22,24 @@ export interface DataFetchType {
   // };
 }
 
-export interface DataFetchInPageType {
-  page: number;
-  data: [
-    {
-      attributes: {
-        name: string;
-        slug: string;
-        description: string;
-        display_price: string;
-      };
-      relationships: {
-        images: {
-          data: { id: string; type: string }[];
-        };
-      };
-    }
-  ];
-}
+// export interface DataFetchInPageType {
+//   page: number;
+//   data: [
+//     {
+//       attributes: {
+//         name: string;
+//         slug: string;
+//         description: string;
+//         display_price: string;
+//       };
+//       relationships: {
+//         images: {
+//           data: { id: string; type: string }[];
+//         };
+//       };
+//     }
+//   ];
+// }
 
 export interface IncludedFetchType {
   attributes: {

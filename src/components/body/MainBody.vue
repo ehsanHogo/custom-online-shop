@@ -14,12 +14,11 @@ import {
   FilterItemType,
   FilterCriteriaType,
   QueryType,
-  DataFetchInPageType,
 } from "../../types/interfaces";
 
 const loading = ref(true);
 const dataFetched = ref<DataFetchType[]>([]);
-const ShowData = ref<DataFetchInPageType[]>([]);
+const ShowData = ref<DataFetchType[]>([]);
 
 const includedFetched = ref<IncludedFetchType[]>([]);
 
@@ -150,10 +149,7 @@ const fetchData = async (
             response.included
           );
 
-          ShowData.value.push({
-            page: nextPage,
-            data: response.data,
-          });
+          ShowData.value = response.data;
 
           console.log(ShowData.value);
         } else {
@@ -180,34 +176,30 @@ const receivePageData = async (data: number) => {
 
   // fetchPage.value += 1;
 
-  if (ShowData.value.find((elem) => elem.page === currentPage.value)) {
+  await fetchData(
+    sortField.value,
+    {
+      filterType: "none",
+      filterCriteria: "a",
+      criteriaId: "a",
+    },
+    currentPage.value
+  );
+
+  if (!haveNewItems.value) {
+    console.log("herrre2");
+
+    return;
   } else {
-    await fetchData(
-      sortField.value,
-      {
-        filterType: "none",
-        filterCriteria: "a",
-        criteriaId: "a",
-      },
-      currentPage.value
-    );
-  }
-
-    if (!haveNewItems.value) {
-      console.log("herrre2");
-
-      return;
+    fetchPage.value += 1;
+    if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
+      // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
     } else {
-      fetchPage.value += 1;
-      if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
-        // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
-      } else {
-        // numberOfPage.value =
-        //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
-      }
-
-      console.log(numberOfPage.value);
+      // numberOfPage.value =
+      //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
     }
+
+    console.log(numberOfPage.value);
   }
 };
 
@@ -271,10 +263,7 @@ watch(sortField, (newVal) => {
         </div>
         <ShowCards
           v-if="!loading"
-          v-for="(item, index) in ShowData.slice(
-            (currentPage - 1) * 6,
-            (currentPage - 1) * 6 + 6
-          )"
+          v-for="(item, index) in ShowData"
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
