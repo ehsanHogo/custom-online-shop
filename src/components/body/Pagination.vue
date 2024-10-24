@@ -55,7 +55,7 @@ const changePage = (page: number) => {
     lastPageIndex.value = Math.min(stepSize - 1, totalPage.value);
   } else if (page === totalPage.value) {
     // Show the last set of pages
-    firstPageIndex.value = Math.max(0, totalPage.value - stepSize - 1);
+    firstPageIndex.value = Math.max(0, totalPage.value - stepSize);
     lastPageIndex.value = totalPage.value - 1;
   }
   currentPage.value = page;
