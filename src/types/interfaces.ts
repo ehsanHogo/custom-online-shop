@@ -6,8 +6,6 @@ export type SortType =
   | "new-created"
   | "none";
 export interface DataFetchType {
-  // page: number;
-  // data: {
   attributes: {
     name: string;
     slug: string;
@@ -19,27 +17,7 @@ export interface DataFetchType {
       data: { id: string; type: string }[];
     };
   };
-  // };
 }
-
-// export interface DataFetchInPageType {
-//   page: number;
-//   data: [
-//     {
-//       attributes: {
-//         name: string;
-//         slug: string;
-//         description: string;
-//         display_price: string;
-//       };
-//       relationships: {
-//         images: {
-//           data: { id: string; type: string }[];
-//         };
-//       };
-//     }
-//   ];
-// }
 
 export interface IncludedFetchType {
   attributes: {
@@ -87,5 +65,5 @@ export interface QueryType {
     createdAsc: string;
   };
 
-  splitQuery: string;
+  splitQuery : string
 }

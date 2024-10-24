@@ -47,9 +47,9 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
 
     if (filterCriterias.value.length === 0) {
       // haveFilter.value = false;
-      // ShowData.value = dataFetched.value;
+      ShowData.value = dataFetched.value;
     } else {
-      // ShowData.value = filteredfetchData.value;
+      ShowData.value = filteredfetchData.value;
     }
   }
 };
@@ -115,7 +115,7 @@ const fetchData = async (
       throw Error("error in fetch");
     } else {
       if (response.data.length === 0) {
-        console.log("hereee");
+        // console.log("hereee");
 
         haveNewItems.value = false;
       } else {
@@ -136,22 +136,17 @@ const fetchData = async (
 
         filteredfetchData.value = filteredfetchData.value.concat(response.data);
 
-        // ShowData.value = filteredfetchData.value;
+        ShowData.value = filteredfetchData.value;
       } else {
         filters.value = response.meta.filters.option_types;
 
         // dataFetched.value = dataFetched.value.concat(response.data);
         if (sort === "none") {
-          console.log("respon : ", response.data);
-
           dataFetched.value = dataFetched.value.concat(response.data);
           includedFetched.value = includedFetched.value.concat(
             response.included
           );
-
-          ShowData.value = response.data;
-
-          console.log(ShowData.value);
+          ShowData.value = ShowData.value.concat(response.data);
         } else {
           includedFetched.value = response.included;
           ShowData.value = response.data;
@@ -172,9 +167,7 @@ const currentPage = ref(1); // recieve update from child
 const receivePageData = async (data: number) => {
   currentPage.value = data;
 
-  console.log("pag :", currentPage.value);
-
-  // fetchPage.value += 1;
+  fetchPage.value += 1;
 
   await fetchData(
     sortField.value,
@@ -263,7 +256,10 @@ watch(sortField, (newVal) => {
         </div>
         <ShowCards
           v-if="!loading"
-          v-for="(item, index) in ShowData"
+          v-for="(item, index) in ShowData.slice(
+            (currentPage - 1) * numberOfProductsInPage,
+            (currentPage - 1) * numberOfProductsInPage + numberOfProductsInPage
+          )"
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
