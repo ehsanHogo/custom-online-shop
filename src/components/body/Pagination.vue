@@ -14,7 +14,9 @@ const sendDataToParent = (pageData: number) => {
   emit("data-page", pageData);
 };
 // manual setting
-const currentPage = ref(1);
+
+const fatherPage = props.startPage;
+const currentPage = ref(fatherPage);
 const totalPage = toRef(props, "numberOfPages");
 // const totalPage = ref(5);
 const stepSize = props.stepNum;
@@ -24,16 +26,20 @@ const stepSize = props.stepNum;
 // const lastPage = ref(Math.min(stepSize, totalPage.value));
 // const lastPage = ref(2);
 
-const lastPageIndex = ref(stepSize + (props.startPage - 1) * 5);
-const firstPageIndex = ref(Math.max(0, currentPage.value - 1));
+// const lastPageIndex = ref(stepSize + (props.startPage - 1) * 5);
+// const firstPageIndex = ref(Math.max(0, currentPage.value - 1));
 
-watch(
-  () => props.startPage,
-  () => {
-    firstPageIndex.value = Math.max(0, currentPage.value - 1);
-    lastPageIndex.value = stepSize + currentPage.value - 1;
-  }
-);
+const firstPageIndex = ref(0);
+const lastPageIndex = ref(2);
+
+// watch(
+//   () => props.startPage,
+//   () => {
+//     firstPageIndex.value = Math.max(0, currentPage.value - 1);
+//     lastPageIndex.value = stepSize + currentPage.value - 1;
+//   }
+// );
+
 const pages = computed(() => {
   console.log([...Array(totalPage.value)].map((_, i) => i + 1));
   return [...Array(totalPage.value)].map((_, i) => i + 1);
@@ -46,7 +52,7 @@ const changePage = (page: number) => {
   if (page === 1) {
     // Reset to the first set of pages
     firstPageIndex.value = 0;
-    lastPageIndex.value = Math.min(stepSize + 1, totalPage.value);
+    lastPageIndex.value = Math.min(stepSize - 1, totalPage.value);
   } else if (page === totalPage.value) {
     // Show the last set of pages
     firstPageIndex.value = Math.max(0, totalPage.value - stepSize - 1);
@@ -61,24 +67,26 @@ watch(currentPage, (newval, _) => {
 
 const nextPage = () => {
   if (currentPage.value < totalPage.value) {
-    currentPage.value++;
-    if (currentPage.value >= pages.value[lastPageIndex.value]) {
+    if (currentPage.value + 1 > pages.value[lastPageIndex.value]) {
       firstPageIndex.value += stepSize;
       lastPageIndex.value = Math.min(
         totalPage.value - 1,
         lastPageIndex.value + stepSize
       );
     }
+
+    currentPage.value++;
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) {
-    currentPage.value--;
-    if (currentPage.value < pages.value[firstPageIndex.value]) {
+    if (currentPage.value - 1 < pages.value[firstPageIndex.value]) {
+      lastPageIndex.value = firstPageIndex.value - 1;
       firstPageIndex.value = Math.max(0, firstPageIndex.value - stepSize);
-      lastPageIndex.value = firstPageIndex.value + stepSize;
     }
+
+    currentPage.value--;
   }
 };
 
@@ -88,13 +96,16 @@ const slicePages = computed(() => {
 
   // console.log(lastPageIndex.value);
   // console.log(currentPage.value);
-  return pages.value.slice(firstPageIndex.value, lastPageIndex.value);
+  // console.log(slicePages);
+  return pages.value.slice(firstPageIndex.value, lastPageIndex.value + 1);
   // if (firstPageIndex.value === 0) {
   //   return pages.value.slice(1, lastPageIndex.value - 1);
   // } else {
   //   return pages.value.slice(firstPageIndex.value, lastPageIndex.value);
   // }
 });
+
+console.log(slicePages.value);
 </script>
 
 <template>
