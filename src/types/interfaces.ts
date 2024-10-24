@@ -26,7 +26,7 @@ export interface IncludedFetchType {
   id: string;
 }
 
-export interface FilterItem {
+export interface FilterItemShowing {
   name: string;
   presentation: string;
   id: string;
@@ -34,7 +34,7 @@ export interface FilterItem {
 
 export interface FilterType {
   name: string;
-  option_values: FilterItem[];
+  option_values: FilterItemShowing[];
 }
 
 export interface FilterItemOptions {
@@ -42,12 +42,12 @@ export interface FilterItemOptions {
   open: Ref<boolean>;
 }
 
-export interface FilterCriteriaType {
-  criteriaName: string;
-  criteriaType: string;
-  criteriaId: string;
-  data: DataFetchType[];
-}
+// export interface FilterCriteriaType {
+//   criteriaName: string;
+//   criteriaType: string;
+//   criteriaId: string;
+//   data: DataFetchType[];
+// }
 
 export interface FilterItemType {
   filterType: string;
@@ -65,5 +65,11 @@ export interface QueryType {
     createdAsc: string;
   };
 
-  splitQuery : string
+  splitQuery: string;
+}
+
+
+export interface FiltersQueryType{
+  filters : FilterItemType[],
+  onlyExist : boolean
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { DataFetchType, FilterItem } from "../../types/interfaces";
+import { DataFetchType, FilterItemShowing } from "../../types/interfaces";
 interface MyProps {
-  filterColorData: FilterItem[];
+  filterColorData: FilterItemShowing[];
 }
 const props = defineProps<MyProps>();
 const filterList = ref(

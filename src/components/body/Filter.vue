@@ -4,8 +4,8 @@ import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
 import {
-
   FilterItemOptions,
+  FilterItemType,
   FilterType,
 } from "../../types/interfaces";
 
@@ -18,9 +18,6 @@ const emit = defineEmits(["data-fetched"]);
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 const onlyExist = ref(false);
-
-
-
 
 const filterButtons: FilterItemOptions[] = [
   { name: "برند", open: ref(false) },
@@ -38,6 +35,8 @@ const setOpen = (index: number) => {
   filterButtons[index].open.value = !filterButtons[index].open.value;
 };
 
+const filterCriterias = ref<FilterItemType[]>([]);
+
 const recieveCriteria = (
   criteria: string,
   criteriaType: string,
@@ -46,14 +45,22 @@ const recieveCriteria = (
 ) => {
   console.log(criteria);
 
-  // if (action === "add")
-  emit(
-    "data-fetched",
-    {
+  if (action === "add") {
+    filterCriterias.value.push({
       filterType: criteriaType,
       filterCriteria: criteria,
       criteriaId: criteriaId,
-    },
+    });
+  } else if (action === "remove") {
+    filterCriterias.value = filterCriterias.value.filter((item) => {
+      return item.criteriaId !== criteriaId;
+    });
+  }
+
+  // if (action === "add")
+  emit(
+    "data-fetched",
+    { filters: filterCriterias.value, onlyExist: onlyExist },
     action
   );
 };

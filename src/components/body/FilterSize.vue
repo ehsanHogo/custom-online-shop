@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { DataFetchType, FilterItem } from "../../types/interfaces";
+import { DataFetchType, FilterItemShowing } from "../../types/interfaces";
 interface MyProps {
-  filterSizeData: FilterItem[];
+  filterSizeData: FilterItemShowing[];
 }
 const props = defineProps<MyProps>();
 const filterList = ref(

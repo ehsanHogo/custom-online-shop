@@ -12,33 +12,33 @@ import {
   IncludedFetchType,
   SortType,
   FilterItemType,
-  FilterCriteriaType,
   QueryType,
+  FiltersQueryType,
 } from "../../types/interfaces";
 
 const loading = ref(true);
-const dataFetched = ref<DataFetchType[]>([]);
-const ShowData = ref<DataFetchType[]>([]);
+
+const showData = ref<DataFetchType[]>([]);
 
 const includedFetched = ref<IncludedFetchType[]>([]);
 
 //filter
 const filters = ref<FilterType[]>([]);
-const haveFilter = ref(false);
-const filterCriterias = ref<FilterItemType[]>([]);
 
-const filteredfetchData = ref<DataFetchType[]>([]);
+const filterCriterias = ref<FiltersQueryType>({
+  filters: [],
+  onlyExist: false,
+});
 
-const recieveDataFetched = (filterData: FilterItemType, action: string) => {
-  if (action === "add") {
-    // haveFilter.value = true;
-    filterCriterias.value.push(filterData);
-    // fetchData(sortField.value, filterData, currentPage.value);
-  } else if (action === "remove") {
-    filterCriterias.value = filterCriterias.value.filter((item) => {
-      return item.criteriaId !== filterData.criteriaId;
-    });
-  }
+const recieveDataFetched = (filterData: FiltersQueryType, action: string) => {
+  // if (action === "add") {
+  //   filterCriterias.value.push(filterData);
+  // } else if (action === "remove") {
+  //   filterCriterias.value = filterCriterias.value.filter((item) => {
+  //     return item.criteriaId !== filterData.criteriaId;
+  //   });
+  // }
+  filterCriterias.value = filterData;
   fetchData(sortField.value, filterData, currentPage.value);
 };
 
@@ -48,16 +48,12 @@ const fetchPage = ref(1);
 
 const lastPage = ref(1);
 
-const resetPagination = ref(false);
-
 const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
 
-const haveNewItems = ref(false);
-
 const fetchData = async (
   sort: SortType,
-  filter: FilterItemType,
+  filter: FiltersQueryType,
   nextPage: number
 ) => {
   loading.value = true;
@@ -91,8 +87,8 @@ const fetchData = async (
     baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
-  if (filterCriterias.value.length !== 0) {
-    filterCriterias.value.forEach((item) => {
+  if (filter.filters.length !== 0) {
+    filter.filters.forEach((item) => {
       baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
     });
   }
@@ -108,13 +104,7 @@ const fetchData = async (
       filters.value = response.meta.filters.option_types;
 
       includedFetched.value = response.included;
-      ShowData.value = response.data;
-
-      // if (sort !== "none" || filterCriterias.value.length !== 0) {
-      //   console.log("gklsjgfdjghkl");
-
-      //   currentPage.value = 1;
-      // }
+      showData.value = response.data;
 
       if (response.meta.total_pages !== numberOfPage.value) {
         currentPage.value = 1;
@@ -131,20 +121,12 @@ const fetchData = async (
 
 const currentPage = ref(1); // recieve update from child
 
-const receivePageData = async (data: number) => {
+const receivePageData = (data: number) => {
   currentPage.value = data;
 
   fetchPage.value += 1;
 
-  await fetchData(
-    sortField.value,
-    {
-      filterType: "none",
-      filterCriteria: "a",
-      criteriaId: "a",
-    },
-    currentPage.value
-  );
+  fetchData(sortField.value, filterCriterias.value, currentPage.value);
 };
 
 const findImageUrl = (imageId: string) => {
@@ -169,27 +151,11 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-  fetchData(
-    sortField.value,
-    {
-      filterType: "none",
-      filterCriteria: "fdfgs",
-      criteriaId: "fjksdhg",
-    },
-    1
-  );
+  fetchData(sortField.value, filterCriterias.value, 1);
 });
 
 watch(sortField, (newVal) => {
-  fetchData(
-    newVal,
-    {
-      filterType: "none",
-      filterCriteria: "fdfgs",
-      criteriaId: "fjksdhg",
-    },
-    currentPage.value
-  );
+  fetchData(newVal, filterCriterias.value, currentPage.value);
 });
 </script>
 
@@ -207,7 +173,7 @@ watch(sortField, (newVal) => {
         </div>
         <ShowCards
           v-if="!loading"
-          v-for="(item, index) in ShowData"
+          v-for="(item, index) in showData"
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"

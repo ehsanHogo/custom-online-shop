@@ -5,7 +5,6 @@ interface MyProps {
   numberOfPages: number;
   stepNum: number;
   startPage: number;
-  // reset: Boolean;
 }
 const props = defineProps<MyProps>();
 
@@ -28,12 +27,6 @@ watch(fatherPage, (newVal) => {
     firstPageIndex.value = 0;
     lastPageIndex.value = 2;
   }
-
-  // if (newVal > totalPage.value) {
-  // currentPage.value = 1;
-  // firstPageIndex.value = 0;
-  // lastPageIndex.value = 2;
-  // }
 });
 // general
 
@@ -44,9 +37,6 @@ const pages = computed(() => {
   console.log([...Array(totalPage.value)].map((_, i) => i + 1));
   return [...Array(totalPage.value)].map((_, i) => i + 1);
 });
-//  pages = ref([...Array(totalPage.value)].map((_, i) => i + 1));
-// pages = computed(() => [...Array(totalPage.value)].map((_, i) => i + 1));
-// console.log(pages.value);
 
 const changePage = (page: number) => {
   if (page === 1) {
@@ -92,23 +82,11 @@ const prevPage = () => {
 
 // Slice pages to display in pagination bar
 const slicePages = computed<number[]>(() => {
-  // console.log(firstPageIndex.value);
-
-  // console.log(lastPageIndex.value);
-  // console.log(currentPage.value);
-  // console.log(slicePages);
   return pages.value.slice(
     Math.max(1, firstPageIndex.value),
     lastPageIndex.value + 1
   );
-  // if (firstPageIndex.value === 0) {
-  //   return pages.value.slice(1, lastPageIndex.value - 1);
-  // } else {
-  //   return pages.value.slice(firstPageIndex.value, lastPageIndex.value);
-  // }
 });
-
-console.log(slicePages.value);
 </script>
 
 <template>
