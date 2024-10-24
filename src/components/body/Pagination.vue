@@ -56,7 +56,7 @@ const changePage = (page: number) => {
   } else if (page === totalPage.value) {
     // Show the last set of pages
     firstPageIndex.value = Math.max(0, totalPage.value - stepSize - 1);
-    lastPageIndex.value = totalPage.value - 1;
+    lastPageIndex.value = totalPage.value - 2;
   }
   currentPage.value = page;
 };
@@ -91,13 +91,16 @@ const prevPage = () => {
 };
 
 // Slice pages to display in pagination bar
-const slicePages = computed(() => {
+const slicePages = computed<number[]>(() => {
   // console.log(firstPageIndex.value);
 
   // console.log(lastPageIndex.value);
   // console.log(currentPage.value);
   // console.log(slicePages);
-  return pages.value.slice(firstPageIndex.value, lastPageIndex.value + 1);
+  return pages.value.slice(
+    Math.max(1, firstPageIndex.value),
+    lastPageIndex.value + 1
+  );
   // if (firstPageIndex.value === 0) {
   //   return pages.value.slice(1, lastPageIndex.value - 1);
   // } else {
@@ -114,15 +117,15 @@ console.log(slicePages.value);
       <img src="../../assets/body/arrow-left.png" alt="left arrow" />
     </button>
     <div class="flex gap-3 border border-myGray-4 rounded-lg p-3" dir="rtl">
-      <!-- <button
+      <button
         @click="changePage(pages[0])"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
         :class="{ 'bg-Tint-5': 1 === currentPage }"
       >
         <b> 1</b>
-      </button> -->
+      </button>
 
-      <!-- <div v-if="currentPage !== 1"><b>...</b></div> -->
+      <div v-if="firstPageIndex !== 0"><b>...</b></div>
 
       <button
         @click="changePage(page)"
@@ -133,10 +136,9 @@ console.log(slicePages.value);
       >
         <b> {{ page }}</b>
       </button>
-      <div v-if="pages[lastPageIndex] !== totalPage"><b>...</b></div>
+      <div v-if="pages[lastPageIndex] !== totalPage - 1"><b>...</b></div>
 
       <button
-        v-if="currentPage !== totalPage"
         @click="changePage(totalPage)"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
         :class="{ 'bg-Tint-5': totalPage === currentPage }"

@@ -61,6 +61,7 @@ const fetchPage = ref(1);
 const lastPage = ref(1);
 
 const numberOfPage = ref(1);
+const numberOfProductsInPage = 9;
 
 const haveNewItems = ref(false);
 
@@ -73,7 +74,6 @@ const fetchData = async (
 
   console.log(nextPage);
 
-  const numberOfProductsInPage = 9;
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
     include: {
@@ -142,11 +142,11 @@ const fetchData = async (
 
         // dataFetched.value = dataFetched.value.concat(response.data);
         if (sort === "none") {
-          dataFetched.value = dataFetched.value.concat(response.data);
-          includedFetched.value = includedFetched.value.concat(
-            response.included
-          );
-          ShowData.value = ShowData.value.concat(response.data);
+          // dataFetched.value = dataFetched.value.concat(response.data);
+          includedFetched.value = response.included;
+
+          // ShowData.value = ShowData.value.concat(response.data);
+          ShowData.value = ShowData.value = response.data;
         } else {
           includedFetched.value = response.included;
           ShowData.value = response.data;
@@ -256,10 +256,7 @@ watch(sortField, (newVal) => {
         </div>
         <ShowCards
           v-if="!loading"
-          v-for="(item, index) in ShowData.slice(
-            (currentPage - 1) * numberOfProductsInPage,
-            (currentPage - 1) * numberOfProductsInPage + numberOfProductsInPage
-          )"
+          v-for="(item, index) in ShowData"
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
