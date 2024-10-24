@@ -179,21 +179,21 @@ const receivePageData = async (data: number) => {
     currentPage.value
   );
 
-  if (!haveNewItems.value) {
-    console.log("herrre2");
+  // if (!haveNewItems.value) {
+  //   console.log("herrre2");
 
-    return;
-  } else {
-    fetchPage.value += 1;
-    if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
-      // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
-    } else {
-      // numberOfPage.value =
-      //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
-    }
+  //   return;
+  // } else {
+  //   fetchPage.value += 1;
+  //   if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
+  //     // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
+  //   } else {
+  //     // numberOfPage.value =
+  //     //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
+  //   }
 
-    console.log(numberOfPage.value);
-  }
+  //   console.log(numberOfPage.value);
+  // }
 };
 
 const findImageUrl = (imageId: string) => {
@@ -237,7 +237,7 @@ watch(sortField, (newVal) => {
       filterCriteria: "fdfgs",
       criteriaId: "fjksdhg",
     },
-    1
+    currentPage.value
   );
 });
 </script>
