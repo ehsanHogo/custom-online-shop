@@ -13,6 +13,7 @@ import {
   SortType,
   FilterItemType,
   FilterCriteriaType,
+  QueryType,
 } from "../../types/interfaces";
 
 const loading = ref(true);
@@ -57,7 +58,9 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
 
 const fetchPage = ref(1);
 
-const numberOfPage = ref(5);
+const lastPage = ref(1);
+
+const numberOfPage = ref(1);
 
 const haveNewItems = ref(false);
 
@@ -70,40 +73,49 @@ const fetchData = async (
 
   console.log(nextPage);
 
-  let query = "";
-
-  if (nextPage === 1) {
-    query = "https://demo.spreecommerce.org/api/v2/storefront/products?";
-  } else {
-    query = `https://demo.spreecommerce.org/api/v2/storefront/products?page=${nextPage}&`;
+  const numberOfProductsInPage = 9;
+  let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
+  const mainQuery: QueryType = {
+    include: {
+      images: "include=images",
+    },
+    sort: {
+      priceAsc: "sort=price",
+      priceDec: "sort=-price",
+      createdAsc: "sort=-created_at",
+    },
+    splitQuery: "&",
+  };
+  if (nextPage !== 1) {
+    baseQuery += `&page=${nextPage}`;
   }
   if (sort === "none") {
-    query += "include=images";
+    // baseQuery += mainQuery.splitQuery +  mainQuery.include.images;
   } else if (sort === "price-cheap") {
-    query += "sort=price&include=images";
+    baseQuery += mainQuery.splitQuery + mainQuery.sort.priceAsc;
   } else if (sort === "price-expensive") {
-    query += "sort=-price&include=images";
+    baseQuery += mainQuery.splitQuery + mainQuery.sort.priceDec;
   } else if (sort === "new-created") {
-    query += "sort=-created_at&include=images";
+    baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
   if (filter.filterType !== "none") {
-    query += `&filter[options][${filter.filterType}]=${filter.filterCriteria}`;
+    baseQuery += `&filter[options][${filter.filterType}]=${filter.filterCriteria}`;
     // console.log(query);
   } else if (filterCriterias.value.length !== 0) {
     filterCriterias.value.forEach((item) => {
-      query += `&filter[options][${item.criteriaType}]=${item.criteriaName}`;
+      baseQuery += `&filter[options][${item.criteriaType}]=${item.criteriaName}`;
     });
   }
   try {
-    const res = await fetch(`${query}`, { method: "GET" });
+    const res = await fetch(`${baseQuery}`, { method: "GET" });
     const response = await res.json();
 
     if (!res.ok) {
       throw Error("error in fetch");
     } else {
       if (response.data.length === 0) {
-        console.log("hereee");
+        // console.log("hereee");
 
         haveNewItems.value = false;
       } else {
@@ -128,12 +140,20 @@ const fetchData = async (
       } else {
         filters.value = response.meta.filters.option_types;
 
-        includedFetched.value = includedFetched.value.concat(response.included);
-
-        dataFetched.value = dataFetched.value.concat(response.data);
-
-        ShowData.value = ShowData.value.concat(response.data);
+        // dataFetched.value = dataFetched.value.concat(response.data);
+        if (sort === "none") {
+          dataFetched.value = dataFetched.value.concat(response.data);
+          includedFetched.value = includedFetched.value.concat(
+            response.included
+          );
+          ShowData.value = ShowData.value.concat(response.data);
+        } else {
+          includedFetched.value = response.included;
+          ShowData.value = response.data;
+        }
       }
+
+      numberOfPage.value = response.meta.total_pages;
 
       loading.value = false;
     }
@@ -143,8 +163,6 @@ const fetchData = async (
 };
 
 const currentPage = ref(1); // recieve update from child
-
-
 
 const receivePageData = async (data: number) => {
   currentPage.value = data;
@@ -167,10 +185,10 @@ const receivePageData = async (data: number) => {
     } else {
       fetchPage.value += 1;
       if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
-        numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
+        // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
       } else {
-        numberOfPage.value =
-          Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
+        // numberOfPage.value =
+        //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
       }
 
       console.log(numberOfPage.value);
@@ -253,6 +271,7 @@ watch(sortField, (newVal) => {
           :numberOfPages="numberOfPage"
           :stepNum="3"
           :startPage="fetchPage"
+          :lastPage="lastPage"
           @data-page="receivePageData"
         ></Pagination>
       </div>

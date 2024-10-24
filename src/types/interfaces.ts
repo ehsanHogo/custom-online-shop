@@ -54,3 +54,16 @@ export interface FilterItemType {
   filterCriteria: string;
   criteriaId: string;
 }
+
+export interface QueryType {
+  include: {
+    images: string;
+  };
+  sort: {
+    priceDec: string;
+    priceAsc: string;
+    createdAsc: string;
+  };
+
+  splitQuery : string
+}
