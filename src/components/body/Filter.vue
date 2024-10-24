@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { Ref, ref } from "vue";
+import { Ref, ref, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
 import {
-  DataFetchType,
-  FilterCriteriaType,
+
   FilterItemOptions,
   FilterType,
 } from "../../types/interfaces";
@@ -19,6 +18,9 @@ const emit = defineEmits(["data-fetched"]);
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 const onlyExist = ref(false);
+
+
+
 
 const filterButtons: FilterItemOptions[] = [
   { name: "برند", open: ref(false) },

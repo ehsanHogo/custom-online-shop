@@ -5,6 +5,7 @@ interface MyProps {
   numberOfPages: number;
   stepNum: number;
   startPage: number;
+  // reset: Boolean;
 }
 const props = defineProps<MyProps>();
 
@@ -15,30 +16,29 @@ const sendDataToParent = (pageData: number) => {
 };
 // manual setting
 
-const fatherPage = props.startPage;
-const currentPage = ref(fatherPage);
+const fatherPage = toRef(props, "startPage");
+const currentPage = ref(fatherPage.value);
 const totalPage = toRef(props, "numberOfPages");
 // const totalPage = ref(5);
 const stepSize = props.stepNum;
 
-// general
-// const firstPage = ref(1);
-// const lastPage = ref(Math.min(stepSize, totalPage.value));
-// const lastPage = ref(2);
+watch(fatherPage, (newVal) => {
+  if (newVal === 1) {
+    currentPage.value = 1;
+    firstPageIndex.value = 0;
+    lastPageIndex.value = 2;
+  }
 
-// const lastPageIndex = ref(stepSize + (props.startPage - 1) * 5);
-// const firstPageIndex = ref(Math.max(0, currentPage.value - 1));
+  // if (newVal > totalPage.value) {
+  // currentPage.value = 1;
+  // firstPageIndex.value = 0;
+  // lastPageIndex.value = 2;
+  // }
+});
+// general
 
 const firstPageIndex = ref(0);
 const lastPageIndex = ref(2);
-
-// watch(
-//   () => props.startPage,
-//   () => {
-//     firstPageIndex.value = Math.max(0, currentPage.value - 1);
-//     lastPageIndex.value = stepSize + currentPage.value - 1;
-//   }
-// );
 
 const pages = computed(() => {
   console.log([...Array(totalPage.value)].map((_, i) => i + 1));
@@ -136,9 +136,18 @@ console.log(slicePages.value);
       >
         <b> {{ page }}</b>
       </button>
-      <div v-if="pages[lastPageIndex] !== totalPage - 1"><b>...</b></div>
+      <div
+        v-if="
+          pages[lastPageIndex] !== totalPage - 1 &&
+          totalPage > 1 &&
+          totalPage >= 1 + stepNum
+        "
+      >
+        <b>...</b>
+      </div>
 
       <button
+        v-if="totalPage > 1 && totalPage >= 1 + stepNum"
         @click="changePage(totalPage)"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
         :class="{ 'bg-Tint-5': totalPage === currentPage }"

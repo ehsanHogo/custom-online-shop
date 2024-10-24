@@ -25,33 +25,21 @@ const includedFetched = ref<IncludedFetchType[]>([]);
 //filter
 const filters = ref<FilterType[]>([]);
 const haveFilter = ref(false);
-const filterCriterias = ref<FilterCriteriaType[]>([]);
+const filterCriterias = ref<FilterItemType[]>([]);
 
 const filteredfetchData = ref<DataFetchType[]>([]);
 
 const recieveDataFetched = (filterData: FilterItemType, action: string) => {
-  // console.log(filterData);
-
   if (action === "add") {
     // haveFilter.value = true;
-    fetchData(sortField.value, filterData, fetchPage.value);
+    filterCriterias.value.push(filterData);
+    // fetchData(sortField.value, filterData, currentPage.value);
   } else if (action === "remove") {
     filterCriterias.value = filterCriterias.value.filter((item) => {
       return item.criteriaId !== filterData.criteriaId;
     });
-
-    filteredfetchData.value = [];
-    filterCriterias.value.forEach((item) => {
-      filteredfetchData.value = filteredfetchData.value.concat(item.data);
-    });
-
-    if (filterCriterias.value.length === 0) {
-      // haveFilter.value = false;
-      ShowData.value = dataFetched.value;
-    } else {
-      ShowData.value = filteredfetchData.value;
-    }
   }
+  fetchData(sortField.value, filterData, currentPage.value);
 };
 
 //page
@@ -59,6 +47,8 @@ const recieveDataFetched = (filterData: FilterItemType, action: string) => {
 const fetchPage = ref(1);
 
 const lastPage = ref(1);
+
+const resetPagination = ref(false);
 
 const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
@@ -72,7 +62,7 @@ const fetchData = async (
 ) => {
   loading.value = true;
 
-  console.log(nextPage);
+  // console.log(nextPage);
 
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
@@ -86,9 +76,11 @@ const fetchData = async (
     },
     splitQuery: "&",
   };
+
   if (nextPage !== 1) {
     baseQuery += `&page=${nextPage}`;
   }
+
   if (sort === "none") {
     // baseQuery += mainQuery.splitQuery +  mainQuery.include.images;
   } else if (sort === "price-cheap") {
@@ -99,14 +91,12 @@ const fetchData = async (
     baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
-  if (filter.filterType !== "none") {
-    baseQuery += `&filter[options][${filter.filterType}]=${filter.filterCriteria}`;
-    // console.log(query);
-  } else if (filterCriterias.value.length !== 0) {
+  if (filterCriterias.value.length !== 0) {
     filterCriterias.value.forEach((item) => {
-      baseQuery += `&filter[options][${item.criteriaType}]=${item.criteriaName}`;
+      baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
     });
   }
+
   try {
     const res = await fetch(`${baseQuery}`, { method: "GET" });
     const response = await res.json();
@@ -114,43 +104,20 @@ const fetchData = async (
     if (!res.ok) {
       throw Error("error in fetch");
     } else {
-      if (response.data.length === 0) {
-        // console.log("hereee");
+      console.log(response.data);
+      filters.value = response.meta.filters.option_types;
 
-        haveNewItems.value = false;
-      } else {
-        haveNewItems.value = true;
-      }
-      if (filter.filterType !== "none") {
-        console.log(response.data);
+      includedFetched.value = response.included;
+      ShowData.value = response.data;
 
-        filters.value = response.meta.filters.option_types;
-        filterCriterias.value.push({
-          criteriaName: filter.filterCriteria,
-          criteriaType: filter.filterType,
-          criteriaId: filter.criteriaId,
-          data: response.data,
-        });
+      // if (sort !== "none" || filterCriterias.value.length !== 0) {
+      //   console.log("gklsjgfdjghkl");
 
-        includedFetched.value = includedFetched.value.concat(response.included);
+      //   currentPage.value = 1;
+      // }
 
-        filteredfetchData.value = filteredfetchData.value.concat(response.data);
-
-        ShowData.value = filteredfetchData.value;
-      } else {
-        filters.value = response.meta.filters.option_types;
-
-        // dataFetched.value = dataFetched.value.concat(response.data);
-        if (sort === "none") {
-          // dataFetched.value = dataFetched.value.concat(response.data);
-          includedFetched.value = response.included;
-
-          // ShowData.value = ShowData.value.concat(response.data);
-          ShowData.value = ShowData.value = response.data;
-        } else {
-          includedFetched.value = response.included;
-          ShowData.value = response.data;
-        }
+      if (response.meta.total_pages !== numberOfPage.value) {
+        currentPage.value = 1;
       }
 
       numberOfPage.value = response.meta.total_pages;
@@ -178,22 +145,6 @@ const receivePageData = async (data: number) => {
     },
     currentPage.value
   );
-
-  // if (!haveNewItems.value) {
-  //   console.log("herrre2");
-
-  //   return;
-  // } else {
-  //   fetchPage.value += 1;
-  //   if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
-  //     // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
-  //   } else {
-  //     // numberOfPage.value =
-  //     //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
-  //   }
-
-  //   console.log(numberOfPage.value);
-  // }
 };
 
 const findImageUrl = (imageId: string) => {
@@ -267,7 +218,7 @@ watch(sortField, (newVal) => {
         <Pagination
           :numberOfPages="numberOfPage"
           :stepNum="3"
-          :startPage="fetchPage"
+          :startPage="currentPage"
           :lastPage="lastPage"
           @data-page="receivePageData"
         ></Pagination>
