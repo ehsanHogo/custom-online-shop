@@ -64,6 +64,8 @@ const numberOfPage = ref(1);
 
 const haveNewItems = ref(false);
 
+const numberOfProductsInPage = 9;
+
 const fetchData = async (
   sort: SortType,
   filter: FilterItemType,
@@ -73,7 +75,6 @@ const fetchData = async (
 
   console.log(nextPage);
 
-  const numberOfProductsInPage = 9;
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
     include: {
@@ -167,33 +168,33 @@ const currentPage = ref(1); // recieve update from child
 const receivePageData = async (data: number) => {
   currentPage.value = data;
 
-  if (currentPage.value === numberOfPage.value) {
-    await fetchData(
-      sortField.value,
-      {
-        filterType: "none",
-        filterCriteria: "a",
-        criteriaId: "a",
-      },
-      fetchPage.value + 1
-    );
+  fetchPage.value += 1;
 
-    if (!haveNewItems.value) {
-      console.log("herrre2");
+  await fetchData(
+    sortField.value,
+    {
+      filterType: "none",
+      filterCriteria: "a",
+      criteriaId: "a",
+    },
+    fetchPage.value + 1
+  );
 
-      return;
-    } else {
-      fetchPage.value += 1;
-      if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
-        // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
-      } else {
-        // numberOfPage.value =
-        //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
-      }
+  // if (!haveNewItems.value) {
+  //   console.log("herrre2");
 
-      console.log(numberOfPage.value);
-    }
-  }
+  //   return;
+  // } else {
+  //   fetchPage.value += 1;
+  //   if (((fetchPage.value - 1) * 25 + 25) % 6 === 0) {
+  //     // numberOfPage.value = ((fetchPage.value - 1) * 25 + 25) / 6;
+  //   } else {
+  //     // numberOfPage.value =
+  //     //   Math.floor(((fetchPage.value - 1) * 25 + 25) / 6) + 1;
+  //   }
+
+  //   console.log(numberOfPage.value);
+  // }
 };
 
 const findImageUrl = (imageId: string) => {
@@ -257,8 +258,8 @@ watch(sortField, (newVal) => {
         <ShowCards
           v-if="!loading"
           v-for="(item, index) in ShowData.slice(
-            (currentPage - 1) * 6,
-            (currentPage - 1) * 6 + 6
+            (currentPage - 1) * numberOfProductsInPage,
+            (currentPage - 1) * numberOfProductsInPage + numberOfProductsInPage
           )"
           :key="index"
           :name="item.attributes.slug"
@@ -270,7 +271,7 @@ watch(sortField, (newVal) => {
         <Pagination
           :numberOfPages="numberOfPage"
           :stepNum="3"
-          :startPage="fetchPage"
+          :startPage="currentPage"
           :lastPage="lastPage"
           @data-page="receivePageData"
         ></Pagination>
