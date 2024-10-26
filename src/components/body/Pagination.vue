@@ -84,7 +84,7 @@ const prevPage = () => {
 const slicePages = computed<number[]>(() => {
   return pages.value.slice(
     Math.max(1, firstPageIndex.value),
-    lastPageIndex.value + 1
+    Math.min(lastPageIndex.value + 1, totalPage.value - 1)
   );
 });
 </script>
@@ -103,7 +103,9 @@ const slicePages = computed<number[]>(() => {
         <b> 1</b>
       </button>
 
-      <div v-if="firstPageIndex !== 0"><b>...</b></div>
+      <div v-if="firstPageIndex !== 0 && pages[stepNum - 1] < totalPage">
+        <b>...</b>
+      </div>
 
       <button
         @click="changePage(page)"
@@ -118,14 +120,15 @@ const slicePages = computed<number[]>(() => {
         v-if="
           pages[lastPageIndex] !== totalPage - 1 &&
           totalPage > 1 &&
-          totalPage >= 1 + stepNum
+          pages[stepNum - 1] < totalPage
         "
       >
+        {{ console.log(pages[stepNum - 1]) }}
         <b>...</b>
       </div>
 
       <button
-        v-if="totalPage > 1 && totalPage >= 1 + stepNum"
+        v-if="totalPage > 1"
         @click="changePage(totalPage)"
         class="border border-myGray-8 w-8 h-8 rounded-xl flex justify-center items-center"
         :class="{ 'bg-Tint-5': totalPage === currentPage }"
