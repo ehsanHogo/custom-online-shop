@@ -123,7 +123,7 @@ const slicePages = computed<number[]>(() => {
           pages[stepNum - 1] < totalPage
         "
       >
-        {{ console.log(pages[stepNum - 1]) }}
+      
         <b>...</b>
       </div>
 

@@ -37,6 +37,15 @@ const setOpen = (index: number) => {
 
 const filterCriterias = ref<FilterItemType[]>([]);
 
+
+
+watch(onlyExist, (newVal)=>{
+  emit(
+    "data-fetched",
+    { filters: filterCriterias.value, onlyExist: newVal }
+  );
+})
+
 const recieveCriteria = (
   criteria: string,
   criteriaType: string,
@@ -60,8 +69,7 @@ const recieveCriteria = (
   // if (action === "add")
   emit(
     "data-fetched",
-    { filters: filterCriterias.value, onlyExist: onlyExist },
-    action
+    { filters: filterCriterias.value, onlyExist: onlyExist }
   );
 };
 </script>

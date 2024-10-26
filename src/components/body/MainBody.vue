@@ -30,7 +30,7 @@ const filterCriterias = ref<FiltersQueryType>({
   onlyExist: false,
 });
 
-const recieveDataFetched = (filterData: FiltersQueryType, action: string) => {
+const recieveDataFetched = (filterData: FiltersQueryType) => {
   // if (action === "add") {
   //   filterCriterias.value.push(filterData);
   // } else if (action === "remove") {
@@ -38,6 +38,9 @@ const recieveDataFetched = (filterData: FiltersQueryType, action: string) => {
   //     return item.criteriaId !== filterData.criteriaId;
   //   });
   // }
+
+  console.log(filterData.onlyExist);
+
   filterCriterias.value = filterData;
   fetchData(sortField.value, filterData, currentPage.value);
 };
@@ -91,6 +94,9 @@ const fetchData = async (
     filter.filters.forEach((item) => {
       baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
     });
+  }
+  if (filter.onlyExist) {
+    baseQuery += `&filter[in_stock]=true`;
   }
 
   try {
