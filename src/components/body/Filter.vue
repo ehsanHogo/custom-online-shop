@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, watch } from "vue";
+import { computed, Ref, ref, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
@@ -37,14 +37,21 @@ const setOpen = (index: number) => {
 
 const filterCriterias = ref<FilterItemType[]>([]);
 
+const filterColorCriterias = computed<FilterItemType[]>(() => {
+  return filterCriterias.value.filter((item) => {
+    return item.filterType === "color";
+  });
+});
 
+const filterSizeCriterias = computed<FilterItemType[]>(() => {
+  return filterCriterias.value.filter((item) => {
+    return item.filterType === "size";
+  });
+});
 
-watch(onlyExist, (newVal)=>{
-  emit(
-    "data-fetched",
-    { filters: filterCriterias.value, onlyExist: newVal }
-  );
-})
+watch(onlyExist, (newVal) => {
+  emit("data-fetched", { filters: filterCriterias.value, onlyExist: newVal });
+});
 
 const recieveCriteria = (
   criteria: string,
@@ -67,10 +74,10 @@ const recieveCriteria = (
   }
 
   // if (action === "add")
-  emit(
-    "data-fetched",
-    { filters: filterCriterias.value, onlyExist: onlyExist }
-  );
+  emit("data-fetched", {
+    filters: filterCriterias.value,
+    onlyExist: onlyExist,
+  });
 };
 </script>
 
@@ -101,6 +108,7 @@ const recieveCriteria = (
             filterButtons[index].name === 'اندازه' &&
             filterButtons[index].open.value
           "
+          :selectedFilters="filterSizeCriterias"
         ></FilterSize>
 
         <FilterColor
@@ -110,6 +118,7 @@ const recieveCriteria = (
             filterButtons[index].name === 'رنگ' &&
             filterButtons[index].open.value
           "
+          :selectedFilters="filterColorCriterias"
         ></FilterColor>
       </div>
     </div>

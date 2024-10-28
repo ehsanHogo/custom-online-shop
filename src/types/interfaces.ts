@@ -68,10 +68,9 @@ export interface QueryType {
   splitQuery: string;
 }
 
+export interface FiltersQueryType {
+  filters: FilterItemType[];
+  onlyExist: boolean;
 
-export interface FiltersQueryType{
-  filters : FilterItemType[],
-  onlyExist : boolean
-
-  sortField : SortType
+  sortField: SortType;
 }

@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { DataFetchType, FilterItemShowing } from "../../types/interfaces";
+import { DataFetchType, FilterItemShowing, FilterItemType } from "../../types/interfaces";
 interface MyProps {
   filterSizeData: FilterItemShowing[];
+  selectedFilters: FilterItemType[];
 }
 const props = defineProps<MyProps>();
 const filterList = ref(
   props.filterSizeData.map((item) => ({
     ...item,
-    open: false,
+    open: props.selectedFilters.filter((fil) => {
+        return fil.criteriaId === item.id;
+      }).length === 0
+        ? false
+        : true,
   }))
 );
 
