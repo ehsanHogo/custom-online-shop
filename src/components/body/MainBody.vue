@@ -6,6 +6,16 @@ import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import Cattegories from "./Cattegories.vue";
+import qs from "qs";
+
+// const router = useRouter();
+
+// const params = { name: "Alice", age: 25 };
+// router.push({
+//   path: "/custom-online-shop/",
+//   query: qs.parse(qs.stringify(params)),
+// });
+
 import {
   FilterType,
   DataFetchType,
@@ -15,6 +25,7 @@ import {
   QueryType,
   FiltersQueryType,
 } from "../../types/interfaces";
+import { useRouter } from "vue-router";
 
 const loading = ref(true);
 
@@ -28,12 +39,10 @@ const filters = ref<FilterType[]>([]);
 const filterCriterias = ref<FiltersQueryType>({
   filters: [],
   onlyExist: false,
-  sortField : "none"
+  sortField: "none",
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
-
-
   console.log(filterData.onlyExist);
 
   filterCriterias.value.filters = filterData.filters;
@@ -78,11 +87,11 @@ const fetchData = async (
 
   if (filterCriterias.value.sortField === "none") {
     // baseQuery += mainQuery.splitQuery +  mainQuery.include.images;
-  } else if (filterCriterias.value.sortField  === "price-cheap") {
+  } else if (filterCriterias.value.sortField === "price-cheap") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceAsc;
-  } else if (filterCriterias.value.sortField  === "price-expensive") {
+  } else if (filterCriterias.value.sortField === "price-expensive") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceDec;
-  } else if (filterCriterias.value.sortField  === "new-created") {
+  } else if (filterCriterias.value.sortField === "new-created") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
@@ -128,7 +137,7 @@ const receivePageData = (data: number) => {
 
   fetchPage.value += 1;
 
-  fetchData( filterCriterias.value, currentPage.value);
+  fetchData(filterCriterias.value, currentPage.value);
 };
 
 const findImageUrl = (imageId: string) => {
@@ -157,8 +166,7 @@ onBeforeMount(() => {
 });
 
 watch(sortField, (newVal) => {
-
-  filterCriterias.value.sortField = newVal
+  filterCriterias.value.sortField = newVal;
   fetchData(filterCriterias.value, currentPage.value);
 });
 </script>
