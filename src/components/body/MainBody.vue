@@ -31,13 +31,7 @@ const filterCriterias = ref<FiltersQueryType>({
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
-  // if (action === "add") {
-  //   filterCriterias.value.push(filterData);
-  // } else if (action === "remove") {
-  //   filterCriterias.value = filterCriterias.value.filter((item) => {
-  //     return item.criteriaId !== filterData.criteriaId;
-  //   });
-  // }
+
 
   console.log(filterData.onlyExist);
 
@@ -174,16 +168,7 @@ watch(sortField, (newVal) => {
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
       >
         <Sort @data-sort="receiveSortData"></Sort>
-        <!-- <div v-if="loading" class="grid col-span-3 p-5 h-96"> -->
-        <!-- <VaInnerLoading loading :size="60" /> -->
 
-        <!-- <div
-            class="max-w-[250px] border drop-shadow-md rounded-md p-3 flex flex-col gap-3 h-[400px]"
-          > -->
-
-        <!-- </div> -->
-        <!-- <VaSkeleton variant="text" :lines="2" />  -->
-        <!-- </div> -->
         <div v-if="loading" class="col-span-3 grid grid-cols-3 gap-3">
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
         </div>

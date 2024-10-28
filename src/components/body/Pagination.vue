@@ -25,13 +25,13 @@ watch(fatherPage, (newVal) => {
   if (newVal === 1) {
     currentPage.value = 1;
     firstPageIndex.value = 0;
-    lastPageIndex.value = 2;
+    lastPageIndex.value = stepSize - 1;
   }
 });
 // general
 
 const firstPageIndex = ref(0);
-const lastPageIndex = ref(2);
+const lastPageIndex = ref(stepSize - 1);
 
 const pages = computed(() => {
   console.log([...Array(totalPage.value)].map((_, i) => i + 1));
@@ -123,7 +123,6 @@ const slicePages = computed<number[]>(() => {
           pages[stepNum - 1] < totalPage
         "
       >
-      
         <b>...</b>
       </div>
 

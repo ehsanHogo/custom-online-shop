@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Contact from "./Contact.vue";
-import ImportantInfo from "./ImportantInfo.vue";
+import Contact from "./FooterContact.vue";
+import ImportantInfo from "./FooterInformation.vue";
 </script>
 
 <template>

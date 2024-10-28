@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LinkSection from "./LinkSection.vue";
-import ShopInfo from "./ShopInfo.vue";
+import InformationLinkSection from "./InformationLinkSection.vue";
+import InformationShopping from "./InformationShopping.vue";
 
 const withCustomeSectionLinks: string[] = [
   "فروش محصولات",
@@ -25,21 +25,21 @@ const buyGuidelineLinks: string[] = [
 <template>
   <div class="bg-redp flex flex-col gap-9 py-10">
     <div class="flex justify-around">
-      <ShopInfo></ShopInfo>
+      <InformationShopping></InformationShopping>
 
-      <LinkSection
+      <InformationLinkSection
         title="راهنمای خرید"
         :linkList="buyGuidelineLinks"
-      ></LinkSection>
+      ></InformationLinkSection>
 
-      <LinkSection
+      <InformationLinkSection
         title="خدمات مشتریان"
         :linkList="userServicesLinks"
-      ></LinkSection>
-      <LinkSection
+      ></InformationLinkSection>
+      <InformationLinkSection
         title="همراه با کاستومی"
         :linkList="withCustomeSectionLinks"
-      ></LinkSection>
+      ></InformationLinkSection>
     </div>
     <div class="flex justify-end px-4 text-white">
       <p>تمام حقوق این وبسایت متعلق به فروشگاه آنلاین کاستومی می باشد</p>
