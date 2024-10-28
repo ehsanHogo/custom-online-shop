@@ -28,6 +28,7 @@ const filters = ref<FilterType[]>([]);
 const filterCriterias = ref<FiltersQueryType>({
   filters: [],
   onlyExist: false,
+  sortField : "none"
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
@@ -35,8 +36,9 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
 
   console.log(filterData.onlyExist);
 
-  filterCriterias.value = filterData;
-  fetchData(sortField.value, filterData, currentPage.value);
+  filterCriterias.value.filters = filterData.filters;
+  filterCriterias.value.onlyExist = filterData.onlyExist;
+  fetchData(filterData, currentPage.value);
 };
 
 //page
@@ -49,7 +51,7 @@ const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
 
 const fetchData = async (
-  sort: SortType,
+  // sort: SortType,
   filter: FiltersQueryType,
   nextPage: number
 ) => {
@@ -74,13 +76,13 @@ const fetchData = async (
     baseQuery += `&page=${nextPage}`;
   }
 
-  if (sort === "none") {
+  if (filterCriterias.value.sortField === "none") {
     // baseQuery += mainQuery.splitQuery +  mainQuery.include.images;
-  } else if (sort === "price-cheap") {
+  } else if (filterCriterias.value.sortField  === "price-cheap") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceAsc;
-  } else if (sort === "price-expensive") {
+  } else if (filterCriterias.value.sortField  === "price-expensive") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceDec;
-  } else if (sort === "new-created") {
+  } else if (filterCriterias.value.sortField  === "new-created") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
@@ -126,7 +128,7 @@ const receivePageData = (data: number) => {
 
   fetchPage.value += 1;
 
-  fetchData(sortField.value, filterCriterias.value, currentPage.value);
+  fetchData( filterCriterias.value, currentPage.value);
 };
 
 const findImageUrl = (imageId: string) => {
@@ -151,11 +153,13 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-  fetchData(sortField.value, filterCriterias.value, 1);
+  fetchData(filterCriterias.value, 1);
 });
 
 watch(sortField, (newVal) => {
-  fetchData(newVal, filterCriterias.value, currentPage.value);
+
+  filterCriterias.value.sortField = newVal
+  fetchData(filterCriterias.value, currentPage.value);
 });
 </script>
 

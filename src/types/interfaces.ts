@@ -72,4 +72,6 @@ export interface QueryType {
 export interface FiltersQueryType{
   filters : FilterItemType[],
   onlyExist : boolean
+
+  sortField : SortType
 }
