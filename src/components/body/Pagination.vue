@@ -34,7 +34,7 @@ const firstPageIndex = ref(0);
 const lastPageIndex = ref(stepSize - 1);
 
 const pages = computed(() => {
-  console.log([...Array(totalPage.value)].map((_, i) => i + 1));
+  // console.log([...Array(totalPage.value)].map((_, i) => i + 1));
   return [...Array(totalPage.value)].map((_, i) => i + 1);
 });
 

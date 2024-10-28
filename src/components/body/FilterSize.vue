@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { DataFetchType, FilterItemShowing, FilterItemType } from "../../types/interfaces";
+import {
+  DataFetchType,
+  FilterItemShowing,
+  FilterItemType,
+} from "../../types/interfaces";
 interface MyProps {
   filterSizeData: FilterItemShowing[];
   selectedFilters: FilterItemType[];
@@ -9,7 +13,8 @@ const props = defineProps<MyProps>();
 const filterList = ref(
   props.filterSizeData.map((item) => ({
     ...item,
-    open: props.selectedFilters.filter((fil) => {
+    open:
+      props.selectedFilters.filter((fil) => {
         return fil.criteriaId === item.id;
       }).length === 0
         ? false
@@ -28,25 +33,50 @@ const sendDatatoParrent = (
   emit("data-criteria", criteria, criteriaType, criteriaId, action);
 };
 
-const updateOpenFlag = (index: number, event: Event) => {
-  // console.log((event.target as HTMLInputElement).checked);
-  if ((event.target as HTMLInputElement).checked)
+const updateOpenFlag = (index: number) => {
+  //   console.log((event.target as HTMLInputElement).checked);
+  //   if ((event.target as HTMLInputElement).checked)
+  //     fetchFilteredData(filterList.value[index].name);
+  //   console.log(index);
+  // };
+
+  filterList.value[index].open = !filterList.value[index].open;
+  if (filterList.value[index].open === true) {
     sendDatatoParrent(
       filterList.value[index].name,
-      "size",
+      "color",
       filterList.value[index].id,
       "add"
     );
-  else {
+  } else {
     sendDatatoParrent(
       filterList.value[index].name,
-      "size",
+      "color",
       filterList.value[index].id,
       "remove"
     );
   }
-  // console.log(index);
 };
+
+// const updateOpenFlag = (index: number, event: Event) => {
+//   // console.log((event.target as HTMLInputElement).checked);
+//   if ((event.target as HTMLInputElement).checked)
+//     sendDatatoParrent(
+//       filterList.value[index].name,
+//       "size",
+//       filterList.value[index].id,
+//       "add"
+//     );
+//   else {
+//     sendDatatoParrent(
+//       filterList.value[index].name,
+//       "size",
+//       filterList.value[index].id,
+//       "remove"
+//     );
+//   }
+//   // console.log(index);
+// };
 </script>
 
 <template>
@@ -57,12 +87,13 @@ const updateOpenFlag = (index: number, event: Event) => {
         :key="index"
         class="flex justify-between"
       >
-        <p>{{ item.presentation }}</p>
-        <input
-          v-model="item.open"
-          type="checkbox"
-          @change="(event) => updateOpenFlag(index, event)"
-        />
+        <button
+          @click="updateOpenFlag(index)"
+          class="flex justify-between w-full"
+        >
+          <p>{{ item.presentation }}</p>
+          <input v-model="item.open" type="checkbox" />
+        </button>
       </li>
     </ul>
   </div>

@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import Filter from "./Filter.vue";
 import ShowCards from "./ShowCards.vue";
-import { computed, onBeforeMount, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import Cattegories from "./Cattegories.vue";
 import qs from "qs";
 
-// const router = useRouter();
+const router = useRouter();
 
-// const params = { name: "Alice", age: 25 };
-// router.push({
-//   path: "/custom-online-shop/",
-//   query: qs.parse(qs.stringify(params)),
-// });
+const route = useRoute();
 
 import {
   FilterType,
@@ -25,7 +21,7 @@ import {
   QueryType,
   FiltersQueryType,
 } from "../../types/interfaces";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const loading = ref(true);
 
@@ -43,10 +39,23 @@ const filterCriterias = ref<FiltersQueryType>({
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
-  console.log(filterData.onlyExist);
+  // console.log(filterData.onlyExist);
+
+  // const params = { name: "Alice", age: 25 };
 
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
+
+  const obj = {
+    obj: qs.stringify(filterCriterias.value, { allowEmptyArrays: true }),
+  };
+
+  // console.log(qs.stringify(params));
+
+  router.push({
+    path: "/custom-online-shop/",
+    query: obj,
+  });
   fetchData(filterData, currentPage.value);
 };
 
@@ -111,7 +120,7 @@ const fetchData = async (
     if (!res.ok) {
       throw Error("error in fetch");
     } else {
-      console.log(response.data);
+      // console.log(response.data);
       filters.value = response.meta.filters.option_types;
 
       includedFetched.value = response.included;
@@ -161,7 +170,31 @@ const receiveSortData = (data: SortType) => {
   sortField.value = data;
 };
 
+// onMounted(() => {
+//   console.log(qs.parse(qs.parse(route.query)["obj"]));
+
+//   const parsedObj = qs.parse(qs.parse(route.query)["obj"]);
+//   if (Object.entries(parsedObj).length !== 0) {
+//     if (parsedObj.filters[0] === "") parsedObj.filters = [];
+//     filterCriterias.value = parsedObj as FiltersQueryType;
+//   }
+
+//   fetchData(filterCriterias.value, 1);
+// });
+
 onBeforeMount(() => {
+  // console.log(qs.parse(qs.stringify(route.query)).filters[0]);
+
+  // console.log("route.query :", qs.stringify(route.query));
+  // console.log(qs.parse(route.query));
+  console.log(qs.parse(qs.parse(route.query)["obj"]));
+
+  const parsedObj = qs.parse(qs.parse(route.query)["obj"]);
+  if (Object.entries(parsedObj).length !== 0) {
+    if (parsedObj.filters[0] === "") parsedObj.filters = [];
+    filterCriterias.value = parsedObj as FiltersQueryType;
+  }
+
   fetchData(filterCriterias.value, 1);
 });
 
@@ -203,7 +236,11 @@ watch(sortField, (newVal) => {
         ></Pagination>
       </div>
 
-      <Filter @data-fetched="recieveDataFetched" :filterData="filters"></Filter>
+      <Filter
+        @data-fetched="recieveDataFetched"
+        :filterData="filters"
+        :previousFilterCriterias="filterCriterias"
+      ></Filter>
     </div>
   </div>
 </template>

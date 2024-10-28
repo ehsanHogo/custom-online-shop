@@ -36,22 +36,22 @@ const sendDatatoParrent = (
   emit("data-criteria", criteria, criteriaType, criteriaId, action);
 };
 
-const updateOpenFlag = (index: number, event: Event) => {
+const updateOpenFlag = (index: number) => {
   //   console.log((event.target as HTMLInputElement).checked);
   //   if ((event.target as HTMLInputElement).checked)
   //     fetchFilteredData(filterList.value[index].name);
   //   console.log(index);
   // };
 
-  // console.log((event.target as HTMLInputElement).checked);
-  if ((event.target as HTMLInputElement).checked)
+  filterList.value[index].open = !filterList.value[index].open;
+  if (filterList.value[index].open === true) {
     sendDatatoParrent(
       filterList.value[index].name,
       "color",
       filterList.value[index].id,
       "add"
     );
-  else {
+  } else {
     sendDatatoParrent(
       filterList.value[index].name,
       "color",
@@ -59,6 +59,22 @@ const updateOpenFlag = (index: number, event: Event) => {
       "remove"
     );
   }
+  // console.log((event.target as HTMLInputElement).checked);
+  // if ((event.target as HTMLInputElement).checked)
+  //   sendDatatoParrent(
+  //     filterList.value[index].name,
+  //     "color",
+  //     filterList.value[index].id,
+  //     "add"
+  //   );
+  // else {
+  //   sendDatatoParrent(
+  //     filterList.value[index].name,
+  //     "color",
+  //     filterList.value[index].id,
+  //     "remove"
+  //   );
+  // }
   // console.log(index);
 };
 // const text = ref(true);
@@ -71,14 +87,16 @@ const updateOpenFlag = (index: number, event: Event) => {
       <li
         v-for="(item, index) in filterList"
         :key="index"
-        class="flex justify-between"
+        class="flex justify-between "
       >
-        <p>{{ item.presentation }}</p>
-        <input
-          v-model="item.open"
-          type="checkbox"
-          @change="(event) => updateOpenFlag(index, event)"
-        />
+        <button
+          @click="updateOpenFlag(index)"
+          class="flex justify-between w-full"
+        >
+          <p>{{ item.presentation }}</p>
+
+          <input v-model="item.open" type="checkbox" />
+        </button>
       </li>
     </ul>
   </div>

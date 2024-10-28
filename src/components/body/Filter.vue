@@ -1,28 +1,60 @@
 <script setup lang="ts">
-import { computed, Ref, ref, watch } from "vue";
+import { computed, Ref, ref, toRef, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
 import {
   FilterItemOptions,
   FilterItemType,
+  FiltersQueryType,
   FilterType,
 } from "../../types/interfaces";
 
 interface MyProps {
   filterData: FilterType[];
+  previousFilterCriterias: FiltersQueryType;
 }
 
 const emit = defineEmits(["data-fetched"]);
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
-const onlyExist = ref(false);
+
+const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
+
+const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
+
+console.log("father", fatherFilterCriterias.value.onlyExist);
+
+watch(fatherFilterCriterias, (newVal) => {
+  console.log("father vkange");
+
+  onlyExist.value = newVal.onlyExist;
+});
+
+// watch(onlyExist, (k) => {
+//   console.log(k);
+// });
+const filterCriterias = ref<FilterItemType[]>(
+  fatherFilterCriterias.value.filters
+);
+
+const selectedFilterColorCriterias = computed<FilterItemType[]>(() => {
+  return filterCriterias.value.filter((item) => {
+    return item.filterType === "color";
+  });
+});
+
+const selectedFilterSizeCriterias = computed<FilterItemType[]>(() => {
+  return filterCriterias.value.filter((item) => {
+    return item.filterType === "size";
+  });
+});
 
 const filterButtons = ref<FilterItemOptions[]>([
   { name: "برند", open: false },
-  { name: "اندازه", open: false },
-  { name: "رنگ", open: false },
+  { name: "اندازه", open: selectedFilterSizeCriterias.value.length !== 0 },
+  { name: "رنگ", open: selectedFilterColorCriterias.value.length !== 0 },
   { name: "ارسال امروز", open: false },
   { name: "فقط کالاهای موجود", open: false },
 
@@ -31,35 +63,9 @@ const filterButtons = ref<FilterItemOptions[]>([
   { name: "طرح", open: false },
 ]);
 
-// const filterButtons: FilterItemOptions[] = [
-//   { name: "برند", open: ref(false) },
-//   { name: "اندازه", open: ref(false) },
-//   { name: "رنگ", open: ref(false) },
-//   { name: "ارسال امروز", open: ref(false) },
-//   { name: "فقط کالاهای موجود", open: ref(false) },
-
-//   { name: "محدوده قیمت", open: ref(false) },
-//   { name: "مدل", open: ref(false) },
-//   { name: "طرح", open: ref(false) },
-// ];
-
 const setOpen = (index: number) => {
   filterButtons.value[index].open = !filterButtons.value[index].open;
 };
-
-const filterCriterias = ref<FilterItemType[]>([]);
-
-const filterColorCriterias = computed<FilterItemType[]>(() => {
-  return filterCriterias.value.filter((item) => {
-    return item.filterType === "color";
-  });
-});
-
-const filterSizeCriterias = computed<FilterItemType[]>(() => {
-  return filterCriterias.value.filter((item) => {
-    return item.filterType === "size";
-  });
-});
 
 watch(onlyExist, (newVal) => {
   emit("data-fetched", { filters: filterCriterias.value, onlyExist: newVal });
@@ -102,7 +108,6 @@ const deleteAllFilter = () => {
     filters: filterCriterias.value,
     onlyExist: onlyExist.value,
   });
-  console.log("delete");
 };
 </script>
 
@@ -134,7 +139,7 @@ const deleteAllFilter = () => {
           v-if="
             filterButtons[index].name === 'اندازه' && filterButtons[index].open
           "
-          :selectedFilters="filterSizeCriterias"
+          :selectedFilters="selectedFilterSizeCriterias"
         ></FilterSize>
 
         <FilterColor
@@ -143,7 +148,7 @@ const deleteAllFilter = () => {
           v-if="
             filterButtons[index].name === 'رنگ' && filterButtons[index].open
           "
-          :selectedFilters="filterColorCriterias"
+          :selectedFilters="selectedFilterColorCriterias"
         ></FilterColor>
       </div>
     </div>
