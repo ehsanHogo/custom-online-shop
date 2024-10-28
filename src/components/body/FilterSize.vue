@@ -29,7 +29,7 @@ const sendDatatoParrent = (
 };
 
 const updateOpenFlag = (index: number, event: Event) => {
-  console.log((event.target as HTMLInputElement).checked);
+  // console.log((event.target as HTMLInputElement).checked);
   if ((event.target as HTMLInputElement).checked)
     sendDatatoParrent(
       filterList.value[index].name,
@@ -45,7 +45,7 @@ const updateOpenFlag = (index: number, event: Event) => {
       "remove"
     );
   }
-  console.log(index);
+  // console.log(index);
 };
 </script>
 

@@ -39,7 +39,7 @@ export interface FilterType {
 
 export interface FilterItemOptions {
   name: string;
-  open: Ref<boolean>;
+  open: boolean;
 }
 
 // export interface FilterCriteriaType {

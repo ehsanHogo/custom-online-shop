@@ -19,20 +19,32 @@ const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 const onlyExist = ref(false);
 
-const filterButtons: FilterItemOptions[] = [
-  { name: "برند", open: ref(false) },
-  { name: "اندازه", open: ref(false) },
-  { name: "رنگ", open: ref(false) },
-  { name: "ارسال امروز", open: ref(false) },
-  { name: "فقط کالاهای موجود", open: ref(false) },
+const filterButtons = ref<FilterItemOptions[]>([
+  { name: "برند", open: false },
+  { name: "اندازه", open: false },
+  { name: "رنگ", open: false },
+  { name: "ارسال امروز", open: false },
+  { name: "فقط کالاهای موجود", open: false },
 
-  { name: "محدوده قیمت", open: ref(false) },
-  { name: "مدل", open: ref(false) },
-  { name: "طرح", open: ref(false) },
-];
+  { name: "محدوده قیمت", open: false },
+  { name: "مدل", open: false },
+  { name: "طرح", open: false },
+]);
+
+// const filterButtons: FilterItemOptions[] = [
+//   { name: "برند", open: ref(false) },
+//   { name: "اندازه", open: ref(false) },
+//   { name: "رنگ", open: ref(false) },
+//   { name: "ارسال امروز", open: ref(false) },
+//   { name: "فقط کالاهای موجود", open: ref(false) },
+
+//   { name: "محدوده قیمت", open: ref(false) },
+//   { name: "مدل", open: ref(false) },
+//   { name: "طرح", open: ref(false) },
+// ];
 
 const setOpen = (index: number) => {
-  filterButtons[index].open.value = !filterButtons[index].open.value;
+  filterButtons.value[index].open = !filterButtons.value[index].open;
 };
 
 const filterCriterias = ref<FilterItemType[]>([]);
@@ -59,8 +71,6 @@ const recieveCriteria = (
   criteriaId: string,
   action: string
 ) => {
-  console.log(criteria);
-
   if (action === "add") {
     filterCriterias.value.push({
       filterType: criteriaType,
@@ -73,18 +83,35 @@ const recieveCriteria = (
     });
   }
 
+  // console.log("exist :" , onlyExist.value);
   // if (action === "add")
   emit("data-fetched", {
     filters: filterCriterias.value,
-    onlyExist: onlyExist,
+    onlyExist: onlyExist.value,
   });
+};
+
+const deleteAllFilter = () => {
+  filterCriterias.value = [];
+
+  filterButtons.value = filterButtons.value.map((item) => {
+    return { name: item.name, open: false };
+  });
+  onlyExist.value = false;
+  emit("data-fetched", {
+    filters: filterCriterias.value,
+    onlyExist: onlyExist.value,
+  });
+  console.log("delete");
 };
 </script>
 
 <template>
   <div class="col-span-1 border rounded-sm p-5 flex flex-col gap-5 h-fit">
     <div class="flex justify-between">
-      <button><b class="text-redp">حذف فیلتر ها</b></button>
+      <button @click="deleteAllFilter">
+        <b class="text-redp">حذف فیلتر ها</b>
+      </button>
       <b>فیلتر ها</b>
     </div>
 
@@ -105,8 +132,7 @@ const recieveCriteria = (
           @data-criteria="recieveCriteria"
           :filterSizeData="props.filterData[1].option_values"
           v-if="
-            filterButtons[index].name === 'اندازه' &&
-            filterButtons[index].open.value
+            filterButtons[index].name === 'اندازه' && filterButtons[index].open
           "
           :selectedFilters="filterSizeCriterias"
         ></FilterSize>
@@ -115,8 +141,7 @@ const recieveCriteria = (
           @data-criteria="recieveCriteria"
           :filterColorData="props.filterData[0].option_values"
           v-if="
-            filterButtons[index].name === 'رنگ' &&
-            filterButtons[index].open.value
+            filterButtons[index].name === 'رنگ' && filterButtons[index].open
           "
           :selectedFilters="filterColorCriterias"
         ></FilterColor>
