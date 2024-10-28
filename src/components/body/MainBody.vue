@@ -30,7 +30,7 @@ const showData = ref<DataFetchType[]>([]);
 const includedFetched = ref<IncludedFetchType[]>([]);
 
 //filter
-const filters = ref<FilterType[]>([]);
+const filtersType = ref<FilterType[]>([]);
 
 const filterCriterias = ref<FiltersQueryType>({
   filters: [],
@@ -47,7 +47,9 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
   const obj = {
-    obj: qs.stringify(filterCriterias.value, { allowEmptyArrays: true }),
+    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
+      allowEmptyArrays: true,
+    }),
   };
 
   // console.log(qs.stringify(params));
@@ -56,7 +58,7 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
     path: "/custom-online-shop/",
     query: obj,
   });
-  fetchData(filterData, currentPage.value);
+  fetchData(currentPage.value);
 };
 
 //page
@@ -70,9 +72,11 @@ const numberOfProductsInPage = 9;
 
 const fetchData = async (
   // sort: SortType,
-  filter: FiltersQueryType,
+  // filter: FiltersQueryType,
   nextPage: number
 ) => {
+  console.log("filters", filterCriterias.value);
+
   loading.value = true;
 
   // console.log(nextPage);
@@ -104,12 +108,14 @@ const fetchData = async (
     baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
-  if (filter.filters.length !== 0) {
-    filter.filters.forEach((item) => {
+  if (filterCriterias.value.filters.length !== 0) {
+    filterCriterias.value.filters.forEach((item) => {
       baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
     });
   }
-  if (filter.onlyExist) {
+  console.log(filterCriterias.value.onlyExist);
+
+  if (filterCriterias.value.onlyExist) {
     baseQuery += `&filter[in_stock]=true`;
   }
 
@@ -121,8 +127,8 @@ const fetchData = async (
       throw Error("error in fetch");
     } else {
       // console.log(response.data);
-      filters.value = response.meta.filters.option_types;
-
+      filtersType.value = response.meta.filters.option_types;
+      console.log("hererer");
       includedFetched.value = response.included;
       showData.value = response.data;
 
@@ -146,7 +152,7 @@ const receivePageData = (data: number) => {
 
   fetchPage.value += 1;
 
-  fetchData(filterCriterias.value, currentPage.value);
+  fetchData(currentPage.value);
 };
 
 const findImageUrl = (imageId: string) => {
@@ -182,7 +188,7 @@ const receiveSortData = (data: SortType) => {
 //   fetchData(filterCriterias.value, 1);
 // });
 
-onBeforeMount(() => {
+onBeforeMount( () => {
   // console.log(qs.parse(qs.stringify(route.query)).filters[0]);
 
   // console.log("route.query :", qs.stringify(route.query));
@@ -192,15 +198,17 @@ onBeforeMount(() => {
   const parsedObj = qs.parse(qs.parse(route.query)["obj"]);
   if (Object.entries(parsedObj).length !== 0) {
     if (parsedObj.filters[0] === "") parsedObj.filters = [];
+    if (parsedObj.onlyExist === "false") parsedObj.onlyExist = false;
+    else parsedObj.onlyExist = true;
     filterCriterias.value = parsedObj as FiltersQueryType;
   }
 
-  fetchData(filterCriterias.value, 1);
+   fetchData(1);
 });
 
 watch(sortField, (newVal) => {
   filterCriterias.value.sortField = newVal;
-  fetchData(filterCriterias.value, currentPage.value);
+  fetchData(currentPage.value);
 });
 </script>
 
@@ -238,7 +246,7 @@ watch(sortField, (newVal) => {
 
       <Filter
         @data-fetched="recieveDataFetched"
-        :filterData="filters"
+        :filterData="filtersType"
         :previousFilterCriterias="filterCriterias"
       ></Filter>
     </div>

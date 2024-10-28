@@ -44,14 +44,14 @@ const updateOpenFlag = (index: number) => {
   if (filterList.value[index].open === true) {
     sendDatatoParrent(
       filterList.value[index].name,
-      "color",
+      "size",
       filterList.value[index].id,
       "add"
     );
   } else {
     sendDatatoParrent(
       filterList.value[index].name,
-      "color",
+      "size",
       filterList.value[index].id,
       "remove"
     );

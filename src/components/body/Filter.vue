@@ -22,15 +22,15 @@ const sendingToday = ref(false);
 
 const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
 
-const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
+const onlyExist = ref(false);
 
 console.log("father", fatherFilterCriterias.value.onlyExist);
 
-watch(fatherFilterCriterias, (newVal) => {
-  console.log("father vkange");
+// watch(fatherFilterCriterias, (newVal) => {
+//   console.log("father vkange");
 
-  onlyExist.value = newVal.onlyExist;
-});
+//   onlyExist.value = newVal.onlyExist;
+// });
 
 // watch(onlyExist, (k) => {
 //   console.log(k);
@@ -77,6 +77,8 @@ const recieveCriteria = (
   criteriaId: string,
   action: string
 ) => {
+  // console.log("in filtert");
+
   if (action === "add") {
     filterCriterias.value.push({
       filterType: criteriaType,

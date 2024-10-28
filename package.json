@@ -15,6 +15,7 @@
     "vuestic-ui": "^1.10.2"
   },
   "devDependencies": {
+    "@types/qs": "^6.9.16",
     "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
     "material-design-icons-iconfont": "^6.7.0",
