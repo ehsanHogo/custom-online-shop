@@ -22,7 +22,7 @@ const sendingToday = ref(false);
 
 const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
 
-const onlyExist = ref(false);
+const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
 
 console.log("father", fatherFilterCriterias.value.onlyExist);
 
