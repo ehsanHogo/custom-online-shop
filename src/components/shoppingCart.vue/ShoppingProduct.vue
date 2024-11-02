@@ -2,16 +2,6 @@
 import { ref } from "vue";
 
 import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
-
-const itemNumber = ref(1);
-
-const decItemNum = () => {
-  if (itemNumber.value - 1 >= 0) itemNumber.value -= 1;
-};
-
-const incItemNum = () => {
-  itemNumber.value += 1;
-};
 </script>
 
 <template>

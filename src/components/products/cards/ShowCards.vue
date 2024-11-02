@@ -28,7 +28,7 @@ const extractTextFromString = (htmlString: string) => {
   return extractedText;
 };
 
-const itemNumber = ref(1);
+
 const changeToCounter = ref(false);
 
 const addFirstItem = () => {
