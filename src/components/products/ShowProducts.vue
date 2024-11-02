@@ -7,6 +7,16 @@ import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
 
 import qs from "qs";
+// interface MyProps {
+//   shoppingList: ShoppingCartListType;
+// }
+// const props = defineProps<MyProps>();
+//shopping
+
+const emit = defineEmits(["shopping-data"]);
+const passShoppingData = (data: ShoppingProductType) => {
+  emit("shopping-data", data);
+};
 
 const router = useRouter();
 
@@ -20,6 +30,8 @@ import {
   FilterItemType,
   QueryType,
   FiltersQueryType,
+  ShoppingProductType,
+  ShoppingCartListType,
 } from "../../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
 
@@ -235,7 +247,6 @@ watch(sortField, (newVal) => {
   <div class="p-5">
     <!-- <router-view /> -->
 
-
     <div class="grid grid-cols-4 p-5 gap-4">
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
@@ -253,6 +264,8 @@ watch(sortField, (newVal) => {
           :price="item.attributes.display_price"
           :description="item.attributes.description"
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
+          :id="item.id"
+          @shopping-data="passShoppingData"
         ></ShowCards>
 
         <Pagination

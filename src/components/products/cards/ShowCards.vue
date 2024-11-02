@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import AddRemoveProduct from "../../generall/AddRemoveProduct.vue";
+import { ShoppingProductType } from "../../../types/interfaces";
 interface CardData {
   name?: string;
   price?: string;
   description?: string;
   imageUrl?: string;
+  id:string
 }
+
+const emit = defineEmits(["shopping-data"]);
+
+const passShoppingData = (data: ShoppingProductType) => {
+  emit("shopping-data", data);
+};
 
 const props = withDefaults(defineProps<CardData>(), {
   name: "",
   price: "",
   description: "",
   imageUrl: "",
+  id : ""
 });
 
 const extractTextFromString = (htmlString: string) => {
@@ -28,13 +37,18 @@ const extractTextFromString = (htmlString: string) => {
   return extractedText;
 };
 
-
 const changeToCounter = ref(false);
 
 const addFirstItem = () => {
   changeToCounter.value = true;
+  passShoppingData({
+    name: props.name,
+    image: props.imageUrl,
+    count: 1,
+    price: props.price,
+    id : props.id
+  });
 };
-
 </script>
 
 <template>

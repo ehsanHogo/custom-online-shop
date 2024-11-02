@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/custom-online-shop/shopping-cart",
     name: "shopping-cart",
-    component: ShoppingCart,
+    component: ShoppingCart
   },
 ];
 

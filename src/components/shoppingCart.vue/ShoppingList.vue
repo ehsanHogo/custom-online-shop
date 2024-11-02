@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import { toRef } from "vue";
+import { ShoppingCartListType } from "../../types/interfaces";
 import ShoppingProduct from "./ShoppingProduct.vue";
+
+interface MyProps {
+  shoppingList: ShoppingCartListType;
+}
+const props = defineProps<MyProps>();
+
+const shoppingListRef = toRef(props, "shoppingList");
 </script>
 <template>
   <div class="col-span-2 p-5" dir="rtl">
@@ -9,12 +18,13 @@ import ShoppingProduct from "./ShoppingProduct.vue";
 
     <div class="">
       <ul>
-        <li>
-          <ShoppingProduct></ShoppingProduct>
-        </li>
-
-        <li>
-          <ShoppingProduct></ShoppingProduct>
+        <li v-for="(item, index) in shoppingListRef.products" :key="index">
+          <ShoppingProduct
+            :name="item.name"
+            :price="item.price"
+            :image="item.image"
+            :count="item.count"
+          ></ShoppingProduct>
         </li>
       </ul>
     </div>

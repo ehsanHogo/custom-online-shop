@@ -2,6 +2,9 @@
 import { ref } from "vue";
 
 import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
+import { ShoppingProductType } from "../../types/interfaces";
+
+const props = defineProps<ShoppingProductType>();
 </script>
 
 <template>
@@ -13,19 +16,20 @@ import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
           alt="delete product"
         />
       </button>
-
-      <img
-        src="../../assets/body/shopping cart/test.png"
-        alt="product picture"
-      />
-
-      <b> تیشرت سفید طرح دار</b>
-      <b>240,000 تومان</b>
+      <div>
+        <img
+          :src="props.image"
+          alt="product picture"
+          class="rounded-sm h-[150px]"
+        />
+      </div>
+      <b> {{ props.name }}</b>
+      <b>{{ props.price }} تومان</b>
 
       <AddRemoveProduct></AddRemoveProduct>
     </div>
     <div class="flex justify-end gap-3 mt-3">
-      <img src="../../assets/body/shopping cart/truck-fast.png" alt="" />
+      <img src="../../assets/body/shopping cart/trunk-fast.png" alt="" />
       <b class="text-myGray-9">ارسال از سه روز آینده</b>
     </div>
   </div>

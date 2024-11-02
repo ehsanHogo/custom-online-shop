@@ -2,6 +2,23 @@
 import ShoppingRegistration from "./ShoppingRegistration.vue";
 import ShopppingAlerts from "./ShopppingAlerts.vue";
 import ShoppingList from "./ShoppingList.vue";
+import {
+  ShoppingCartListType,
+  ShoppingProductType,
+} from "../../types/interfaces";
+import { toRef } from "vue";
+
+interface MyProps {
+  shoppingList: ShoppingCartListType;
+}
+const props = defineProps<MyProps>();
+
+const emit = defineEmits(["shopping-data"]);
+const passShoppingData = (data: ShoppingProductType) => {
+  emit("shopping-data", data);
+};
+
+const shoppingListRef = toRef(props, "shoppingList");
 </script>
 
 <template>
@@ -17,6 +34,6 @@ import ShoppingList from "./ShoppingList.vue";
       <ShoppingRegistration></ShoppingRegistration>
       <ShopppingAlerts></ShopppingAlerts>
     </div>
-    <ShoppingList></ShoppingList>
+    <ShoppingList :shoppingList="shoppingListRef"></ShoppingList>
   </div>
 </template>

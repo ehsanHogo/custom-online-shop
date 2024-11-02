@@ -6,6 +6,7 @@ export type SortType =
   | "new-created"
   | "none";
 export interface DataFetchType {
+  id: string;
   attributes: {
     name: string;
     slug: string;
@@ -75,5 +76,14 @@ export interface FiltersQueryType {
   sortField: SortType;
 }
 
+export interface ShoppingProductType {
+  name: string;
+  image: string;
+  price: string;
+  count: number;
+  id: string;
+}
 
-
+export interface ShoppingCartListType {
+  products: ShoppingProductType[];
+}
