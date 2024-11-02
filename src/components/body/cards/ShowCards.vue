@@ -39,7 +39,7 @@ const extractTextFromString = (htmlString: string) => {
     <div class="flex justify-between">
       <b>{{ props.name }}</b>
       <button>
-        <img src="../../assets/body/heart.png" alt="heart icon" />
+        <img src="../../../assets/body/heart.png" alt="heart icon" />
       </button>
     </div>
 

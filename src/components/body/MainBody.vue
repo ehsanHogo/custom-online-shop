@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Filter from "./filter/Filter.vue";
-import ShowCards from "./ShowCards.vue";
+import ShowCards from "./cards/ShowCards.vue";
 import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
-import CardSkeleton from "./CardSkeleton.vue";
+import CardSkeleton from "./cards/CardSkeleton.vue";
 import Cattegories from "./Cattegories.vue";
 import qs from "qs";
 
