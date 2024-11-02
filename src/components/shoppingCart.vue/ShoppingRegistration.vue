@@ -16,7 +16,9 @@
           class="outline-none rounded-sm px-2 border border-myGray-4 h-10"
         />
 
-        <button class="bg-redp w-36 rounded-sm text-white">ثبت</button>
+        <button class="border border-redp w-36 rounded-sm text-redp">
+          <b> ثبت</b>
+        </button>
       </div>
     </div>
     <div class="flex flex-col mt-3 border-b border-b-myGray-4 pb-5 gap-3">
