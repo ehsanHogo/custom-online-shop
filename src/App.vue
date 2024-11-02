@@ -9,9 +9,8 @@ import { useRoute, useRouter } from "vue-router";
 
 <template>
   <div class="font-MyFont">
-    <router-link :to="{ name: 'products' }">go products</router-link>
-    <br />
-    <router-link :to="{ name: '404' }">go 404</router-link>
+
+  
 
     <router-view />
   </div>

@@ -1,5 +1,9 @@
 <template>
-  <button class="flex justify-end items-center gap-2 text-myGray-9">
+  <router-link
+    :to="{ name: 'products' }"
+    class="flex justify-end items-center gap-2 text-myGray-9"
+  >
+    <!-- <button class="flex justify-end items-center gap-2 text-myGray-9"> -->
     <div class="flex flex-col">
       <img
         src="../../assets/siteBrand/custom-brand-name.png"
@@ -8,5 +12,6 @@
       <b class="text-nowrap">فروشگاه اینترنتی</b>
     </div>
     <img src="../../assets/siteBrand/LOGO.png" alt="online shop logo" />
-  </button>
+    <!-- </button> -->
+  </router-link>
 </template>

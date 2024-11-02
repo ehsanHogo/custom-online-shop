@@ -1,5 +1,9 @@
 <template>
-  <button class="flex justify-start items-center gap-1 text-myGray-9">
+  <router-link
+    :to="{ name: 'shopping-cart' }"
+    class="flex justify-start items-center gap-1 text-myGray-9"
+  >
+    <!-- <button class="flex justify-start items-center gap-1 text-myGray-9"> -->
     <b class="text-sm">سبد خرید</b>
 
     <div class="flex items-center">
@@ -10,7 +14,8 @@
         <b> 0</b>
       </div>
     </div>
-  </button>
+    <!-- </button> -->
+  </router-link>
   <button class="flex justify-start items-center gap-1 text-myGray-9">
     <b class="text-sm">ورود | ثبت نام</b>
     <img src="../../assets/header/Login.png" alt="login logo" />
