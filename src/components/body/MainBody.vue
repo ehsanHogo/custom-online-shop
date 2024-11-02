@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Filter from "./Filter.vue";
+import Filter from "./filter/Filter.vue";
 import ShowCards from "./ShowCards.vue";
 import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import Sort from "./Sort.vue";

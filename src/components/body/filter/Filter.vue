@@ -8,7 +8,7 @@ import {
   FilterItemType,
   FiltersQueryType,
   FilterType,
-} from "../../types/interfaces";
+} from "../../../types/interfaces";
 
 interface MyProps {
   filterData: FilterType[];
@@ -131,7 +131,7 @@ const deleteAllFilter = () => {
         <button class="flex justify-between w-full" @click="setOpen(index)">
           <VaSwitch size="small" v-if="index === 3" v-model="sendingToday" />
           <VaSwitch size="small" v-else-if="index === 4" v-model="onlyExist" />
-          <img v-else src="../../assets/body/arrow-down.png" alt="arrow down" />
+          <img v-else src="../../../assets/body/arrow-down.png" alt="arrow down" />
 
           <p>{{ filterButton.name }}</p>
         </button>

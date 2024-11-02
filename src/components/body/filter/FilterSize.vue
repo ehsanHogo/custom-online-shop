@@ -4,7 +4,7 @@ import {
   DataFetchType,
   FilterItemShowing,
   FilterItemType,
-} from "../../types/interfaces";
+} from "../../../types/interfaces";
 interface MyProps {
   filterSizeData: FilterItemShowing[];
   selectedFilters: FilterItemType[];
