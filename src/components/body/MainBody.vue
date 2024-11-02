@@ -20,7 +20,6 @@ import {
   FilterItemType,
   QueryType,
   FiltersQueryType,
-  StoreQueryType,
 } from "../../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
 

@@ -25,11 +25,18 @@ const extractTextFromString = (htmlString: string) => {
 
   return extractedText;
 };
+
+
+
+
+const updateShoppingCart = ()=>{
+
+}
 </script>
 
 <template>
   <div
-    class="max-w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[400px]"
+    class="max-w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[425px] justify-around"
   >
     <img
       class="rounded-sm h-[200px]"
@@ -47,5 +54,19 @@ const extractTextFromString = (htmlString: string) => {
       {{ extractTextFromString(props.description) }}
     </p>
     <b>{{ props.price }} </b>
+
+    <div class="flex justify-end">
+      <button
+      @click="updateShoppingCart"
+        class="bg-redp flex justify-center items-center p-2 w-fit rounded-sm gap-2"
+      >
+        <p class="text-white">افزودن به سبد خرید</p>
+
+        <img
+          src="../../../assets/body/shopping cart/shopping-cart.png"
+          alt="shopping cart"
+        />
+      </button>
+    </div>
   </div>
 </template>
