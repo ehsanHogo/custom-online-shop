@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ShoppingRegistration from "./ShoppingRegistration.vue";
 import ShopppingAlerts from "./ShopppingAlerts.vue";
+import ShoppingList from "./ShoppingList.vue";
 </script>
 
 <template>
@@ -16,6 +17,6 @@ import ShopppingAlerts from "./ShopppingAlerts.vue";
       <ShoppingRegistration></ShoppingRegistration>
       <ShopppingAlerts></ShopppingAlerts>
     </div>
-    <div class="col-span-2"><p>salam</p></div>
+    <ShoppingList></ShoppingList>
   </div>
 </template>
