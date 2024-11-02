@@ -7,10 +7,10 @@ import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
 
 import qs from "qs";
-// interface MyProps {
-//   shoppingList: ShoppingCartListType;
-// }
-// const props = defineProps<MyProps>();
+interface MyProps {
+  shoppingList: ShoppingCartListType;
+}
+const props = defineProps<MyProps>();
 //shopping
 
 const emit = defineEmits(["shopping-data"]);
@@ -265,6 +265,10 @@ watch(sortField, (newVal) => {
           :description="item.attributes.description"
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
           :id="item.id"
+          :count="
+            shoppingList.products.find((elem) => elem.id === item.id)?.count ||
+            0
+          "
           @shopping-data="passShoppingData"
         ></ShowCards>
 

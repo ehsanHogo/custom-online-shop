@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, toRef } from "vue";
 import AddRemoveProduct from "../../generall/AddRemoveProduct.vue";
-import { ShoppingProductType } from "../../../types/interfaces";
+import {
+  ShoppingCartListType,
+  ShoppingProductType,
+} from "../../../types/interfaces";
 interface CardData {
   name?: string;
   price?: string;
   description?: string;
   imageUrl?: string;
   id: string;
+  count: number;
 }
 
 const emit = defineEmits(["shopping-data"]);
@@ -37,10 +41,9 @@ const extractTextFromString = (htmlString: string) => {
   return extractedText;
 };
 
-const changeToCounter = ref(false);
-
 const addFirstItem = () => {
   changeToCounter.value = true;
+  MyCount.value += 1;
   passShoppingData({
     name: props.name,
     image: props.imageUrl,
@@ -50,10 +53,12 @@ const addFirstItem = () => {
   });
 };
 
-const count = ref(0);
+const fatherCount = toRef(props, "count");
+const MyCount = ref(fatherCount.value);
 
+const changeToCounter = ref(fatherCount.value !== 0);
 const updateCount = (data: number) => {
-  count.value = data;
+  MyCount.value = data;
 
   console.log("count : ", data);
 
@@ -64,7 +69,7 @@ const updateCount = (data: number) => {
   passShoppingData({
     name: props.name,
     image: props.imageUrl,
-    count: count.value,
+    count: MyCount.value,
     price: props.price,
     id: props.id,
   });
@@ -107,7 +112,7 @@ const updateCount = (data: number) => {
       </button>
       <div dir="rtl">
         <AddRemoveProduct
-          :first-count="1"
+          :first-count="MyCount"
           @count-data="updateCount"
           v-if="changeToCounter"
         ></AddRemoveProduct>
