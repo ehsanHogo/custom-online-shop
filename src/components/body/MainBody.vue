@@ -174,6 +174,21 @@ const findImageUrl = (imageId: string) => {
 const sortField = ref<SortType>("none");
 const receiveSortData = (data: SortType) => {
   sortField.value = data;
+
+  filterCriterias.value.sortField = data;
+
+  const obj = {
+    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
+      allowEmptyArrays: true,
+    }),
+  };
+
+  // console.log(qs.stringify(params));
+
+  router.push({
+    path: "/custom-online-shop/",
+    query: obj,
+  });
 };
 
 // onMounted(() => {
@@ -188,7 +203,7 @@ const receiveSortData = (data: SortType) => {
 //   fetchData(filterCriterias.value, 1);
 // });
 
-onBeforeMount( () => {
+onBeforeMount(() => {
   // console.log(qs.parse(qs.stringify(route.query)).filters[0]);
 
   // console.log("route.query :", qs.stringify(route.query));
@@ -201,9 +216,10 @@ onBeforeMount( () => {
     if (parsedObj.onlyExist === "false") parsedObj.onlyExist = false;
     else parsedObj.onlyExist = true;
     filterCriterias.value = parsedObj as FiltersQueryType;
+    sortField.value = (parsedObj as FiltersQueryType).sortField;
   }
 
-   fetchData(1);
+  fetchData(1);
 });
 
 watch(sortField, (newVal) => {
@@ -220,7 +236,7 @@ watch(sortField, (newVal) => {
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
       >
-        <Sort @data-sort="receiveSortData"></Sort>
+        <Sort @data-sort="receiveSortData" :prevSort="sortField"></Sort>
 
         <div v-if="loading" class="col-span-3 grid grid-cols-3 gap-3">
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
