@@ -5,9 +5,11 @@ import MainBody from "../components/products/MainBody.vue";
 import { ref } from "vue";
 </script>
 <template>
+  <!-- <router-link :to="{ name: 'products' }"></router-link> -->
   <Header></Header>
 
-  <MainBody></MainBody>
+  <!-- <MainBody></MainBody> -->
+  <router-view />
 
   <Footer></Footer>
 </template>

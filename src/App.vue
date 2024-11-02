@@ -5,14 +5,14 @@ import MainBody from "./components/body/MainBody.vue";
 
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import ShowProducts from "./views/ShowProducts.vue";
 </script>
 
 <template>
   <div class="font-MyFont">
+    <ShowProducts></ShowProducts>
 
-  
-
-    <router-view />
+    <!-- <router-view /> -->
   </div>
 </template>
 

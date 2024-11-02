@@ -233,6 +233,7 @@ watch(sortField, (newVal) => {
 
 <template>
   <div class="p-5">
+    <!-- <router-view /> -->
     <Cattegories></Cattegories>
 
     <div class="grid grid-cols-4 p-5 gap-4">
