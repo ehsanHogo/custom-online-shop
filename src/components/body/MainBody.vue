@@ -43,6 +43,8 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
 
   // const params = { name: "Alice", age: 25 };
 
+  currentPage.value = 1;
+
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
@@ -50,6 +52,8 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
     obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
+
+    page: currentPage.value,
   };
 
   // console.log(qs.stringify(params));
@@ -79,7 +83,7 @@ const fetchData = async (
 
   loading.value = true;
 
-  // console.log(nextPage);
+  console.log("father current", currentPage.value);
 
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
@@ -94,8 +98,8 @@ const fetchData = async (
     splitQuery: "&",
   };
 
-  if (nextPage !== 1) {
-    baseQuery += `&page=${nextPage}`;
+  if (currentPage.value !== 1) {
+    baseQuery += `&page=${currentPage.value}`;
   }
 
   if (filterCriterias.value.sortField === "none") {
@@ -132,9 +136,10 @@ const fetchData = async (
       includedFetched.value = response.included;
       showData.value = response.data;
 
-      if (response.meta.total_pages !== numberOfPage.value) {
-        currentPage.value = 1;
-      }
+      // if (response.meta.total_pages !== numberOfPage.value) {
+      //   currentPage.value = 1;
+      //   console.log("reher");
+      // }
 
       numberOfPage.value = response.meta.total_pages;
 
@@ -151,6 +156,20 @@ const receivePageData = (data: number) => {
   currentPage.value = data;
 
   fetchPage.value += 1;
+
+  const obj = {
+    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
+      allowEmptyArrays: true,
+    }),
+    page: currentPage.value,
+  };
+
+  // console.log(qs.stringify(params));
+
+  router.push({
+    path: "/custom-online-shop/",
+    query: obj,
+  });
 
   fetchData(currentPage.value);
 };
@@ -181,6 +200,7 @@ const receiveSortData = (data: SortType) => {
     obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
+    page: currentPage.value,
   };
 
   // console.log(qs.stringify(params));
@@ -217,6 +237,10 @@ onBeforeMount(() => {
     else parsedObj.onlyExist = true;
     filterCriterias.value = parsedObj as FiltersQueryType;
     sortField.value = (parsedObj as FiltersQueryType).sortField;
+    console.log("page :", qs.parse(route.query)["page"]);
+
+    currentPage.value = +qs.parse(route.query)["page"] as number;
+    console.log("before nount page ", currentPage.value);
   }
 
   fetchData(1);

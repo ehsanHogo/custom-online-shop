@@ -17,6 +17,10 @@ const sendDataToParent = (pageData: number) => {
 
 const fatherPage = toRef(props, "startPage");
 const currentPage = ref(fatherPage.value);
+
+console.log("father page :", fatherPage.value);
+console.log("father page :", currentPage.value);
+
 const totalPage = toRef(props, "numberOfPages");
 // const totalPage = ref(5);
 const stepSize = props.stepNum;
@@ -27,6 +31,9 @@ watch(fatherPage, (newVal) => {
     firstPageIndex.value = 0;
     lastPageIndex.value = stepSize - 1;
   }
+
+  console.log("here");
+  console.log(currentPage.value);
 });
 // general
 
