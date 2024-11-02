@@ -15,10 +15,12 @@ const incItemNum = () => {
 <template>
   <div class="border-b border-b-myGray-4 pb-4 mt-5">
     <div class="flex justify-evenly items-center">
-      <img
-        src="../../assets/body/shopping cart/close-square.png"
-        alt="delete product"
-      />
+      <button>
+        <img
+          src="../../assets/body/shopping cart/close-square.png"
+          alt="delete product"
+        />
+      </button>
 
       <img
         src="../../assets/body/shopping cart/test.png"

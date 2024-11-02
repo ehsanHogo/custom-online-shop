@@ -4,8 +4,8 @@
     dir="rtl"
   >
     <div class="flex flex-col gap-3 border-b border-b-myGray-4 pb-5">
-      <b>کد تخفیف</b>
-      <p>
+      <b class="text-myGray-10">کد تخفیف</b>
+      <p class="text-myGray-9">
         کد تخفیف کد معرف کارت هدیه خود را در زیر وارد کرده و دکمه ثبت رو بزنید
         تا در صورت داشتن اعتبار به سفارش شما اعمال شود
       </p>
@@ -52,7 +52,7 @@
 
     <div class="mt-3">
       <div class="flex justify-between">
-        <b>سود شما از خرید</b>
+        <b> جمع مبلغ قابل پرداخت </b>
         <b>240,000 تومان</b>
       </div>
     </div>
@@ -61,7 +61,7 @@
       <button
         class="bg-redp flex gap-3 w-[50%] p-3 justify-center items-center rounded-sm"
       >
-        <p class="text-white">ثبت سفارش</p>
+        <b class="text-white">ثبت سفارش</b>
         <img src="../../assets/body/shopping cart/Vector.png" alt="" />
       </button>
     </div>
