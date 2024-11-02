@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
+
 const itemNumber = ref(1);
 
 const decItemNum = () => {
@@ -30,24 +32,7 @@ const incItemNum = () => {
       <b> تیشرت سفید طرح دار</b>
       <b>240,000 تومان</b>
 
-      <div class="flex">
-        <button
-          @click="incItemNum"
-          class="border border-myGray-4 px-3 py-2 rounded-r-sm"
-        >
-          <p>+</p>
-        </button>
-
-        <div class="border border-myGray-4 px-3 py-2">
-          <b>{{ itemNumber }}</b>
-        </div>
-        <button
-          @click="decItemNum"
-          class="border border-myGray-4 px-3 py-2 rounded-l-sm"
-        >
-          <p>-</p>
-        </button>
-      </div>
+      <AddRemoveProduct></AddRemoveProduct>
     </div>
     <div class="flex justify-end gap-3 mt-3">
       <img src="../../assets/body/shopping cart/truck-fast.png" alt="" />
