@@ -32,7 +32,7 @@ watch(fatherPage, (newVal) => {
     lastPageIndex.value = stepSize - 1;
   }
 
-  console.log("here");
+  console.log("heasdgaghshfre");
   console.log(currentPage.value);
 });
 // general

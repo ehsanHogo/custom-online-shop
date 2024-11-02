@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
 interface CardData {
   name?: string;
   price?: string;
@@ -26,12 +28,20 @@ const extractTextFromString = (htmlString: string) => {
   return extractedText;
 };
 
+const itemNumber = ref(1);
+const changeToCounter = ref(false);
 
+const addFirstItem = () => {
+  changeToCounter.value = true;
+};
+const decItemNum = () => {
+  if (itemNumber.value - 1 !== 0) itemNumber.value -= 1;
+  else changeToCounter.value = false;
+};
 
-
-const updateShoppingCart = ()=>{
-
-}
+const incItemNum = () => {
+  itemNumber.value += 1;
+};
 </script>
 
 <template>
@@ -57,7 +67,8 @@ const updateShoppingCart = ()=>{
 
     <div class="flex justify-end">
       <button
-      @click="updateShoppingCart"
+        v-if="!changeToCounter"
+        @click="addFirstItem"
         class="bg-redp flex justify-center items-center p-2 w-fit rounded-sm gap-2"
       >
         <p class="text-white">افزودن به سبد خرید</p>
@@ -67,6 +78,24 @@ const updateShoppingCart = ()=>{
           alt="shopping cart"
         />
       </button>
+
+      <div v-if="changeToCounter" class="flex">
+        <button
+          @click="decItemNum"
+          class="border border-myGray-4 px-3 py-2 rounded-l-sm"
+        >
+          <p>-</p>
+        </button>
+        <div class="border border-myGray-4 px-3 py-2">
+          <b>{{ itemNumber }}</b>
+        </div>
+        <button
+          @click="incItemNum"
+          class="border border-myGray-4 px-3 py-2 rounded-r-sm"
+        >
+          <p>+</p>
+        </button>
+      </div>
     </div>
   </div>
 </template>
