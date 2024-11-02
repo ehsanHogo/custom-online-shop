@@ -7,7 +7,7 @@ interface CardData {
   price?: string;
   description?: string;
   imageUrl?: string;
-  id:string
+  id: string;
 }
 
 const emit = defineEmits(["shopping-data"]);
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<CardData>(), {
   price: "",
   description: "",
   imageUrl: "",
-  id : ""
+  id: "",
 });
 
 const extractTextFromString = (htmlString: string) => {
@@ -46,7 +46,27 @@ const addFirstItem = () => {
     image: props.imageUrl,
     count: 1,
     price: props.price,
-    id : props.id
+    id: props.id,
+  });
+};
+
+const count = ref(0);
+
+const updateCount = (data: number) => {
+  count.value = data;
+
+  console.log("count : ", data);
+
+  if (data === 0) {
+    changeToCounter.value = false;
+  }
+
+  passShoppingData({
+    name: props.name,
+    image: props.imageUrl,
+    count: count.value,
+    price: props.price,
+    id: props.id,
   });
 };
 </script>
@@ -86,7 +106,11 @@ const addFirstItem = () => {
         />
       </button>
       <div dir="rtl">
-        <AddRemoveProduct v-if="changeToCounter"></AddRemoveProduct>
+        <AddRemoveProduct
+          :first-count="1"
+          @count-data="updateCount"
+          v-if="changeToCounter"
+        ></AddRemoveProduct>
       </div>
     </div>
   </div>

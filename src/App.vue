@@ -10,7 +10,15 @@ const shoppingList = ref<ShoppingCartListType>({ products: [] });
 
 const updateShoppingList = (data: ShoppingProductType) => {
   console.log("add to shopping list");
-  shoppingList.value.products = shoppingList.value.products.concat(data);
+
+  const resultIndex = shoppingList.value.products.findIndex(
+    (item) => item.id === data.id
+  );
+  if (resultIndex === -1) {
+    shoppingList.value.products = shoppingList.value.products.concat(data);
+  } else {
+    shoppingList.value.products[resultIndex].count = data.count;
+  }
 };
 </script>
 

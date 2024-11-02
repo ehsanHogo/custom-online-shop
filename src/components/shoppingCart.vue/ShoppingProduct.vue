@@ -26,7 +26,7 @@ const props = defineProps<ShoppingProductType>();
       <b> {{ props.name }}</b>
       <b>{{ props.price }} </b>
 
-      <AddRemoveProduct></AddRemoveProduct>
+      <AddRemoveProduct :firstCount="props.count"></AddRemoveProduct>
     </div>
     <div class="flex justify-end gap-3 mt-3">
       <img src="../../assets/body/shopping cart/truck-fast.png" alt="" />
