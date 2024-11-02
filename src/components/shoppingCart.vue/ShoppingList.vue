@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { toRef } from "vue";
-import { ShoppingCartListType } from "../../types/interfaces";
+import {
+  ShoppingCartListType,
+  ShoppingProductType,
+} from "../../types/interfaces";
 import ShoppingProduct from "./ShoppingProduct.vue";
 
 interface MyProps {
@@ -9,6 +12,12 @@ interface MyProps {
 const props = defineProps<MyProps>();
 
 const shoppingListRef = toRef(props, "shoppingList");
+
+const emit = defineEmits(["shopping-data"]);
+
+const passShoppingData = (data: ShoppingProductType) => {
+  emit("shopping-data", data);
+};
 </script>
 <template>
   <div class="col-span-2 p-5" dir="rtl">
@@ -25,6 +34,7 @@ const shoppingListRef = toRef(props, "shoppingList");
             :image="item.image"
             :count="item.count"
             :id="item.id"
+            @shopping-data="passShoppingData"
           ></ShoppingProduct>
         </li>
       </ul>

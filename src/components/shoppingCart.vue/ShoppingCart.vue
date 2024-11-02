@@ -34,6 +34,9 @@ const shoppingListRef = toRef(props, "shoppingList");
       <ShoppingRegistration></ShoppingRegistration>
       <ShopppingAlerts></ShopppingAlerts>
     </div>
-    <ShoppingList :shoppingList="shoppingListRef"></ShoppingList>
+    <ShoppingList
+      @shopping-data="passShoppingData"
+      :shoppingList="shoppingListRef"
+    ></ShoppingList>
   </div>
 </template>
