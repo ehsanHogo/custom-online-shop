@@ -74,3 +74,6 @@ export interface FiltersQueryType {
 
   sortField: SortType;
 }
+
+
+

@@ -20,6 +20,7 @@ import {
   FilterItemType,
   QueryType,
   FiltersQueryType,
+  StoreQueryType,
 } from "../../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
 
@@ -48,20 +49,7 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
-  const obj = {
-    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
-      allowEmptyArrays: true,
-    }),
-
-    page: currentPage.value,
-  };
-
-  // console.log(qs.stringify(params));
-
-  router.push({
-    path: "/custom-online-shop/",
-    query: obj,
-  });
+  updatePath();
   fetchData(currentPage.value);
 };
 
@@ -157,6 +145,12 @@ const receivePageData = (data: number) => {
 
   fetchPage.value += 1;
 
+  updatePath();
+
+  fetchData(currentPage.value);
+};
+
+const updatePath = () => {
   const obj = {
     obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
@@ -170,8 +164,6 @@ const receivePageData = (data: number) => {
     path: "/custom-online-shop/",
     query: obj,
   });
-
-  fetchData(currentPage.value);
 };
 
 const findImageUrl = (imageId: string) => {
@@ -196,19 +188,7 @@ const receiveSortData = (data: SortType) => {
 
   filterCriterias.value.sortField = data;
 
-  const obj = {
-    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
-      allowEmptyArrays: true,
-    }),
-    page: currentPage.value,
-  };
-
-  // console.log(qs.stringify(params));
-
-  router.push({
-    path: "/custom-online-shop/",
-    query: obj,
-  });
+  updatePath();
 };
 
 // onMounted(() => {
