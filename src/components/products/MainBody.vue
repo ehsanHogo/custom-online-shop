@@ -5,7 +5,7 @@ import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "./Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
-import Cattegories from "./Cattegories.vue";
+
 import qs from "qs";
 
 const router = useRouter();
@@ -234,7 +234,7 @@ watch(sortField, (newVal) => {
 <template>
   <div class="p-5">
     <!-- <router-view /> -->
-    <Cattegories></Cattegories>
+
 
     <div class="grid grid-cols-4 p-5 gap-4">
       <div
