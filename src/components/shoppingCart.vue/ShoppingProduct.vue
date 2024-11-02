@@ -20,16 +20,16 @@ const props = defineProps<ShoppingProductType>();
         <img
           :src="props.image"
           alt="product picture"
-          class="rounded-sm h-[150px]"
+          class="rounded-sm h-[150px] w-[150px]"
         />
       </div>
       <b> {{ props.name }}</b>
-      <b>{{ props.price }} تومان</b>
+      <b>{{ props.price }} </b>
 
       <AddRemoveProduct></AddRemoveProduct>
     </div>
     <div class="flex justify-end gap-3 mt-3">
-      <img src="../../assets/body/shopping cart/trunk-fast.png" alt="" />
+      <img src="../../assets/body/shopping cart/truck-fast.png" alt="" />
       <b class="text-myGray-9">ارسال از سه روز آینده</b>
     </div>
   </div>

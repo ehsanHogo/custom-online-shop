@@ -24,6 +24,7 @@ const shoppingListRef = toRef(props, "shoppingList");
             :price="item.price"
             :image="item.image"
             :count="item.count"
+            :id="item.id"
           ></ShoppingProduct>
         </li>
       </ul>
