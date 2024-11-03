@@ -17,7 +17,11 @@ const updateShoppingList = (data: ShoppingProductType) => {
   if (resultIndex === -1) {
     shoppingList.value.products = shoppingList.value.products.concat(data);
   } else {
-    shoppingList.value.products[resultIndex].count = data.count;
+    if (data.count === 0) {
+      shoppingList.value.products.splice(resultIndex, 1);
+    } else {
+      shoppingList.value.products[resultIndex].count = data.count;
+    }
   }
 };
 </script>

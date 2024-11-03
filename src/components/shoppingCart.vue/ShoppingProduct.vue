@@ -53,7 +53,7 @@ const updateCount = (data: number) => {
       <b>{{ props.price }} </b>
 
       <AddRemoveProduct
-        :firstCount="props.count"
+        :firstCount="MyCount"
         @count-data="updateCount"
       ></AddRemoveProduct>
     </div>
