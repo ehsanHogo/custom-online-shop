@@ -31,12 +31,22 @@ const updateCount = (data: number) => {
     id: props.id,
   });
 };
+
+const handleDelete = () => {
+  passShoppingData({
+    name: props.name,
+    image: props.image,
+    count: 0,
+    price: props.price,
+    id: props.id,
+  });
+};
 </script>
 
 <template>
   <div class="border-b border-b-myGray-4 pb-4 mt-5">
     <div class="flex justify-evenly items-center">
-      <button>
+      <button @click="handleDelete">
         <img
           src="../../assets/body/shopping cart/close-square.png"
           alt="delete product"
