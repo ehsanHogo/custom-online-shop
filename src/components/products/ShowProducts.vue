@@ -9,11 +9,12 @@ import CardSkeleton from "./cards/CardSkeleton.vue";
 import qs from "qs";
 interface MyProps {
   shoppingList: ShoppingCartListType;
+  filterSortPageData : FiltersQueryType
 }
 const props = defineProps<MyProps>();
 //shopping
 
-const emit = defineEmits(["shopping-data"]);
+const emit = defineEmits(["shopping-data", 'filter-sort-page-data']);
 const passShoppingData = (data: ShoppingProductType) => {
   emit("shopping-data", data);
 };
@@ -60,7 +61,10 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
-  updatePath();
+
+  emit('filter-sort-page-data', filterCriterias.value, currentPage.value)
+
+  // updatePath();
   fetchData(currentPage.value);
 };
 
@@ -156,26 +160,27 @@ const receivePageData = (data: number) => {
 
   fetchPage.value += 1;
 
-  updatePath();
+  emit('filter-sort-page-data', filterCriterias.value, currentPage.value)
+  // updatePath();
 
   fetchData(currentPage.value);
 };
 
-const updatePath = () => {
-  const obj = {
-    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
-      allowEmptyArrays: true,
-    }),
-    page: currentPage.value,
-  };
+// const updatePath = () => {
+//   const obj = {
+//     obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
+//       allowEmptyArrays: true,
+//     }),
+//     page: currentPage.value,
+//   };
 
-  // console.log(qs.stringify(params));
+//   // console.log(qs.stringify(params));
 
-  router.push({
-    path: "/custom-online-shop/",
-    query: obj,
-  });
-};
+//   router.push({
+//     path: "/custom-online-shop/",
+//     query: obj,
+//   });
+// };
 
 const findImageUrl = (imageId: string) => {
   if (imageId === null || imageId === undefined) {
@@ -199,7 +204,8 @@ const receiveSortData = (data: SortType) => {
 
   filterCriterias.value.sortField = data;
 
-  updatePath();
+  emit('filter-sort-page-data', filterCriterias.value, currentPage.value)
+  // updatePath();
 };
 
 // onMounted(() => {
@@ -219,7 +225,7 @@ onBeforeMount(() => {
 
   // console.log("route.query :", qs.stringify(route.query));
   // console.log(qs.parse(route.query));
-  console.log(qs.parse(qs.parse(route.query)["obj"]));
+    console.log(qs.parse(qs.parse(route.query)["obj"]));
 
   const parsedObj = qs.parse(qs.parse(route.query)["obj"]);
   if (Object.entries(parsedObj).length !== 0) {
