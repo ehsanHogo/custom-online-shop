@@ -1,6 +1,18 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const newPathWithQuery = computed(() => ({
+  path: "/custom-online-shop/",
+  query: { ...route.query },
+}));
+</script>
+
 <template>
   <router-link
-    :to="{ name: 'products' }"
+    :to="newPathWithQuery"
     class="flex justify-end items-center gap-2 text-myGray-9"
   >
     <!-- <button class="flex justify-end items-center gap-2 text-myGray-9"> -->
