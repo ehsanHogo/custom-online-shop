@@ -13,7 +13,8 @@ const shoppingList = ref<ShoppingCartListType>({
 
 const updateShoppingList = (data: ShoppingCartListType) => {
   shoppingList.value.firstRefresh = false;
-  // console.log("add to shopping list");
+
+  console.log("reset refresh flag");
 
   // console.log(data.count);
   // console.log(data.id);

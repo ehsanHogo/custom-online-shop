@@ -25,6 +25,8 @@ const fatherShoppingList = toRef(props, "shoppingList");
 
 const childShoppingList = ref<ShoppingCartListType>(fatherShoppingList.value);
 
+const firstRefresh = ref(props.shoppingList.firstRefresh);
+
 watch(fatherShoppingList.value, (newVal) => {
   childShoppingList.value = newVal;
   updatePath();
@@ -276,14 +278,17 @@ onBeforeMount(() => {
     currentPage.value = +qs.parse(route.query)["page"] as number;
     console.log(cartObj);
 
-    if (fatherShoppingList.value.firstRefresh) {
+    if (firstRefresh.value) {
       childShoppingList.value.products = (
         cartObj as ShoppingCartListType
       ).products.map((item) => {
         return { ...item, count: +item.count };
       });
+      emit("shopping-data", childShoppingList.value);
+      firstRefresh.value = false;
     } else {
       childShoppingList.value = fatherShoppingList.value;
+
       // childShoppingList.value.products.
       updatePath();
     }

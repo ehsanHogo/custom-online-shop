@@ -7,7 +7,9 @@ import {
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../types/interfaces";
-import { ref, toRef, watch } from "vue";
+import { onBeforeMount, ref, toRef, watch } from "vue";
+import qs from "qs";
+import { useRoute, useRouter } from "vue-router";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
@@ -18,11 +20,14 @@ const props = defineProps<MyProps>();
 const emit = defineEmits(["shopping-data", "filter-sort-page-data"]);
 const passShoppingData = (data: ShoppingProductType) => {
   updateShoppingList(data);
+  updatePath();
   emit("shopping-data", childShoppingList.value);
 };
 
 const shoppingListRef = toRef(props, "shoppingList");
 const childShoppingList = ref(shoppingListRef.value);
+
+const firstRefresh = ref(props.shoppingList.firstRefresh);
 // console.log(shoppingListRef.value);
 
 const updateShoppingList = (data: ShoppingProductType) => {
@@ -42,6 +47,42 @@ const updateShoppingList = (data: ShoppingProductType) => {
     }
   }
 };
+
+const router = useRouter();
+
+const route = useRoute();
+const updatePath = () => {
+  const obj = {
+    cart: qs.stringify(childShoppingList.value as ShoppingCartListType, {
+      allowEmptyArrays: true,
+    }),
+  };
+
+  // console.log(qs.stringify(params));
+
+  router.replace({
+    path: "/custom-online-shop/shopping-cart",
+    query: obj,
+  });
+};
+
+onBeforeMount(() => {
+  const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+
+  if (firstRefresh.value) {
+    childShoppingList.value.products = (
+      cartObj as ShoppingCartListType
+    ).products.map((item) => {
+      return { ...item, count: +item.count };
+    });
+    emit("shopping-data", childShoppingList.value);
+    firstRefresh.value = false;
+  } else {
+    childShoppingList.value = shoppingListRef.value;
+    // childShoppingList.value.products.
+    updatePath();
+  }
+});
 </script>
 
 <template>
