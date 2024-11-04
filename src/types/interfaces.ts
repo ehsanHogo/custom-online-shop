@@ -89,3 +89,11 @@ export interface ShoppingCartListType {
 
   firstRefresh : boolean
 }
+
+
+
+export interface PathObjectType {
+  fillterSort: string,
+  page: number,
+  cart: string,
+}

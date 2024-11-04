@@ -33,7 +33,6 @@ watch(fatherShoppingList.value, (newVal) => {
 });
 
 const updateShoppingList = (data: ShoppingProductType) => {
-
   const resultIndex = childShoppingList.value.products.findIndex(
     (item) => item.id === data.id
   );
@@ -89,7 +88,6 @@ const filterCriterias = ref<FiltersQueryType>({
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
- 
   currentPage.value = 1;
 
   filterCriterias.value.filters = filterData.filters;
@@ -108,14 +106,8 @@ const lastPage = ref(1);
 const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
 
-const fetchData = async (
-
-  nextPage: number
-) => {
-
-
+const fetchData = async (nextPage: number) => {
   loading.value = true;
-
 
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
@@ -164,8 +156,6 @@ const fetchData = async (
       includedFetched.value = response.included;
       showData.value = response.data;
 
-
-
       numberOfPage.value = response.meta.total_pages;
 
       loading.value = false;
@@ -197,7 +187,6 @@ const updatePath = () => {
       allowEmptyArrays: true,
     }),
   };
-
 
   router.push({
     path: "/custom-online-shop/",
@@ -231,9 +220,7 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-
-
-  const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
+  const fillterSortObj = qs.parse(qs.parse(route.query))["fillterSort"];
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
   if (Object.entries(fillterSortObj).length !== 0) {
     if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
@@ -256,15 +243,10 @@ onBeforeMount(() => {
       childShoppingList.value = fatherShoppingList.value;
       updatePath();
     }
-
-
-
   }
 
   fetchData(1);
 });
-
-
 
 watch(sortField, (newVal) => {
   filterCriterias.value.sortField = newVal;
@@ -274,7 +256,6 @@ watch(sortField, (newVal) => {
 
 <template>
   <div class="p-5">
-
     <div class="grid grid-cols-4 p-5 gap-4">
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
