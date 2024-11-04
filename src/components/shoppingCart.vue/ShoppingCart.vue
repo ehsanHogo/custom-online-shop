@@ -7,7 +7,7 @@ import {
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../types/interfaces";
-import { toRef, watch } from "vue";
+import { ref, toRef, watch } from "vue";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
@@ -17,12 +17,31 @@ const props = defineProps<MyProps>();
 
 const emit = defineEmits(["shopping-data", "filter-sort-page-data"]);
 const passShoppingData = (data: ShoppingProductType) => {
-  emit("shopping-data", data);
+  updateShoppingList(data);
+  emit("shopping-data", childShoppingList.value);
 };
 
 const shoppingListRef = toRef(props, "shoppingList");
+const childShoppingList = ref(shoppingListRef.value);
+// console.log(shoppingListRef.value);
 
-console.log(shoppingListRef.value);
+const updateShoppingList = (data: ShoppingProductType) => {
+  console.log("add to shopping list");
+
+  const resultIndex = childShoppingList.value.products.findIndex(
+    (item) => item.id === data.id
+  );
+  if (resultIndex === -1) {
+    childShoppingList.value.products =
+      childShoppingList.value.products.concat(data);
+  } else {
+    if (data.count === 0) {
+      childShoppingList.value.products.splice(resultIndex, 1);
+    } else {
+      childShoppingList.value.products[resultIndex].count = data.count;
+    }
+  }
+};
 </script>
 
 <template>
@@ -40,7 +59,7 @@ console.log(shoppingListRef.value);
     </div>
     <ShoppingList
       @shopping-data="passShoppingData"
-      :shoppingList="shoppingListRef"
+      :shoppingList="childShoppingList"
     ></ShoppingList>
   </div>
 </template>
