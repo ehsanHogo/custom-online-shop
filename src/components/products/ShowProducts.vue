@@ -220,9 +220,14 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-  const fillterSortObj = qs.parse(qs.parse(route.query))["fillterSort"];
+  const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
-  if (Object.entries(fillterSortObj).length !== 0) {
+
+  if (
+    fillterSortObj !== null &&
+    fillterSortObj !== undefined &&
+    Object.keys(fillterSortObj).length !== 0
+  ) {
     if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
     if (fillterSortObj.onlyExist === "false") fillterSortObj.onlyExist = false;
     else fillterSortObj.onlyExist = true;
@@ -244,7 +249,6 @@ onBeforeMount(() => {
       updatePath();
     }
   }
-
   fetchData(1);
 });
 
