@@ -79,11 +79,7 @@ onBeforeMount(() => {
         return { ...item, count: +item.count };
       });
     }
-    // childShoppingList.value.products = (
-    //   cartObj as ShoppingCartListType
-    // ).products.map((item) => {
-    //   return { ...item, count: +item.count };
-    // });
+
     emit("shopping-data", childShoppingList.value);
     firstRefresh.value = false;
   } else {
