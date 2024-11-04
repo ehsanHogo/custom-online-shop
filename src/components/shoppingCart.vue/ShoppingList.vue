@@ -27,7 +27,11 @@ const passShoppingData = (data: ShoppingProductType) => {
 
     <div class="">
       <ul>
-        <li v-for="(item, index) in shoppingListRef.products" :key="item.id">
+        <li
+          v-if="shoppingListRef.products.length !== 0"
+          v-for="(item, index) in shoppingListRef.products"
+          :key="item.id"
+        >
           <ShoppingProduct
             :name="item.name"
             :price="item.price"

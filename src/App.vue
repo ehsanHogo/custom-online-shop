@@ -3,7 +3,7 @@ import Header from "./components/header/TheHeader.vue";
 import Footer from "./components/footer/TheFooter.vue";
 
 import Cattegories from "./components/products/Cattegories.vue";
-import { onBeforeMount, onMounted, ref, watchEffect } from "vue";
+import { onBeforeMount, onMounted, ref, watch, watchEffect } from "vue";
 import {
   FiltersQueryType,
   ShoppingCartListType,
@@ -11,7 +11,7 @@ import {
 } from "./types/interfaces";
 
 import qs from "qs";
-import { useRoute, useRouter } from "vue-router";
+import { LocationQuery, useRoute, useRouter } from "vue-router";
 
 const shoppingList = ref<ShoppingCartListType>({ products: [] });
 
@@ -87,6 +87,14 @@ const updatePath = () => {
 //   console.log(qs.parse(qs.parse(route.query)["fillterSort"]));
 // });
 
+watch(
+  () => route.query,
+  (newVal) => {
+    routing.value = newVal;
+    console.log("path caahge ");
+  }
+);
+const routing = ref<LocationQuery>(route.query);
 watchEffect(() => {
   console.log(route.query);
 
@@ -95,10 +103,11 @@ watchEffect(() => {
   const parsedObj = qs.parse(qs.parse(route.query)["cart"]);
 
   if (Object.entries(parsedObj).length !== 0) {
-
-    shoppingList.value.products =  (parsedObj as ShoppingCartListType).products.map((item) => {
+    shoppingList.value.products = (
+      parsedObj as ShoppingCartListType
+    ).products.map((item) => {
       return { ...item, count: +item.count };
-    });;
+    });
   }
 });
 </script>
@@ -113,6 +122,7 @@ watchEffect(() => {
       :shoppingList="shoppingList"
       :filterSortPageData="filterCriterias"
       @filter-sort-page-data="updateFilterCriterias"
+      :routing="routing"
     />
 
     <Footer></Footer>

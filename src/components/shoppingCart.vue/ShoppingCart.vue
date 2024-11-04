@@ -7,11 +7,14 @@ import {
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../types/interfaces";
-import { toRef, watch } from "vue";
+import { onBeforeMount, ref, toRef, watch } from "vue";
+import { LocationQuery, useRoute, useRouter } from "vue-router";
+import qs from "qs";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
   filterSortPageData: FiltersQueryType;
+  routing: LocationQuery;
 }
 const props = defineProps<MyProps>();
 
@@ -20,7 +23,52 @@ const passShoppingData = (data: ShoppingProductType) => {
   emit("shopping-data", data);
 };
 
+const fatherRouting = toRef(props, "routing");
+
 const shoppingListRef = toRef(props, "shoppingList");
+const childShoppingList = ref(shoppingListRef.value);
+watch(fatherRouting, (newVal) => {
+  console.log("lsit change newVal", newVal);
+});
+
+const router = useRouter();
+
+const route = useRoute();
+
+const updatePath = () => {
+  const obj = {
+    cart: qs.stringify(shoppingListRef.value as ShoppingCartListType, {
+      allowEmptyArrays: true,
+    }),
+  };
+
+  // console.log(qs.stringify(params));
+
+  router.push({
+    path: "/custom-online-shop/",
+    query: obj,
+  });
+};
+
+watch(fatherRouting, (newVal) => {
+  console.log("hey path");
+
+  router.push({
+    path: "/custom-online-shop/shopping-cart",
+    query: newVal,
+  });
+});
+
+onBeforeMount(() => {
+  console.log(fatherRouting.value);
+
+  router.push({
+    path: "/custom-online-shop/shopping-cart",
+    query: fatherRouting.value,
+  });
+});
+
+// console.log(fatherRouting);
 </script>
 
 <template>

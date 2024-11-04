@@ -10,6 +10,8 @@ import qs from "qs";
 interface MyProps {
   shoppingList: ShoppingCartListType;
   filterSortPageData: FiltersQueryType;
+
+  routing: LocationQuery;
 }
 const props = defineProps<MyProps>();
 //shopping
@@ -34,7 +36,7 @@ import {
   ShoppingProductType,
   ShoppingCartListType,
 } from "../../types/interfaces";
-import { useRoute, useRouter } from "vue-router";
+import { LocationQuery, useRoute, useRouter } from "vue-router";
 
 const loading = ref(true);
 
@@ -134,7 +136,7 @@ const fetchData = async (
     } else {
       // console.log(response.data);
       filtersType.value = response.meta.filters.option_types;
-      console.log("hererer");
+      // console.log("hererer");
       includedFetched.value = response.included;
       showData.value = response.data;
 
