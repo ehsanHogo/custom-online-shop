@@ -14,6 +14,8 @@ const shoppingList = ref<ShoppingCartListType>({
 const updateShoppingList = (data: ShoppingCartListType) => {
   shoppingList.value.firstRefresh = false;
 
+  console.log(data);
+
   shoppingList.value = data;
 };
 </script>

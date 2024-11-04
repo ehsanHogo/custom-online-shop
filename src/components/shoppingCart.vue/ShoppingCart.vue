@@ -29,7 +29,6 @@ const childShoppingList = ref(shoppingListRef.value);
 const firstRefresh = ref(props.shoppingList.firstRefresh);
 
 const updateShoppingList = (data: ShoppingProductType) => {
-
   const resultIndex = childShoppingList.value.products.findIndex(
     (item) => item.id === data.id
   );
@@ -55,7 +54,6 @@ const updatePath = () => {
     }),
   };
 
-
   router.replace({
     path: "/custom-online-shop/shopping-cart",
     query: obj,
@@ -64,8 +62,15 @@ const updatePath = () => {
 
 onBeforeMount(() => {
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+  console.log("refresh : ", firstRefresh.value);
 
-  if (firstRefresh.value) {
+  if (
+    firstRefresh.value &&
+    cartObj !== undefined &&
+    cartObj !== null &&
+    Object.keys(cartObj).length !== 0 &&
+    cartObj.products[0] !== ""
+  ) {
     childShoppingList.value.products = (
       cartObj as ShoppingCartListType
     ).products.map((item) => {
@@ -74,6 +79,9 @@ onBeforeMount(() => {
     emit("shopping-data", childShoppingList.value);
     firstRefresh.value = false;
   } else {
+    console.log("hererrer");
+    console.log(shoppingListRef.value);
+
     childShoppingList.value = shoppingListRef.value;
     updatePath();
   }

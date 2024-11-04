@@ -31,14 +31,13 @@ const firstPageIndex = ref(fatherPageData.value.startIndex);
 const lastPageIndex = ref(fatherPageData.value.endIndex);
 
 watch(fatherPageData, (newVal) => {
-  if (newVal.page === 1) {
-    currentPage.value = 1;
-    firstPageIndex.value = 0;
-    lastPageIndex.value = stepSize - 1;
-  } else {
-    // calculatePageIndices(newVal.page);
-  }
-
+  // if (newVal.page === 1) {
+  //   currentPage.value = 1;
+  //   firstPageIndex.value = 0;
+  //   lastPageIndex.value = stepSize - 1;
+  // } else {
+  //   // calculatePageIndices(newVal.page);
+  // }
   // console.log("heasdgaghshfre");
   // console.log(currentPage.value);
 });

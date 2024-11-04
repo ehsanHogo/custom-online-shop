@@ -226,7 +226,7 @@ onBeforeMount(() => {
   const pageObj = qs.parse(qs.parse(route.query)["page"]);
 
   // console.log(pageObj);
-
+  console.log("refresh : ", firstRefresh.value);
   if (
     fillterSortObj !== null &&
     fillterSortObj !== undefined &&
@@ -245,7 +245,11 @@ onBeforeMount(() => {
       endIndex: +pageObj.endIndex,
     };
 
-    if (firstRefresh.value) {
+    if (firstRefresh.value && cartObj.products[0] !== "") {
+
+
+      console.log(cartObj.products);
+
       childShoppingList.value.products = (
         cartObj as ShoppingCartListType
       ).products.map((item) => {

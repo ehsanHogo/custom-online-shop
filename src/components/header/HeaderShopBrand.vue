@@ -2,17 +2,21 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
-const route = useRoute();
+// const route = useRoute();
 
-const newPathWithQuery = computed(() => ({
-  path: "/custom-online-shop/",
-  query: { ...route.query },
-}));
+// const newPathWithQuery = computed(() => {
+//   console.log(route.query);
+
+//   return {
+//     path: "/custom-online-shop/",
+//     query: { ...route.query },
+//   };
+// });
 </script>
 
 <template>
   <router-link
-    :to="newPathWithQuery"
+    :to="{ name: 'products' }"
     class="flex justify-end items-center gap-2 text-myGray-9"
   >
     <div class="flex flex-col">

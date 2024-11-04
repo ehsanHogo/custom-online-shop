@@ -26,7 +26,7 @@ const passShoppingData = (data: ShoppingProductType) => {
     </div>
 
     <div class="">
-      <ul>
+      <ul v-if="shoppingListRef.products.length !== 0">
         <li v-for="(item, index) in shoppingListRef.products" :key="item.id">
           <ShoppingProduct
             :name="item.name"
