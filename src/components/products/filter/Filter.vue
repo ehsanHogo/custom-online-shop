@@ -131,7 +131,11 @@ const deleteAllFilter = () => {
         <button class="flex justify-between w-full" @click="setOpen(index)">
           <VaSwitch size="small" v-if="index === 3" v-model="sendingToday" />
           <VaSwitch size="small" v-else-if="index === 4" v-model="onlyExist" />
-          <img v-else src="../../../assets/body/arrow-down.png" alt="arrow down" />
+          <img
+            v-else
+            src="../../../assets/body/arrow-down.png"
+            alt="arrow down"
+          />
 
           <p>{{ filterButton.name }}</p>
         </button>
@@ -139,7 +143,9 @@ const deleteAllFilter = () => {
           @data-criteria="recieveCriteria"
           :filterSizeData="props.filterData[1].option_values"
           v-if="
-            filterButtons[index].name === 'اندازه' && filterButtons[index].open
+            filterButtons[index].name === 'اندازه' &&
+            filterButtons[index].open &&
+            props.filterData.length !== 0
           "
           :selectedFilters="selectedFilterSizeCriterias"
         ></FilterSize>
@@ -148,7 +154,9 @@ const deleteAllFilter = () => {
           @data-criteria="recieveCriteria"
           :filterColorData="props.filterData[0].option_values"
           v-if="
-            filterButtons[index].name === 'رنگ' && filterButtons[index].open
+            filterButtons[index].name === 'رنگ' &&
+            filterButtons[index].open &&
+            props.filterData.length !== 0
           "
           :selectedFilters="selectedFilterColorCriterias"
         ></FilterColor>
