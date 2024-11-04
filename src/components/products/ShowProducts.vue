@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Filter from "./filter/Filter.vue";
 import ShowCards from "./cards/ShowCards.vue";
-import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, ref, toRef, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
@@ -10,11 +10,42 @@ import qs from "qs";
 interface MyProps {
   shoppingList: ShoppingCartListType;
 }
+
 const props = defineProps<MyProps>();
 //shopping
+const fatherShoppingList = toRef(props, "shoppingList");
+
+const childShoppingList = ref<ShoppingCartListType>(fatherShoppingList.value);
+
+watch(fatherShoppingList.value, (newVal) => {
+  childShoppingList.value = newVal;
+  updatePath();
+  console.log("change list");
+});
+
+const updateShoppingList = (data: ShoppingProductType) => {
+  console.log("add to shopping list");
+
+  const resultIndex = childShoppingList.value.products.findIndex(
+    (item) => item.id === data.id
+  );
+  if (resultIndex === -1) {
+    childShoppingList.value.products =
+      childShoppingList.value.products.concat(data);
+  } else {
+    if (data.count === 0) {
+      childShoppingList.value.products.splice(resultIndex, 1);
+    } else {
+      childShoppingList.value.products[resultIndex].count = data.count;
+    }
+  }
+};
 
 const emit = defineEmits(["shopping-data"]);
 const passShoppingData = (data: ShoppingProductType) => {
+  updateShoppingList(data);
+  // childShoppingList.value.products.
+  updatePath();
   emit("shopping-data", data);
 };
 
@@ -163,10 +194,13 @@ const receivePageData = (data: number) => {
 
 const updatePath = () => {
   const obj = {
-    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
+    fillterSort: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
     page: currentPage.value,
+    cart: qs.stringify(childShoppingList.value as ShoppingCartListType, {
+      allowEmptyArrays: true,
+    }),
   };
 
   // console.log(qs.stringify(params));
@@ -221,16 +255,24 @@ onBeforeMount(() => {
   // console.log(qs.parse(route.query));
   console.log(qs.parse(qs.parse(route.query)["obj"]));
 
-  const parsedObj = qs.parse(qs.parse(route.query)["fillterSort"]);
-  if (Object.entries(parsedObj).length !== 0) {
-    if (parsedObj.filters[0] === "") parsedObj.filters = [];
-    if (parsedObj.onlyExist === "false") parsedObj.onlyExist = false;
-    else parsedObj.onlyExist = true;
-    filterCriterias.value = parsedObj as FiltersQueryType;
-    sortField.value = (parsedObj as FiltersQueryType).sortField;
+  const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
+  const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+  if (Object.entries(fillterSortObj).length !== 0) {
+    if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
+    if (fillterSortObj.onlyExist === "false") fillterSortObj.onlyExist = false;
+    else fillterSortObj.onlyExist = true;
+    filterCriterias.value = fillterSortObj as FiltersQueryType;
+    sortField.value = (fillterSortObj as FiltersQueryType).sortField;
     console.log("page :", qs.parse(route.query)["page"]);
 
     currentPage.value = +qs.parse(route.query)["page"] as number;
+    console.log(cartObj);
+
+    childShoppingList.value.products = (
+      cartObj as ShoppingCartListType
+    ).products.map((item) => {
+      return { ...item, count: +item.count };
+    });
     console.log("before nount page ", currentPage.value);
   }
 
@@ -266,7 +308,7 @@ watch(sortField, (newVal) => {
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
           :id="item.id"
           :count="
-            props.shoppingList.products.find((elem) => elem.id === item.id)
+            childShoppingList.products.find((elem) => elem.id === item.id)
               ?.count || 0
           "
           @shopping-data="passShoppingData"
