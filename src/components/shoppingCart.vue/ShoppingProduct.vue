@@ -19,7 +19,11 @@ const updateCount = (data: number) => {
 
   console.log("count : ", data);
 
-    passShoppingData({
+  if (data === 0) {
+    // changeToCounter.value = false;
+  }
+
+  passShoppingData({
     name: props.name,
     image: props.image,
     count: MyCount.value,
