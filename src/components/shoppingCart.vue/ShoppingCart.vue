@@ -11,7 +11,7 @@ import { toRef, watch } from "vue";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
-  filterSortPageData: FiltersQueryType;
+  // filterSortPageData: FiltersQueryType;
 }
 const props = defineProps<MyProps>();
 
@@ -21,6 +21,8 @@ const passShoppingData = (data: ShoppingProductType) => {
 };
 
 const shoppingListRef = toRef(props, "shoppingList");
+
+console.log(shoppingListRef.value);
 </script>
 
 <template>

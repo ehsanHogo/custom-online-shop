@@ -46,7 +46,7 @@ const passShoppingData = (data: ShoppingProductType) => {
   updateShoppingList(data);
   // childShoppingList.value.products.
   updatePath();
-  emit("shopping-data", data);
+  emit("shopping-data", childShoppingList.value);
 };
 
 const router = useRouter();
@@ -268,12 +268,19 @@ onBeforeMount(() => {
     currentPage.value = +qs.parse(route.query)["page"] as number;
     console.log(cartObj);
 
-    childShoppingList.value.products = (
-      cartObj as ShoppingCartListType
-    ).products.map((item) => {
-      return { ...item, count: +item.count };
-    });
-    console.log("before nount page ", currentPage.value);
+    if (fatherShoppingList.value.products.length === 0) {
+      childShoppingList.value.products = (
+        cartObj as ShoppingCartListType
+      ).products.map((item) => {
+        return { ...item, count: +item.count };
+      });
+    } else {
+      childShoppingList.value = fatherShoppingList.value;
+      // childShoppingList.value.products.
+      updatePath();
+    }
+
+    console.log("run before mpunr ", currentPage.value);
   }
 
   fetchData(1);

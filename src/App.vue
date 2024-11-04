@@ -8,21 +8,30 @@ import { ShoppingCartListType, ShoppingProductType } from "./types/interfaces";
 
 const shoppingList = ref<ShoppingCartListType>({ products: [] });
 
-const updateShoppingList = (data: ShoppingProductType) => {
-  console.log("add to shopping list");
+const updateShoppingList = (data: ShoppingCartListType) => {
+  // console.log("add to shopping list");
 
-  const resultIndex = shoppingList.value.products.findIndex(
-    (item) => item.id === data.id
-  );
-  if (resultIndex === -1) {
-    shoppingList.value.products = shoppingList.value.products.concat(data);
-  } else {
-    if (data.count === 0) {
-      shoppingList.value.products.splice(resultIndex, 1);
-    } else {
-      shoppingList.value.products[resultIndex].count = data.count;
-    }
-  }
+  // console.log(data.count);
+  // console.log(data.id);
+
+  // const resultIndex = shoppingList.value.products.findIndex(
+  //   (item) => item.id === data.id
+  // );
+
+  // console.log("resultIndex", resultIndex);
+  // if (resultIndex === -1) {
+  //   shoppingList.value.products = shoppingList.value.products.concat(data);
+  //   console.log(" enter -1");
+  // } else {
+  //   if (data.count === 0) {
+  //     shoppingList.value.products.splice(resultIndex, 1);
+  //     console.log("deleted");
+  //   } else {
+  //     shoppingList.value.products[resultIndex].count = data.count;
+  //   }
+  // }
+
+  shoppingList.value = data;
 };
 </script>
 
