@@ -245,16 +245,18 @@ onBeforeMount(() => {
       endIndex: +pageObj.endIndex,
     };
 
-    if (firstRefresh.value && cartObj.products[0] !== "") {
-
-
+    if (firstRefresh.value) {
       console.log(cartObj.products);
+      if (cartObj.products[0] === "") {
+        childShoppingList.value.products = [];
+      } else {
+        childShoppingList.value.products = (
+          cartObj as ShoppingCartListType
+        ).products.map((item) => {
+          return { ...item, count: +item.count };
+        });
+      }
 
-      childShoppingList.value.products = (
-        cartObj as ShoppingCartListType
-      ).products.map((item) => {
-        return { ...item, count: +item.count };
-      });
       emit("shopping-data", childShoppingList.value);
       firstRefresh.value = false;
     } else {

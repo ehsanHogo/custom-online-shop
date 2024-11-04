@@ -68,14 +68,22 @@ onBeforeMount(() => {
     firstRefresh.value &&
     cartObj !== undefined &&
     cartObj !== null &&
-    Object.keys(cartObj).length !== 0 &&
-    cartObj.products[0] !== ""
+    Object.keys(cartObj).length !== 0
   ) {
-    childShoppingList.value.products = (
-      cartObj as ShoppingCartListType
-    ).products.map((item) => {
-      return { ...item, count: +item.count };
-    });
+    if (cartObj.products[0] === "") {
+      childShoppingList.value.products = [];
+    } else {
+      childShoppingList.value.products = (
+        cartObj as ShoppingCartListType
+      ).products.map((item) => {
+        return { ...item, count: +item.count };
+      });
+    }
+    // childShoppingList.value.products = (
+    //   cartObj as ShoppingCartListType
+    // ).products.map((item) => {
+    //   return { ...item, count: +item.count };
+    // });
     emit("shopping-data", childShoppingList.value);
     firstRefresh.value = false;
   } else {
