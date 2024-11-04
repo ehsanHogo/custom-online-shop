@@ -86,4 +86,6 @@ export interface ShoppingProductType {
 
 export interface ShoppingCartListType {
   products: ShoppingProductType[];
+
+  firstRefresh : boolean
 }

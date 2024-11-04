@@ -6,9 +6,13 @@ import Cattegories from "./components/products/Cattegories.vue";
 import { ref } from "vue";
 import { ShoppingCartListType, ShoppingProductType } from "./types/interfaces";
 
-const shoppingList = ref<ShoppingCartListType>({ products: [] });
+const shoppingList = ref<ShoppingCartListType>({
+  products: [],
+  firstRefresh: true,
+});
 
 const updateShoppingList = (data: ShoppingCartListType) => {
+  shoppingList.value.firstRefresh = false;
   // console.log("add to shopping list");
 
   // console.log(data.count);

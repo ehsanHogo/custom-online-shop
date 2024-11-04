@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import Filter from "./filter/Filter.vue";
 import ShowCards from "./cards/ShowCards.vue";
-import { computed, onBeforeMount, onMounted, ref, toRef, watch } from "vue";
+import {
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  toRef,
+  watch,
+} from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
@@ -268,7 +276,7 @@ onBeforeMount(() => {
     currentPage.value = +qs.parse(route.query)["page"] as number;
     console.log(cartObj);
 
-    if (fatherShoppingList.value.products.length === 0) {
+    if (fatherShoppingList.value.firstRefresh) {
       childShoppingList.value.products = (
         cartObj as ShoppingCartListType
       ).products.map((item) => {
@@ -280,11 +288,45 @@ onBeforeMount(() => {
       updatePath();
     }
 
+    // const navEntries = window.performance.getEntriesByType("navigation");
+    // const isReloaded =
+    //   navEntries.length &&
+    //   (navEntries[0] as PerformanceNavigationTiming).type === "reload";
+
+    // if (isReloaded) {
+    //   console.log("reloaded");
+
+    //   childShoppingList.value.products = (
+    //     cartObj as ShoppingCartListType
+    //   ).products.map((item) => {
+    //     return { ...item, count: +item.count };
+    //   });
+    // }
+
     console.log("run before mpunr ", currentPage.value);
   }
 
   fetchData(1);
 });
+
+// const handlePopState = () => {
+//       console.log("Navigated using back/forward button");
+//     };
+
+// onMounted(() => {
+//       window.addEventListener('popstate', handlePopState);
+
+//       // Detect internal route changes
+//       router.beforeEach((to, from, next) => {
+//         console.log("Route path changed");
+//         next();
+//       });
+//     });
+
+//     // Clean up event listener on component unmount
+//     onBeforeUnmount(() => {
+//       window.removeEventListener('popstate', handlePopState);
+//     });
 
 watch(sortField, (newVal) => {
   filterCriterias.value.sortField = newVal;
