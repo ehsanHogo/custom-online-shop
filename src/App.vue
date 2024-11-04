@@ -3,7 +3,7 @@ import Header from "./components/header/TheHeader.vue";
 import Footer from "./components/footer/TheFooter.vue";
 
 import Cattegories from "./components/products/Cattegories.vue";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, onMounted, ref, watchEffect } from "vue";
 import {
   FiltersQueryType,
   ShoppingCartListType,
@@ -58,7 +58,7 @@ const updateShoppingList = (data: ShoppingProductType) => {
 
 const updatePath = () => {
   const obj = {
-    obj: qs.stringify(filterCriterias.value as FiltersQueryType, {
+    fillterSort: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
     cart: qs.stringify(shoppingList.value as ShoppingCartListType, {
@@ -66,6 +66,12 @@ const updatePath = () => {
     }),
     page: currentPage.value,
   };
+
+  console.log(
+    qs.stringify(shoppingList.value as ShoppingCartListType, {
+      allowEmptyArrays: true,
+    })
+  );
 
   // console.log(qs.stringify(params));
 
@@ -75,8 +81,25 @@ const updatePath = () => {
   });
 };
 
-onBeforeMount(() => {
-  console.log(qs.parse(route.query["cart"]));
+// onMounted(() => {
+//   console.log(route.query);
+
+//   console.log(qs.parse(qs.parse(route.query)["fillterSort"]));
+// });
+
+watchEffect(() => {
+  console.log(route.query);
+
+  console.log(qs.parse(qs.parse(route.query)["cart"]));
+
+  const parsedObj = qs.parse(qs.parse(route.query)["cart"]);
+
+  if (Object.entries(parsedObj).length !== 0) {
+
+    shoppingList.value.products =  (parsedObj as ShoppingCartListType).products.map((item) => {
+      return { ...item, count: +item.count };
+    });;
+  }
 });
 </script>
 

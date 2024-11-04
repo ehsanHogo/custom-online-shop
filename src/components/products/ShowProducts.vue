@@ -9,12 +9,12 @@ import CardSkeleton from "./cards/CardSkeleton.vue";
 import qs from "qs";
 interface MyProps {
   shoppingList: ShoppingCartListType;
-  filterSortPageData : FiltersQueryType
+  filterSortPageData: FiltersQueryType;
 }
 const props = defineProps<MyProps>();
 //shopping
 
-const emit = defineEmits(["shopping-data", 'filter-sort-page-data']);
+const emit = defineEmits(["shopping-data", "filter-sort-page-data"]);
 const passShoppingData = (data: ShoppingProductType) => {
   emit("shopping-data", data);
 };
@@ -61,8 +61,7 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
-
-  emit('filter-sort-page-data', filterCriterias.value, currentPage.value)
+  emit("filter-sort-page-data", filterCriterias.value, currentPage.value);
 
   // updatePath();
   fetchData(currentPage.value);
@@ -82,7 +81,7 @@ const fetchData = async (
   // filter: FiltersQueryType,
   nextPage: number
 ) => {
-  console.log("filters", filterCriterias.value);
+  // console.log("filters", filterCriterias.value);
 
   loading.value = true;
 
@@ -160,7 +159,7 @@ const receivePageData = (data: number) => {
 
   fetchPage.value += 1;
 
-  emit('filter-sort-page-data', filterCriterias.value, currentPage.value)
+  emit("filter-sort-page-data", filterCriterias.value, currentPage.value);
   // updatePath();
 
   fetchData(currentPage.value);
@@ -204,7 +203,7 @@ const receiveSortData = (data: SortType) => {
 
   filterCriterias.value.sortField = data;
 
-  emit('filter-sort-page-data', filterCriterias.value, currentPage.value)
+  emit("filter-sort-page-data", filterCriterias.value, currentPage.value);
   // updatePath();
 };
 
@@ -225,9 +224,9 @@ onBeforeMount(() => {
 
   // console.log("route.query :", qs.stringify(route.query));
   // console.log(qs.parse(route.query));
-    console.log(qs.parse(qs.parse(route.query)["obj"]));
+  console.log(qs.parse(qs.parse(route.query)["fillterSort"]));
 
-  const parsedObj = qs.parse(qs.parse(route.query)["obj"]);
+  const parsedObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   if (Object.entries(parsedObj).length !== 0) {
     if (parsedObj.filters[0] === "") parsedObj.filters = [];
     if (parsedObj.onlyExist === "false") parsedObj.onlyExist = false;
@@ -272,8 +271,8 @@ watch(sortField, (newVal) => {
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
           :id="item.id"
           :count="
-            shoppingList.products.find((elem) => elem.id === item.id)?.count ||
-            0
+            props.shoppingList.products.find((elem) => elem.id === item.id)
+              ?.count || 0
           "
           @shopping-data="passShoppingData"
         ></ShowCards>

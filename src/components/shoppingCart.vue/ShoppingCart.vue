@@ -3,22 +3,32 @@ import ShoppingRegistration from "./ShoppingRegistration.vue";
 import ShopppingAlerts from "./ShopppingAlerts.vue";
 import ShoppingList from "./ShoppingList.vue";
 import {
+  FiltersQueryType,
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../types/interfaces";
-import { toRef } from "vue";
+import { ref, toRef, watch } from "vue";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
+  filterSortPageData: FiltersQueryType;
 }
 const props = defineProps<MyProps>();
 
-const emit = defineEmits(["shopping-data"]);
+const emit = defineEmits(["shopping-data", "filter-sort-page-data"]);
 const passShoppingData = (data: ShoppingProductType) => {
   emit("shopping-data", data);
 };
 
-const shoppingListRef = toRef(props, "shoppingList");
+const fatherShoppingListRef = toRef(props, "shoppingList");
+
+const childShoppingList = ref(fatherShoppingListRef.value);
+
+watch(fatherShoppingListRef, (newVal) => {
+  // childShoppingList.value = newVal;
+});
+
+// watch()
 </script>
 
 <template>
@@ -36,7 +46,7 @@ const shoppingListRef = toRef(props, "shoppingList");
     </div>
     <ShoppingList
       @shopping-data="passShoppingData"
-      :shoppingList="shoppingListRef"
+      :shoppingList="childShoppingList"
     ></ShoppingList>
   </div>
 </template>
