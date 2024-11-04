@@ -7,7 +7,7 @@ import {
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../types/interfaces";
-import { ref, toRef, watch } from "vue";
+import { toRef, watch } from "vue";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
@@ -20,15 +20,7 @@ const passShoppingData = (data: ShoppingProductType) => {
   emit("shopping-data", data);
 };
 
-const fatherShoppingListRef = toRef(props, "shoppingList");
-
-const childShoppingList = ref(fatherShoppingListRef.value);
-
-watch(fatherShoppingListRef, (newVal) => {
-  // childShoppingList.value = newVal;
-});
-
-// watch()
+const shoppingListRef = toRef(props, "shoppingList");
 </script>
 
 <template>
@@ -46,7 +38,7 @@ watch(fatherShoppingListRef, (newVal) => {
     </div>
     <ShoppingList
       @shopping-data="passShoppingData"
-      :shoppingList="childShoppingList"
+      :shoppingList="shoppingListRef"
     ></ShoppingList>
   </div>
 </template>
