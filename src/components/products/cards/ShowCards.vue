@@ -60,7 +60,6 @@ const changeToCounter = ref(fatherCount.value !== 0);
 const updateCount = (data: number) => {
   MyCount.value = data;
 
-  console.log("count : ", data);
 
   if (data === 0) {
     changeToCounter.value = false;

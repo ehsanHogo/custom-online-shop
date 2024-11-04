@@ -30,11 +30,9 @@ const firstRefresh = ref(props.shoppingList.firstRefresh);
 watch(fatherShoppingList.value, (newVal) => {
   childShoppingList.value = newVal;
   updatePath();
-  console.log("change list");
 });
 
 const updateShoppingList = (data: ShoppingProductType) => {
-  console.log("add to shopping list");
 
   const resultIndex = childShoppingList.value.products.findIndex(
     (item) => item.id === data.id
@@ -54,7 +52,6 @@ const updateShoppingList = (data: ShoppingProductType) => {
 const emit = defineEmits(["shopping-data"]);
 const passShoppingData = (data: ShoppingProductType) => {
   updateShoppingList(data);
-  // childShoppingList.value.products.
   updatePath();
   emit("shopping-data", childShoppingList.value);
 };
@@ -92,10 +89,7 @@ const filterCriterias = ref<FiltersQueryType>({
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
-  // console.log(filterData.onlyExist);
-
-  // const params = { name: "Alice", age: 25 };
-
+ 
   currentPage.value = 1;
 
   filterCriterias.value.filters = filterData.filters;
@@ -115,15 +109,13 @@ const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
 
 const fetchData = async (
-  // sort: SortType,
-  // filter: FiltersQueryType,
+
   nextPage: number
 ) => {
-  // console.log("filters", filterCriterias.value);
+
 
   loading.value = true;
 
-  console.log("father current", currentPage.value);
 
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
@@ -143,7 +135,6 @@ const fetchData = async (
   }
 
   if (filterCriterias.value.sortField === "none") {
-    // baseQuery += mainQuery.splitQuery +  mainQuery.include.images;
   } else if (filterCriterias.value.sortField === "price-cheap") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceAsc;
   } else if (filterCriterias.value.sortField === "price-expensive") {
@@ -157,7 +148,6 @@ const fetchData = async (
       baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
     });
   }
-  console.log(filterCriterias.value.onlyExist);
 
   if (filterCriterias.value.onlyExist) {
     baseQuery += `&filter[in_stock]=true`;
@@ -170,16 +160,11 @@ const fetchData = async (
     if (!res.ok) {
       throw Error("error in fetch");
     } else {
-      // console.log(response.data);
       filtersType.value = response.meta.filters.option_types;
-      console.log("hererer");
       includedFetched.value = response.included;
       showData.value = response.data;
 
-      // if (response.meta.total_pages !== numberOfPage.value) {
-      //   currentPage.value = 1;
-      //   console.log("reher");
-      // }
+
 
       numberOfPage.value = response.meta.total_pages;
 
@@ -213,7 +198,6 @@ const updatePath = () => {
     }),
   };
 
-  // console.log(qs.stringify(params));
 
   router.push({
     path: "/custom-online-shop/",
@@ -246,24 +230,8 @@ const receiveSortData = (data: SortType) => {
   updatePath();
 };
 
-// onMounted(() => {
-//   console.log(qs.parse(qs.parse(route.query)["obj"]));
-
-//   const parsedObj = qs.parse(qs.parse(route.query)["obj"]);
-//   if (Object.entries(parsedObj).length !== 0) {
-//     if (parsedObj.filters[0] === "") parsedObj.filters = [];
-//     filterCriterias.value = parsedObj as FiltersQueryType;
-//   }
-
-//   fetchData(filterCriterias.value, 1);
-// });
-
 onBeforeMount(() => {
-  // console.log(qs.parse(qs.stringify(route.query)).filters[0]);
 
-  // console.log("route.query :", qs.stringify(route.query));
-  // console.log(qs.parse(route.query));
-  console.log(qs.parse(qs.parse(route.query)["obj"]));
 
   const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
@@ -273,10 +241,8 @@ onBeforeMount(() => {
     else fillterSortObj.onlyExist = true;
     filterCriterias.value = fillterSortObj as FiltersQueryType;
     sortField.value = (fillterSortObj as FiltersQueryType).sortField;
-    console.log("page :", qs.parse(route.query)["page"]);
 
     currentPage.value = +qs.parse(route.query)["page"] as number;
-    console.log(cartObj);
 
     if (firstRefresh.value) {
       childShoppingList.value.products = (
@@ -288,50 +254,17 @@ onBeforeMount(() => {
       firstRefresh.value = false;
     } else {
       childShoppingList.value = fatherShoppingList.value;
-
-      // childShoppingList.value.products.
       updatePath();
     }
 
-    // const navEntries = window.performance.getEntriesByType("navigation");
-    // const isReloaded =
-    //   navEntries.length &&
-    //   (navEntries[0] as PerformanceNavigationTiming).type === "reload";
 
-    // if (isReloaded) {
-    //   console.log("reloaded");
 
-    //   childShoppingList.value.products = (
-    //     cartObj as ShoppingCartListType
-    //   ).products.map((item) => {
-    //     return { ...item, count: +item.count };
-    //   });
-    // }
-
-    console.log("run before mpunr ", currentPage.value);
   }
 
   fetchData(1);
 });
 
-// const handlePopState = () => {
-//       console.log("Navigated using back/forward button");
-//     };
 
-// onMounted(() => {
-//       window.addEventListener('popstate', handlePopState);
-
-//       // Detect internal route changes
-//       router.beforeEach((to, from, next) => {
-//         console.log("Route path changed");
-//         next();
-//       });
-//     });
-
-//     // Clean up event listener on component unmount
-//     onBeforeUnmount(() => {
-//       window.removeEventListener('popstate', handlePopState);
-//     });
 
 watch(sortField, (newVal) => {
   filterCriterias.value.sortField = newVal;
@@ -341,7 +274,6 @@ watch(sortField, (newVal) => {
 
 <template>
   <div class="p-5">
-    <!-- <router-view /> -->
 
     <div class="grid grid-cols-4 p-5 gap-4">
       <div

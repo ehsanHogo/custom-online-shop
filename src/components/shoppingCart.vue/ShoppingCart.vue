@@ -13,7 +13,6 @@ import { useRoute, useRouter } from "vue-router";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
-  // filterSortPageData: FiltersQueryType;
 }
 const props = defineProps<MyProps>();
 
@@ -28,10 +27,8 @@ const shoppingListRef = toRef(props, "shoppingList");
 const childShoppingList = ref(shoppingListRef.value);
 
 const firstRefresh = ref(props.shoppingList.firstRefresh);
-// console.log(shoppingListRef.value);
 
 const updateShoppingList = (data: ShoppingProductType) => {
-  console.log("add to shopping list");
 
   const resultIndex = childShoppingList.value.products.findIndex(
     (item) => item.id === data.id
@@ -58,7 +55,6 @@ const updatePath = () => {
     }),
   };
 
-  // console.log(qs.stringify(params));
 
   router.replace({
     path: "/custom-online-shop/shopping-cart",
@@ -79,7 +75,6 @@ onBeforeMount(() => {
     firstRefresh.value = false;
   } else {
     childShoppingList.value = shoppingListRef.value;
-    // childShoppingList.value.products.
     updatePath();
   }
 });
