@@ -69,6 +69,7 @@ import {
   FiltersQueryType,
   ShoppingProductType,
   ShoppingCartListType,
+  PageType,
 } from "../../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
 
@@ -166,10 +167,10 @@ const fetchData = async (nextPage: number) => {
 };
 
 const currentPage = ref(1); // recieve update from child
-
-const receivePageData = (data: number) => {
-  currentPage.value = data;
-
+const pageData = ref<PageType>({ page: 1, startIndex: 0, endIndex: 2 });
+const receivePageData = (data: PageType) => {
+  currentPage.value = data.page;
+  pageData.value = data;
   fetchPage.value += 1;
 
   updatePath();
@@ -182,7 +183,7 @@ const updatePath = () => {
     fillterSort: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
-    page: currentPage.value,
+    page: qs.stringify(pageData.value as PageType),
     cart: qs.stringify(childShoppingList.value as ShoppingCartListType, {
       allowEmptyArrays: true,
     }),
@@ -222,6 +223,9 @@ const receiveSortData = (data: SortType) => {
 onBeforeMount(() => {
   const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+  const pageObj = qs.parse(qs.parse(route.query)["page"]);
+
+  // console.log(pageObj);
 
   if (
     fillterSortObj !== null &&
@@ -234,7 +238,12 @@ onBeforeMount(() => {
     filterCriterias.value = fillterSortObj as FiltersQueryType;
     sortField.value = (fillterSortObj as FiltersQueryType).sortField;
 
-    currentPage.value = +qs.parse(route.query)["page"] as number;
+    currentPage.value = +(pageObj as PageType).page;
+    pageData.value = {
+      page: +pageObj.page,
+      startIndex: +pageObj.startIndex,
+      endIndex: +pageObj.endIndex,
+    };
 
     if (firstRefresh.value) {
       childShoppingList.value.products = (
@@ -291,6 +300,7 @@ watch(sortField, (newVal) => {
           :startPage="currentPage"
           :lastPage="lastPage"
           @data-page="receivePageData"
+          :prevPages="pageData"
         ></Pagination>
       </div>
 

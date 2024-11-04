@@ -1,44 +1,70 @@
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from "vue";
+import { PageType } from "../../types/interfaces";
 
 interface MyProps {
   numberOfPages: number;
   stepNum: number;
   startPage: number;
+  prevPages: PageType;
 }
 const props = defineProps<MyProps>();
 
 const emit = defineEmits(["data-page"]);
 
-const sendDataToParent = (pageData: number) => {
+const sendDataToParent = (pageData: PageType) => {
   emit("data-page", pageData);
 };
 // manual setting
 
-const fatherPage = toRef(props, "startPage");
-const currentPage = ref(fatherPage.value);
+const fatherPageData = toRef(props, "prevPages");
+const currentPage = ref(fatherPageData.value.page);
 
-console.log("father page :", fatherPage.value);
+console.log("father page :", fatherPageData.value);
 console.log("father page :", currentPage.value);
 
 const totalPage = toRef(props, "numberOfPages");
 // const totalPage = ref(5);
 const stepSize = props.stepNum;
 
-watch(fatherPage, (newVal) => {
-  if (newVal === 1) {
+const firstPageIndex = ref(fatherPageData.value.startIndex);
+const lastPageIndex = ref(fatherPageData.value.endIndex);
+
+watch(fatherPageData, (newVal) => {
+  if (newVal.page === 1) {
     currentPage.value = 1;
     firstPageIndex.value = 0;
     lastPageIndex.value = stepSize - 1;
+  } else {
+    // calculatePageIndices(newVal.page);
   }
 
-  console.log("heasdgaghshfre");
-  console.log(currentPage.value);
+  // console.log("heasdgaghshfre");
+  // console.log(currentPage.value);
 });
-// general
 
-const firstPageIndex = ref(0);
-const lastPageIndex = ref(stepSize - 1);
+const calculatePageIndices = (page: number) => {
+  // const startIndex = Math.max(0, page - Math.ceil(stepSize / 2));
+  // let startIndex = 0;
+  // if (page % stepSize === 0) {
+  //   lastPageIndex.value = page - 1;
+  //   firstPageIndex.value = lastPageIndex.value - stepSize + 1;
+  // } else {
+  //   lastPageIndex.value = page + (page % stepSize) - 1;
+  //   firstPageIndex.value = lastPageIndex.value - stepSize + 1;
+  // }
+
+  // // startIndex = (page % stepSize) - 2 + page / stepSize - 1;
+  // firstPageIndex.value = startIndex;
+  // lastPageIndex.value = Math.min(
+  //   startIndex + stepSize - 1,
+  //   totalPage.value - 1
+  // );
+
+  console.log(firstPageIndex.value);
+  console.log(lastPageIndex.value);
+};
+// general
 
 const pages = computed(() => {
   // console.log([...Array(totalPage.value)].map((_, i) => i + 1));
@@ -59,7 +85,11 @@ const changePage = (page: number) => {
 };
 
 watch(currentPage, (newval, _) => {
-  sendDataToParent(newval);
+  sendDataToParent({
+    page: newval,
+    startIndex: firstPageIndex.value,
+    endIndex: lastPageIndex.value,
+  });
 });
 
 const nextPage = () => {

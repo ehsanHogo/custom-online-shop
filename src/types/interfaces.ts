@@ -97,3 +97,10 @@ export interface PathObjectType {
   page: number,
   cart: string,
 }
+
+
+export interface PageType {
+  page:number
+  startIndex:number
+  endIndex:number
+}
