@@ -1,4 +1,3 @@
-import { Ref } from "vue";
 
 export type SortType =
   | "price-cheap"
@@ -43,12 +42,6 @@ export interface FilterItemOptions {
   open: boolean;
 }
 
-// export interface FilterCriteriaType {
-//   criteriaName: string;
-//   criteriaType: string;
-//   criteriaId: string;
-//   data: DataFetchType[];
-// }
 
 export interface FilterItemType {
   filterType: string;

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-  DataFetchType,
   FilterItemShowing,
   FilterItemType,
 } from "../../../types/interfaces";
@@ -24,9 +23,7 @@ const filterList = ref(
 
 const emit = defineEmits(["data-criteria"]);
 
-// const sendDatatoParrent = (data: DataFetchType[]) => {
-//   emit("data-fetched", data);
-// };
+
 const sendDatatoParrent = (
   criteria: string,
   criteriaType: string,
@@ -37,11 +34,7 @@ const sendDatatoParrent = (
 };
 
 const updateOpenFlag = (index: number) => {
-  //   console.log((event.target as HTMLInputElement).checked);
-  //   if ((event.target as HTMLInputElement).checked)
-  //     fetchFilteredData(filterList.value[index].name);
-  //   console.log(index);
-  // };
+
 
   filterList.value[index].open = !filterList.value[index].open;
   if (filterList.value[index].open === true) {
@@ -59,29 +52,13 @@ const updateOpenFlag = (index: number) => {
       "remove"
     );
   }
-  // console.log((event.target as HTMLInputElement).checked);
-  // if ((event.target as HTMLInputElement).checked)
-  //   sendDatatoParrent(
-  //     filterList.value[index].name,
-  //     "color",
-  //     filterList.value[index].id,
-  //     "add"
-  //   );
-  // else {
-  //   sendDatatoParrent(
-  //     filterList.value[index].name,
-  //     "color",
-  //     filterList.value[index].id,
-  //     "remove"
-  //   );
-  // }
-  // console.log(index);
+
 };
-// const text = ref(true);
+
 </script>
 
 <template>
-  <!-- <transition-group name="fade" mode="out-in"> -->
+  
   <div class="h-[200px] overflow-y-auto pr-4">
     <ul>
       <li
@@ -101,5 +78,5 @@ const updateOpenFlag = (index: number) => {
     </ul>
   </div>
 
-  <!-- </transition-group> -->
+
 </template>

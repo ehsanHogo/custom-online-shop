@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import {
-  DataFetchType,
   FilterItemShowing,
   FilterItemType,
 } from "../../../types/interfaces";
@@ -34,11 +33,7 @@ const sendDatatoParrent = (
 };
 
 const updateOpenFlag = (index: number) => {
-  //   console.log((event.target as HTMLInputElement).checked);
-  //   if ((event.target as HTMLInputElement).checked)
-  //     fetchFilteredData(filterList.value[index].name);
-  //   console.log(index);
-  // };
+
 
   filterList.value[index].open = !filterList.value[index].open;
   if (filterList.value[index].open === true) {
@@ -58,25 +53,7 @@ const updateOpenFlag = (index: number) => {
   }
 };
 
-// const updateOpenFlag = (index: number, event: Event) => {
-//   // console.log((event.target as HTMLInputElement).checked);
-//   if ((event.target as HTMLInputElement).checked)
-//     sendDatatoParrent(
-//       filterList.value[index].name,
-//       "size",
-//       filterList.value[index].id,
-//       "add"
-//     );
-//   else {
-//     sendDatatoParrent(
-//       filterList.value[index].name,
-//       "size",
-//       filterList.value[index].id,
-//       "remove"
-//     );
-//   }
-//   // console.log(index);
-// };
+
 </script>
 
 <template>

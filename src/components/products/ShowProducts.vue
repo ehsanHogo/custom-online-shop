@@ -2,10 +2,7 @@
 import Filter from "./filter/Filter.vue";
 import ShowCards from "./cards/ShowCards.vue";
 import {
-  computed,
   onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
   ref,
   toRef,
   watch,
@@ -64,7 +61,6 @@ import {
   DataFetchType,
   IncludedFetchType,
   SortType,
-  FilterItemType,
   QueryType,
   FiltersQueryType,
   ShoppingProductType,
@@ -90,9 +86,6 @@ const filterCriterias = ref<FiltersQueryType>({
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
   currentPage.value = 1;
-  // pageData.value.page = 1;
-  // pageData.value.startIndex = 0;
-  // pageData.value.endIndex = 2;
 
   pageData.value = {
     page: 1,
@@ -115,7 +108,7 @@ const lastPage = ref(1);
 const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
 
-const fetchData = async (nextPage: number) => {
+const fetchData = async () => {
   loading.value = true;
 
   let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
@@ -233,7 +226,6 @@ onBeforeMount(() => {
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
   const pageObj = qs.parse(qs.parse(route.query)["page"]);
 
-  // console.log(pageObj);
   console.log("refresh : ", firstRefresh.value);
   if (
     fillterSortObj !== null &&

@@ -1,17 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
 
-// const route = useRoute();
 
-// const newPathWithQuery = computed(() => {
-//   console.log(route.query);
-
-//   return {
-//     path: "/custom-online-shop/",
-//     query: { ...route.query },
-//   };
-// });
 </script>
 
 <template>

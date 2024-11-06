@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, Ref, ref, toRef, watch } from "vue";
+import { computed, ref, toRef, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
@@ -26,15 +26,7 @@ const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
 
 console.log("father", fatherFilterCriterias.value.onlyExist);
 
-// watch(fatherFilterCriterias, (newVal) => {
-//   console.log("father vkange");
 
-//   onlyExist.value = newVal.onlyExist;
-// });
-
-// watch(onlyExist, (k) => {
-//   console.log(k);
-// });
 const filterCriterias = ref<FilterItemType[]>(
   fatherFilterCriterias.value.filters
 );
@@ -77,7 +69,7 @@ const recieveCriteria = (
   criteriaId: string,
   action: string
 ) => {
-  // console.log("in filtert");
+
 
   if (action === "add") {
     filterCriterias.value.push({
@@ -91,8 +83,7 @@ const recieveCriteria = (
     });
   }
 
-  // console.log("exist :" , onlyExist.value);
-  // if (action === "add")
+
   emit("data-fetched", {
     filters: filterCriterias.value,
     onlyExist: onlyExist.value,

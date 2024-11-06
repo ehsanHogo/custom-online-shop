@@ -20,20 +20,12 @@ const sendDataToParent = (pageData: PageType) => {
 const fatherPageData = toRef(props, "prevPages");
 const currentPage = ref(fatherPageData.value.page);
 
-// console.log("father page :", fatherPageData.value);
-// console.log("father page :", currentPage.value);
-
 const totalPage = toRef(props, "numberOfPages");
-// const totalPage = ref(5);
+
 const stepSize = props.stepNum;
 
 const firstPageIndex = ref(fatherPageData.value.startIndex);
 const lastPageIndex = ref(fatherPageData.value.endIndex);
-
-// console.log(fatherPageData.value.page);
-// console.log(fatherPageData.value.startIndex);
-// console.log(fatherPageData.value.endIndex);
-// console.log(currentPage.value);
 
 watch(fatherPageData, (newVal) => {
   if (newVal.page === 1) {
@@ -41,37 +33,12 @@ watch(fatherPageData, (newVal) => {
     firstPageIndex.value = 0;
     lastPageIndex.value = stepSize - 1;
   }
-  //   // calculatePageIndices(newVal.page);
-  // }
-  // console.log("heasdgaghshfre");
-  // console.log(currentPage.value);
 });
 
-const calculatePageIndices = (page: number) => {
-  // const startIndex = Math.max(0, page - Math.ceil(stepSize / 2));
-  // let startIndex = 0;
-  // if (page % stepSize === 0) {
-  //   lastPageIndex.value = page - 1;
-  //   firstPageIndex.value = lastPageIndex.value - stepSize + 1;
-  // } else {
-  //   lastPageIndex.value = page + (page % stepSize) - 1;
-  //   firstPageIndex.value = lastPageIndex.value - stepSize + 1;
-  // }
-
-  // // startIndex = (page % stepSize) - 2 + page / stepSize - 1;
-  // firstPageIndex.value = startIndex;
-  // lastPageIndex.value = Math.min(
-  //   startIndex + stepSize - 1,
-  //   totalPage.value - 1
-  // );
-
-  console.log(firstPageIndex.value);
-  console.log(lastPageIndex.value);
-};
 // general
 
 const pages = computed(() => {
-  // console.log([...Array(totalPage.value)].map((_, i) => i + 1));
+
   return [...Array(totalPage.value)].map((_, i) => i + 1);
 });
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, toRef } from "vue";
 import { SortType } from "../../types/interfaces";
-// import { SortType } from "./MainBody.vue";
+
 
 interface MyProps {
   prevSort: SortType;
@@ -21,7 +21,7 @@ const fatherSort = toRef(props, "prevSort");
 console.log("sort : ", fatherSort.value);
 
 const sortItems: SortItems[] = [
-  // "پربازدیدترین",
+
   { name: "پرفروش ترین", sortName: "none" },
   { name: "جدیدترین", sortName: "new-created" },
   { name: "گران ترین", sortName: "price-expensive" },
