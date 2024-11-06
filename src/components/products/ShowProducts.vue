@@ -90,7 +90,15 @@ const filterCriterias = ref<FiltersQueryType>({
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
   currentPage.value = 1;
+  // pageData.value.page = 1;
+  // pageData.value.startIndex = 0;
+  // pageData.value.endIndex = 2;
 
+  pageData.value = {
+    page: 1,
+    startIndex: 0,
+    endIndex: 2,
+  };
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
@@ -245,6 +253,8 @@ onBeforeMount(() => {
       endIndex: +pageObj.endIndex,
     };
 
+    console.log("father page ", pageData.value.page);
+
     if (firstRefresh.value) {
       console.log(cartObj.products);
       if (cartObj.products[0] === "") {
@@ -303,7 +313,6 @@ watch(sortField, (newVal) => {
         <Pagination
           :numberOfPages="numberOfPage"
           :stepNum="3"
-          :startPage="currentPage"
           :lastPage="lastPage"
           @data-page="receivePageData"
           :prevPages="pageData"

@@ -5,7 +5,7 @@ import { PageType } from "../../types/interfaces";
 interface MyProps {
   numberOfPages: number;
   stepNum: number;
-  startPage: number;
+
   prevPages: PageType;
 }
 const props = defineProps<MyProps>();
@@ -20,8 +20,8 @@ const sendDataToParent = (pageData: PageType) => {
 const fatherPageData = toRef(props, "prevPages");
 const currentPage = ref(fatherPageData.value.page);
 
-console.log("father page :", fatherPageData.value);
-console.log("father page :", currentPage.value);
+// console.log("father page :", fatherPageData.value);
+// console.log("father page :", currentPage.value);
 
 const totalPage = toRef(props, "numberOfPages");
 // const totalPage = ref(5);
@@ -30,12 +30,17 @@ const stepSize = props.stepNum;
 const firstPageIndex = ref(fatherPageData.value.startIndex);
 const lastPageIndex = ref(fatherPageData.value.endIndex);
 
+// console.log(fatherPageData.value.page);
+// console.log(fatherPageData.value.startIndex);
+// console.log(fatherPageData.value.endIndex);
+// console.log(currentPage.value);
+
 watch(fatherPageData, (newVal) => {
-  // if (newVal.page === 1) {
-  //   currentPage.value = 1;
-  //   firstPageIndex.value = 0;
-  //   lastPageIndex.value = stepSize - 1;
-  // } else {
+  if (newVal.page === 1) {
+    currentPage.value = 1;
+    firstPageIndex.value = 0;
+    lastPageIndex.value = stepSize - 1;
+  }
   //   // calculatePageIndices(newVal.page);
   // }
   // console.log("heasdgaghshfre");
@@ -84,6 +89,8 @@ const changePage = (page: number) => {
 };
 
 watch(currentPage, (newval, _) => {
+  console.log("new page : ", newval);
+
   sendDataToParent({
     page: newval,
     startIndex: firstPageIndex.value,
