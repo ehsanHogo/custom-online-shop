@@ -96,7 +96,7 @@ const recieveDataFetched = (filterData: FiltersQueryType) => {
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
   updatePath();
-  fetchData(currentPage.value);
+  fetchData();
 };
 
 //page
@@ -176,7 +176,7 @@ const receivePageData = (data: PageType) => {
 
   updatePath();
 
-  fetchData(currentPage.value);
+  fetchData();
 };
 
 const updatePath = () => {
@@ -266,12 +266,12 @@ onBeforeMount(() => {
       updatePath();
     }
   }
-  fetchData(1);
+  fetchData();
 });
 
 watch(sortField, (newVal) => {
   filterCriterias.value.sortField = newVal;
-  fetchData(currentPage.value);
+  fetchData();
 });
 </script>
 
