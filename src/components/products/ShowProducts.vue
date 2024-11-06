@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Filter from "./filter/Filter.vue";
 import ShowCards from "./cards/ShowCards.vue";
-import { onBeforeMount, ref, toRef, watch } from "vue";
+import { computed, onBeforeMount, ref, toRef, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
@@ -316,6 +316,7 @@ onBeforeMount(() => {
       //     };
       //   });
       // }
+      console.log(cartObj.products);
 
       childShoppingList.value = {
         products: cartObj.products
@@ -331,6 +332,17 @@ onBeforeMount(() => {
         firstRefresh: false,
       };
 
+      childShoppingList.value.products = (
+        cartObj as ShoppingCartListType
+      ).products.map((item) => {
+        return {
+          ...(item as ShoppingProductType),
+          count: +(item as ShoppingProductType).count,
+        };
+      });
+
+      console.log(childShoppingList.value.products);
+
       emit("shopping-data", childShoppingList.value);
       firstRefresh.value = false;
     } else {
@@ -340,6 +352,20 @@ onBeforeMount(() => {
   }
   fetchData();
 });
+
+const findCount = (itemId: string) => {
+  const res = (
+    childShoppingList.value.products.find(
+      (elem) => (elem as ShoppingProductType).id === itemId
+    ) as ShoppingProductType
+  )?.count;
+
+  if (res !== undefined) {
+    console.log("no zero");
+    console.log(res);
+  }
+  return res ? res : 0;
+};
 
 watch(sortField, (newVal) => {
   filterCriterias.value.sortField = newVal;
@@ -367,9 +393,7 @@ watch(sortField, (newVal) => {
           :description="item.attributes.description"
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
           :id="item.id"
-          :count="( childShoppingList.products.find((elem ) => (elem as ShoppingProductType).id === item.id) as ShoppingProductType)
-              ?.count || 0
-          "
+          :count="findCount(item.id)"
           @shopping-data="passShoppingData"
         ></ShowCards>
 

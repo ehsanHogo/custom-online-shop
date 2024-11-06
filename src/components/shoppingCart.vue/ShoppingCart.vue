@@ -6,6 +6,7 @@ import {
   FiltersQueryType,
   ShoppingCartListType,
   ShoppingProductType,
+  StoreObjType,
 } from "../../types/interfaces";
 import { onBeforeMount, ref, toRef, watch } from "vue";
 import qs from "qs";
@@ -30,16 +31,19 @@ const firstRefresh = ref(props.shoppingList.firstRefresh);
 
 const updateShoppingList = (data: ShoppingProductType) => {
   const resultIndex = childShoppingList.value.products.findIndex(
-    (item) => item.id === data.id
+    (item) => (item as ShoppingProductType).id === data.id
   );
   if (resultIndex === -1) {
-    childShoppingList.value.products =
-      childShoppingList.value.products.concat(data);
+    childShoppingList.value.products = childShoppingList.value.products.concat(
+      data
+    ) as unknown as ShoppingProductType[] | string[];
   } else {
     if (data.count === 0) {
       childShoppingList.value.products.splice(resultIndex, 1);
     } else {
-      childShoppingList.value.products[resultIndex].count = data.count;
+      (
+        childShoppingList.value.products[resultIndex] as ShoppingProductType
+      ).count = data.count;
     }
   }
 };
@@ -60,8 +64,15 @@ const updatePath = () => {
   });
 };
 
-onBeforeMount(() => {
-  const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+onBeforeMount( () => {
+  // const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+
+  const cartObj = qs.parse(
+    (qs.parse(route.query as unknown as string) as unknown as StoreObjType)[
+      "cart"
+    ]
+  ) as unknown as ShoppingCartListType;
+
   console.log("refresh : ", firstRefresh.value);
 
   if (
@@ -70,15 +81,29 @@ onBeforeMount(() => {
     cartObj !== null &&
     Object.keys(cartObj).length !== 0
   ) {
-    if (cartObj.products[0] === "") {
-      childShoppingList.value.products = [];
-    } else {
-      childShoppingList.value.products = (
-        cartObj as ShoppingCartListType
-      ).products.map((item) => {
-        return { ...item, count: +item.count };
-      });
-    }
+    // if (cartObj.products[0] === "") {
+    //   childShoppingList.value.products = [];
+    // } else {
+    //   childShoppingList.value.products = (
+    //     cartObj as ShoppingCartListType
+    //   ).products.map((item) => {
+    //     return { ...item, count: +item.count };
+    //   });
+    // }
+
+    childShoppingList.value = {
+      products: cartObj.products
+        ? cartObj.products[0] === ""
+          ? []
+          : (cartObj as ShoppingCartListType).products.map((item) => {
+              return {
+                ...(item as ShoppingProductType),
+                count: +(item as ShoppingProductType).count,
+              };
+            })
+        : [],
+      firstRefresh: false,
+    };
 
     emit("shopping-data", childShoppingList.value);
     firstRefresh.value = false;
@@ -89,6 +114,8 @@ onBeforeMount(() => {
     childShoppingList.value = shoppingListRef.value;
     updatePath();
   }
+
+  
 });
 </script>
 

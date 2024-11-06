@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRef } from "vue";
+import { ref, toRef, watch } from "vue";
 import AddRemoveProduct from "../../generall/AddRemoveProduct.vue";
 import {
   ShoppingCartListType,
@@ -56,10 +56,17 @@ const addFirstItem = () => {
 const fatherCount = toRef(props, "count");
 const MyCount = ref(fatherCount.value);
 
+fatherCount.value !== 0 && console.log("kjasfhjdhfkj");
+
+// watch(fatherCount, (newVal)=>{
+// MyCount.value =
+// })
+
+MyCount.value !== 0 && console.log("hrer");
+
 const changeToCounter = ref(fatherCount.value !== 0);
 const updateCount = (data: number) => {
   MyCount.value = data;
-
 
   if (data === 0) {
     changeToCounter.value = false;
