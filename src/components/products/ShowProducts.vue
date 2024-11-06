@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import Filter from "./filter/Filter.vue";
 import ShowCards from "./cards/ShowCards.vue";
-import {
-  onBeforeMount,
-  ref,
-  toRef,
-  watch,
-} from "vue";
+import { onBeforeMount, ref, toRef, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
@@ -31,16 +26,19 @@ watch(fatherShoppingList.value, (newVal) => {
 
 const updateShoppingList = (data: ShoppingProductType) => {
   const resultIndex = childShoppingList.value.products.findIndex(
-    (item) => item.id === data.id
+    (item) => (item as ShoppingProductType).id === data.id
   );
   if (resultIndex === -1) {
-    childShoppingList.value.products =
-      childShoppingList.value.products.concat(data);
+    childShoppingList.value.products = childShoppingList.value.products.concat(
+      data
+    ) as unknown as ShoppingProductType[] | string[];
   } else {
     if (data.count === 0) {
       childShoppingList.value.products.splice(resultIndex, 1);
     } else {
-      childShoppingList.value.products[resultIndex].count = data.count;
+      (
+        childShoppingList.value.products[resultIndex] as ShoppingProductType
+      ).count = data.count;
     }
   }
 };
@@ -66,8 +64,10 @@ import {
   ShoppingProductType,
   ShoppingCartListType,
   PageType,
+  StoreObjType,
+  FilterItemType,
 } from "../../types/interfaces";
-import { useRoute, useRouter } from "vue-router";
+import { LocationQueryRaw, useRoute, useRouter } from "vue-router";
 
 const loading = ref(true);
 
@@ -139,7 +139,9 @@ const fetchData = async () => {
 
   if (filterCriterias.value.filters.length !== 0) {
     filterCriterias.value.filters.forEach((item) => {
-      baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
+      baseQuery += `&filter[options][${(item as FilterItemType).filterType}]=${
+        (item as FilterItemType).filterCriteria
+      }`;
     });
   }
 
@@ -180,7 +182,7 @@ const receivePageData = (data: PageType) => {
 };
 
 const updatePath = () => {
-  const obj = {
+  const obj: StoreObjType = {
     fillterSort: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
@@ -222,42 +224,112 @@ const receiveSortData = (data: SortType) => {
 };
 
 onBeforeMount(() => {
-  const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
-  const cartObj = qs.parse(qs.parse(route.query)["cart"]);
-  const pageObj = qs.parse(qs.parse(route.query)["page"]);
+  const fillterSortObj = qs.parse(
+    (qs.parse(route.query as unknown as string) as unknown as StoreObjType)[
+      "fillterSort"
+    ]
+  ) as unknown as FiltersQueryType;
+
+  console.log(
+    qs.parse(
+      (qs.parse(route.query as unknown as string) as unknown as StoreObjType)[
+        "cart"
+      ]
+    )
+  );
+
+  console.log(
+    qs.parse(
+      (qs.parse(route.query as unknown as string) as unknown as StoreObjType)[
+        "page"
+      ]
+    )
+  );
+
+  const cartObj = qs.parse(
+    (qs.parse(route.query as unknown as string) as unknown as StoreObjType)[
+      "cart"
+    ]
+  ) as unknown as ShoppingCartListType;
+  const pageObj = qs.parse(
+    (qs.parse(route.query as unknown as string) as unknown as StoreObjType)[
+      "page"
+    ]
+  ) as unknown as PageType;
 
   console.log("refresh : ", firstRefresh.value);
+
+  console.log(fillterSortObj.filters);
+
   if (
     fillterSortObj !== null &&
     fillterSortObj !== undefined &&
     Object.keys(fillterSortObj).length !== 0
   ) {
-    if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
-    if (fillterSortObj.onlyExist === "false") fillterSortObj.onlyExist = false;
-    else fillterSortObj.onlyExist = true;
-    filterCriterias.value = fillterSortObj as FiltersQueryType;
-    sortField.value = (fillterSortObj as FiltersQueryType).sortField;
+    // if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
+    // if (fillterSortObj.onlyExist === "false") fillterSortObj.onlyExist = false;
+    // else fillterSortObj.onlyExist = true;
 
-    currentPage.value = +(pageObj as PageType).page;
+    // filterCriterias.value = fillterSortObj;
+    filterCriterias.value = {
+      filters: fillterSortObj.filters
+        ? fillterSortObj.filters[0] === ""
+          ? []
+          : fillterSortObj.filters
+        : [],
+      onlyExist: fillterSortObj.onlyExist
+        ? fillterSortObj.onlyExist === "false"
+          ? false
+          : true
+        : false,
+      sortField: fillterSortObj.sortField ? fillterSortObj.sortField : "none",
+    };
+    sortField.value = fillterSortObj.sortField
+      ? fillterSortObj.sortField
+      : "none";
+
+    currentPage.value = +pageObj.page;
+    console.log(currentPage.value);
+
+    console.log(pageObj);
+    console.log(pageObj.page);
+    // newPageObj =  pageObj.page ? pageObj.page : null
     pageData.value = {
-      page: +pageObj.page,
-      startIndex: +pageObj.startIndex,
-      endIndex: +pageObj.endIndex,
+      page: pageObj.page ? +pageObj.page : 1,
+      startIndex: pageObj.startIndex ? +pageObj.startIndex : 0,
+      endIndex: pageObj.endIndex ? +pageObj.endIndex : 2,
     };
 
     console.log("father page ", pageData.value.page);
 
     if (firstRefresh.value) {
       console.log(cartObj.products);
-      if (cartObj.products[0] === "") {
-        childShoppingList.value.products = [];
-      } else {
-        childShoppingList.value.products = (
-          cartObj as ShoppingCartListType
-        ).products.map((item) => {
-          return { ...item, count: +item.count };
-        });
-      }
+      // if (cartObj.products[0] === "") {
+      //   childShoppingList.value.products = [];
+      // } else {
+      //   childShoppingList.value.products = (
+      //     cartObj as ShoppingCartListType
+      //   ).products.map((item) => {
+      //     return {
+      //       ...(item as ShoppingProductType),
+      //       count: +(item as ShoppingProductType).count,
+      //     };
+      //   });
+      // }
+
+      childShoppingList.value = {
+        products: cartObj.products
+          ? cartObj.products[0] === ""
+            ? []
+            : (cartObj as ShoppingCartListType).products.map((item) => {
+                return {
+                  ...(item as ShoppingProductType),
+                  count: +(item as ShoppingProductType).count,
+                };
+              })
+          : [],
+        firstRefresh: false,
+      };
 
       emit("shopping-data", childShoppingList.value);
       firstRefresh.value = false;
@@ -295,8 +367,7 @@ watch(sortField, (newVal) => {
           :description="item.attributes.description"
           :imageUrl="findImageUrl(item.relationships.images?.data?.[0]?.id)"
           :id="item.id"
-          :count="
-            childShoppingList.products.find((elem) => elem.id === item.id)
+          :count="( childShoppingList.products.find((elem ) => (elem as ShoppingProductType).id === item.id) as ShoppingProductType)
               ?.count || 0
           "
           @shopping-data="passShoppingData"
