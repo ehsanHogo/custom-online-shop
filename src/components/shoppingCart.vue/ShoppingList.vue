@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { toRef } from "vue";
-import {
-  ShoppingCartListType,
-  ShoppingProductType,
-} from "../../types/interfaces";
+import { ShoppingProductType } from "../../types/interfaces";
 import ShoppingProduct from "./ShoppingProduct.vue";
+import useCartStore from "../../store/useCartStore";
+import { storeToRefs } from "pinia";
 
-interface MyProps {
-  shoppingList: ShoppingCartListType;
-}
-const props = defineProps<MyProps>();
+//store
+const cartStore = useCartStore();
 
-const shoppingListRef = toRef(props, "shoppingList");
+const { products } = storeToRefs(cartStore);
 
 const emit = defineEmits(["shopping-data"]);
 
@@ -26,8 +22,8 @@ const passShoppingData = (data: ShoppingProductType) => {
     </div>
 
     <div class="">
-      <ul v-if="shoppingListRef.products.length !== 0">
-        <li v-for="(item, index) in shoppingListRef.products" :key="item.id">
+      <ul v-if="products.length !== 0">
+        <li v-for="item in products" :key="item.id">
           <ShoppingProduct
             :name="item.name"
             :price="item.price"

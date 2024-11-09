@@ -50,29 +50,12 @@ const addFirstItem = () => {
   });
 };
 
-// const fatherCount = toRef(props, "count");
 const calCount = () => {
   const result = cartStore.getCountById(props.id);
 
   return result === 0 ? false : true;
 };
 const changeToCounter = ref(calCount());
-
-// const updateCount = (data: number) => {
-//   // MyCount.value = data;
-
-//   if (data === 0) {
-//     changeToCounter.value = false;
-//   }
-
-//   passShoppingData({
-//     name: props.name,
-//     image: props.imageUrl,
-//     count: MyCount.value,
-//     price: props.price,
-//     id: props.id,
-//   });
-// };
 
 cartStore.$subscribe((mutation, state) => {
   const events = Array.isArray(mutation.events)
@@ -84,13 +67,10 @@ cartStore.$subscribe((mutation, state) => {
       (event.type === "delete" || event.type === "set") &&
       event.oldValue.id === props.id
     ) {
-      // if(event)
       changeToCounter.value = false;
     }
   });
   console.log(mutation.events);
-
-  // console.log(state.products);
 });
 </script>
 

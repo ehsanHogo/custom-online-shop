@@ -18,15 +18,12 @@ const itemNumber = ref(cartStore.getCountById(props.productId));
 
 const decItemNum = () => {
   if (itemNumber.value - 1 >= 0) itemNumber.value -= 1;
-  // emit("count-data", itemNumber.value);
   cartStore.updateProductsById(props.productId, itemNumber.value);
 };
 
 const incItemNum = () => {
   itemNumber.value += 1;
   cartStore.updateProductsById(props.productId, itemNumber.value);
-
-  // emit("count-data", itemNumber.value);
 };
 </script>
 

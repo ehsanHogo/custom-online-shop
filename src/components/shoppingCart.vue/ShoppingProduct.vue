@@ -3,41 +3,15 @@ import { ref, toRef } from "vue";
 
 import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
 import { ShoppingProductType } from "../../types/interfaces";
+import useCartStore from "../../store/useCartStore";
 
 const props = defineProps<ShoppingProductType>();
 
-const emit = defineEmits(["shopping-data"]);
-
-const passShoppingData = (data: ShoppingProductType) => {
-  emit("shopping-data", data);
-};
-
-const fatherCount = toRef(props, "count");
-const MyCount = ref(fatherCount.value);
-const updateCount = (data: number) => {
-  MyCount.value = data;
-
-
-  if (data === 0) {
-  }
-
-  passShoppingData({
-    name: props.name,
-    image: props.image,
-    count: MyCount.value,
-    price: props.price,
-    id: props.id,
-  });
-};
+//store
+const cartStore = useCartStore();
 
 const handleDelete = () => {
-  passShoppingData({
-    name: props.name,
-    image: props.image,
-    count: 0,
-    price: props.price,
-    id: props.id,
-  });
+  cartStore.updateProductsById(props.id, 0);
 };
 </script>
 
@@ -60,10 +34,7 @@ const handleDelete = () => {
       <b> {{ props.name }}</b>
       <b>{{ props.price }} </b>
 
-      <AddRemoveProduct
-        :firstCount="MyCount"
-        @count-data="updateCount"
-      ></AddRemoveProduct>
+      <AddRemoveProduct :productId="props.id"></AddRemoveProduct>
     </div>
     <div class="flex justify-end gap-3 mt-3">
       <img src="../../assets/body/shopping cart/truck-fast.png" alt="" />
