@@ -5,7 +5,7 @@ import useFilterStore from "../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
 interface MyProps {
   filterColorData: FilterItemShowing[];
-  selectedFilters: FilterItemType[];
+
 }
 const props = defineProps<MyProps>();
 

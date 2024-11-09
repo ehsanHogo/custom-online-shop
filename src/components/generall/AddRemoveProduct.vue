@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRef } from "vue";
+import { ref } from "vue";
 import useCartStore from "../../store/useCartStore";
 
 interface MyProps {

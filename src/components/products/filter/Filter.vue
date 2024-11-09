@@ -14,39 +14,40 @@ import { storeToRefs } from "pinia";
 
 interface MyProps {
   filterData: FilterType[];
-  previousFilterCriterias: FiltersQueryType;
+  // previousFilterCriterias: FiltersQueryType;
 }
 
 //store
 const filterStore = useFilterStore();
 const { onlyExist } = storeToRefs(filterStore);
+const changeOnlyExist = ref(onlyExist.value);
 //**** */
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 
-const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
+// const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
 
-const filterCriterias = ref<FilterItemType[]>(
-  fatherFilterCriterias.value.filters
-);
+// const filterCriterias = ref<FilterItemType[]>(
+//   fatherFilterCriterias.value.filters
+// );
 
-const selectedFilterColorCriterias = computed<FilterItemType[]>(() => {
-  return filterCriterias.value.filter((item) => {
-    return item.filterType === "color";
-  });
-});
+// const selectedFilterColorCriterias = computed<FilterItemType[]>(() => {
+//   return filterCriterias.value.filter((item) => {
+//     return item.filterType === "color";
+//   });
+// });
 
-const selectedFilterSizeCriterias = computed<FilterItemType[]>(() => {
-  return filterCriterias.value.filter((item) => {
-    return item.filterType === "size";
-  });
-});
+// const selectedFilterSizeCriterias = computed<FilterItemType[]>(() => {
+//   return filterCriterias.value.filter((item) => {
+//     return item.filterType === "size";
+//   });
+// });
 
 const filterButtons = ref<FilterItemOptions[]>([
   { name: "برند", open: false },
-  { name: "اندازه", open: selectedFilterSizeCriterias.value.length !== 0 },
-  { name: "رنگ", open: selectedFilterColorCriterias.value.length !== 0 },
+  { name: "اندازه", open: filterStore.filters.length !== 0 },
+  { name: "رنگ", open: filterStore.filters.length !== 0 },
   { name: "ارسال امروز", open: false },
   { name: "فقط کالاهای موجود", open: false },
 
@@ -60,8 +61,12 @@ const setOpen = (index: number) => {
 };
 
 const deleteAllFilter = () => {
-  filterStore.$reset();
+  filterStore.reset();
 };
+
+watch(changeOnlyExist, (newVal) => {
+  filterStore.changeOnlyExist();
+});
 </script>
 
 <template>
@@ -81,7 +86,11 @@ const deleteAllFilter = () => {
       >
         <button class="flex justify-between w-full" @click="setOpen(index)">
           <VaSwitch size="small" v-if="index === 3" v-model="sendingToday" />
-          <VaSwitch size="small" v-else-if="index === 4" v-model="onlyExist" />
+          <VaSwitch
+            size="small"
+            v-else-if="index === 4"
+            v-model="changeOnlyExist"
+          />
           <img
             v-else
             src="../../../assets/body/arrow-down.png"
@@ -97,7 +106,6 @@ const deleteAllFilter = () => {
             filterButtons[index].open &&
             props.filterData.length !== 0
           "
-          :selectedFilters="selectedFilterSizeCriterias"
         ></FilterSize>
 
         <FilterColor
@@ -107,7 +115,6 @@ const deleteAllFilter = () => {
             filterButtons[index].open &&
             props.filterData.length !== 0
           "
-          :selectedFilters="selectedFilterColorCriterias"
         ></FilterColor>
       </div>
     </div>

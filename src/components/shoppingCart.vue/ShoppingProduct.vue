@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, toRef } from "vue";
 
 import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
 import { ShoppingProductType } from "../../types/interfaces";

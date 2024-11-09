@@ -7,92 +7,6 @@ import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
 
 import qs from "qs";
-interface MyProps {
-  shoppingList: ShoppingCartListType;
-}
-
-//store
-
-const sortStore = useSortStore();
-const { sortField } = storeToRefs(sortStore);
-
-const filterStore = useFilterStore();
-
-const pageStore = usePageStore();
-
-const pageData = storeToRefs(pageStore);
-
-watch(pageData.currentPage, (val) => {
-  console.log(val);
-  fetchData();
-});
-
-///******* */
-
-// subscribe
-
-filterStore.$subscribe((mutation, state) => {
-  // shoeld update
-  console.log("mutation ", mutation);
-
-  const events = Array.isArray(mutation.events)
-    ? mutation.events
-    : [mutation.events];
-  events.forEach((event) => {
-    if (event.key === "onlyExist") {
-      filterCriterias.value.onlyExist = state.onlyExist;
-    } else {
-      filterCriterias.value.filters = state.filters;
-    }
-  });
-
-  pageStore.$reset();
-
-  fetchData();
-});
-
-//**** */
-
-const props = defineProps<MyProps>();
-//shopping
-const fatherShoppingList = toRef(props, "shoppingList");
-
-const childShoppingList = ref<ShoppingCartListType>(fatherShoppingList.value);
-
-const firstRefresh = ref(props.shoppingList.firstRefresh);
-
-watch(fatherShoppingList.value, (newVal) => {
-  childShoppingList.value = newVal;
-  updatePath();
-});
-
-const updateShoppingList = (data: ShoppingProductType) => {
-  const resultIndex = childShoppingList.value.products.findIndex(
-    (item) => item.id === data.id
-  );
-  if (resultIndex === -1) {
-    childShoppingList.value.products =
-      childShoppingList.value.products.concat(data);
-  } else {
-    if (data.count === 0) {
-      childShoppingList.value.products.splice(resultIndex, 1);
-    } else {
-      childShoppingList.value.products[resultIndex].count = data.count;
-    }
-  }
-};
-
-const emit = defineEmits(["shopping-data"]);
-const passShoppingData = (data: ShoppingProductType) => {
-  updateShoppingList(data);
-  updatePath();
-  emit("shopping-data", childShoppingList.value);
-};
-
-const router = useRouter();
-
-const route = useRoute();
-
 import {
   FilterType,
   DataFetchType,
@@ -109,6 +23,58 @@ import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../../store/useFilterStore";
 import usePageStore from "../../store/usePageData";
+interface MyProps {
+  shoppingList: ShoppingCartListType;
+}
+
+//store
+
+const sortStore = useSortStore();
+const { sortField } = storeToRefs(sortStore);
+
+const filterStore = useFilterStore();
+const { filters, onlyExist } = storeToRefs(filterStore);
+
+const pageStore = usePageStore();
+
+const { currentPage, startIndex, endIndex } = storeToRefs(pageStore);
+
+watch(currentPage, (val) => {
+  console.log(val);
+  updatePath();
+  fetchData();
+});
+
+///******* */
+
+// subscribe
+
+filterStore.$subscribe((mutation, state) => {
+  // shoeld update
+  console.log("mutation ", mutation);
+
+  updatePath();
+  fetchData();
+});
+
+sortStore.$subscribe((_, state) => {
+  updatePath();
+  fetchData();
+});
+
+//**** */
+
+const props = defineProps<MyProps>();
+//shopping
+const fatherShoppingList = toRef(props, "shoppingList");
+
+const childShoppingList = ref<ShoppingCartListType>(fatherShoppingList.value);
+
+const firstRefresh = ref(props.shoppingList.firstRefresh);
+
+const router = useRouter();
+
+const route = useRoute();
 
 const loading = ref(true);
 
@@ -119,30 +85,13 @@ const includedFetched = ref<IncludedFetchType[]>([]);
 //filter
 const filtersType = ref<FilterType[]>([]);
 
-const filterCriterias = ref<FiltersQueryType>({
-  filters: [],
-  onlyExist: false,
-  sortField: "none",
-});
-
-const recieveDataFetched = (filterData: FiltersQueryType) => {
-  // currentPage.value = 1;
-
-  // pageData. = {
-  //   page: 1,
-  //   startIndex: 0,
-  //   endIndex: 2,
-  // };
-  filterCriterias.value.filters = filterData.filters;
-  filterCriterias.value.onlyExist = filterData.onlyExist;
-
-  updatePath();
-  fetchData();
-};
+// const filterCriterias = ref<FiltersQueryType>({
+//   filters: [],
+//   onlyExist: false,
+//   sortField: "none",
+// });
 
 //page
-
-const fetchPage = ref(1);
 
 const lastPage = ref(1);
 
@@ -165,26 +114,26 @@ const fetchData = async () => {
     splitQuery: "&",
   };
 
-  if (pageData.currentPage.value !== 1) {
-    baseQuery += `&page=${pageData.currentPage.value}`;
+  if (currentPage.value !== 1) {
+    baseQuery += `&page=${currentPage.value}`;
   }
 
-  if (filterCriterias.value.sortField === "none") {
-  } else if (filterCriterias.value.sortField === "price-cheap") {
+  if (sortField.value === "none") {
+  } else if (sortField.value === "price-cheap") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceAsc;
-  } else if (filterCriterias.value.sortField === "price-expensive") {
+  } else if (sortField.value === "price-expensive") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.priceDec;
-  } else if (filterCriterias.value.sortField === "new-created") {
+  } else if (sortField.value === "new-created") {
     baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
   }
 
-  if (filterCriterias.value.filters.length !== 0) {
-    filterCriterias.value.filters.forEach((item) => {
+  if (filters.value.length !== 0) {
+    filters.value.forEach((item) => {
       baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
     });
   }
 
-  if (filterCriterias.value.onlyExist) {
+  if (onlyExist.value) {
     baseQuery += `&filter[in_stock]=true`;
   }
 
@@ -208,25 +157,23 @@ const fetchData = async () => {
   }
 };
 
-// const currentPage = ref(1); // recieve update from child
-
-// const pageData = ref<PageType>({ page: 1, startIndex: 0, endIndex: 2 });
-// const receivePageData = (data: PageType) => {
-//   currentPage.value = data.page;
-//   pageData.value = data;
-//   fetchPage.value += 1;
-
-//   updatePath();
-
-//   fetchData();
-// };
-
 const updatePath = () => {
   const obj = {
-    fillterSort: qs.stringify(filterCriterias.value as FiltersQueryType, {
-      allowEmptyArrays: true,
-    }),
-    page: qs.stringify(pageData),
+    fillterSort: qs.stringify(
+      {
+        filters: filters.value,
+        onlyExist: onlyExist.value,
+        sortField: sortField.value,
+      } as FiltersQueryType,
+      {
+        allowEmptyArrays: true,
+      }
+    ),
+    page: qs.stringify({
+      currentPage: currentPage.value,
+      startIndex: startIndex.value,
+      endIndex: endIndex.value,
+    } as PageType),
     cart: qs.stringify(childShoppingList.value as ShoppingCartListType, {
       allowEmptyArrays: true,
     }),
@@ -268,17 +215,22 @@ onBeforeMount(() => {
     if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
     if (fillterSortObj.onlyExist === "false") fillterSortObj.onlyExist = false;
     else fillterSortObj.onlyExist = true;
-    filterCriterias.value = fillterSortObj as FiltersQueryType;
+
+    // filterCriterias.value = fillterSortObj as FiltersQueryType;
+    filters.value = (fillterSortObj as FiltersQueryType).filters;
+    onlyExist.value = (fillterSortObj as FiltersQueryType).onlyExist;
     sortField.value = (fillterSortObj as FiltersQueryType).sortField;
 
-    currentPage.value = +(pageObj as PageType).page;
-    pageData.value = {
-      page: +pageObj.page,
-      startIndex: +pageObj.startIndex,
-      endIndex: +pageObj.endIndex,
-    };
+    currentPage.value = +pageObj.currentPage;
+    startIndex.value = +pageObj.startIndex;
+    endIndex.value = +pageObj.endIndex;
+    // pageData = {
+    //   currentPage: +pageObj.page,
+    //   startIndex: +pageObj.startIndex,
+    //   endIndex: +pageObj.endIndex,
+    // };
 
-    console.log("father page ", pageData.value.page);
+    console.log("father page ", currentPage.value);
 
     if (firstRefresh.value) {
       console.log(cartObj.products);
@@ -292,7 +244,7 @@ onBeforeMount(() => {
         });
       }
 
-      emit("shopping-data", childShoppingList.value);
+      // emit("shopping-data", childShoppingList.value);
       firstRefresh.value = false;
     } else {
       childShoppingList.value = fatherShoppingList.value;
@@ -300,12 +252,6 @@ onBeforeMount(() => {
     }
   }
   fetchData();
-});
-
-sortStore.$subscribe((_, state) => {
-  filterCriterias.value.sortField = state.sortField;
-  fetchData();
-  localStorage.setItem("cart", JSON.stringify(state));
 });
 </script>
 
@@ -315,7 +261,7 @@ sortStore.$subscribe((_, state) => {
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
       >
-        <Sort :prevSort="sortField"></Sort>
+        <Sort></Sort>
 
         <div v-if="loading" class="col-span-3 grid grid-cols-3 gap-3">
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
@@ -333,7 +279,6 @@ sortStore.$subscribe((_, state) => {
             childShoppingList.products.find((elem) => elem.id === item.id)
               ?.count || 0
           "
-          @shopping-data="passShoppingData"
         ></ShowCards>
 
         <Pagination
@@ -343,10 +288,7 @@ sortStore.$subscribe((_, state) => {
         ></Pagination>
       </div>
 
-      <Filter
-        :filterData="filtersType"
-        :previousFilterCriterias="filterCriterias"
-      ></Filter>
+      <Filter :filterData="filtersType"></Filter>
     </div>
   </div>
 </template>

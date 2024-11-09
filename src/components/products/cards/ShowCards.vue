@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { ref, toRef } from "vue";
+import { ref } from "vue";
 import AddRemoveProduct from "../../generall/AddRemoveProduct.vue";
-import {
-  ShoppingCartListType,
-  ShoppingProductType,
-} from "../../../types/interfaces";
 import useCartStore from "../../../store/useCartStore";
 interface CardData {
   name?: string;
@@ -57,7 +53,7 @@ const calCount = () => {
 };
 const changeToCounter = ref(calCount());
 
-cartStore.$subscribe((mutation, state) => {
+cartStore.$subscribe((mutation) => {
   const events = Array.isArray(mutation.events)
     ? mutation.events
     : [mutation.events];

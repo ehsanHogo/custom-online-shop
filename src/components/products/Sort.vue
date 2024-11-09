@@ -5,9 +5,7 @@ import { SortType } from "../../types/interfaces";
 import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
 
-interface MyProps {
-  prevSort: SortType;
-}
+interface MyProps {}
 
 interface SortItems {
   name: string;
@@ -21,11 +19,11 @@ const { sortField } = storeToRefs(sortStore);
 
 //****** */
 
-const props = defineProps<MyProps>();
+// const props = defineProps<MyProps>();
 
-const fatherSort = toRef(props, "prevSort");
+// const fatherSort = toRef(props, "prevSort");
 
-console.log("sort : ", fatherSort.value);
+// console.log("sort : ", fatherSort.value);
 
 const sortItems: SortItems[] = [
   { name: "پرفروش ترین", sortName: "none" },
