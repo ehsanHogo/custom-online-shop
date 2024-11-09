@@ -24,10 +24,7 @@ const updateShoppingList = (data: ShoppingCartListType) => {
   <div class="font-MyFont">
     <Header></Header>
     <Cattegories class="pt-5"></Cattegories>
-    <router-view
-
-      :shoppingList="shoppingList"
-    />
+    <router-view />
     <Footer></Footer>
   </div>
 </template>
