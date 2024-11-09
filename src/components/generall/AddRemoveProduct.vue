@@ -1,23 +1,32 @@
 <script setup lang="ts">
 import { ref, toRef } from "vue";
+import useCartStore from "../../store/useCartStore";
 
 interface MyProps {
-  firstCount: number;
+  // firstCount: number;
+  productId: string;
 }
-const props = defineProps<MyProps>();
-const emit = defineEmits(["count-data"]);
 
-const fatherCount = toRef(props, "firstCount");
-const itemNumber = ref(fatherCount.value);
+//store
+const cartStore = useCartStore();
+
+const props = defineProps<MyProps>();
+// const emit = defineEmits(["count-data"]);
+
+// const fatherCount = toRef(props, "firstCount");
+const itemNumber = ref(1);
 
 const decItemNum = () => {
   if (itemNumber.value - 1 >= 0) itemNumber.value -= 1;
-  emit("count-data", itemNumber.value);
+  // emit("count-data", itemNumber.value);
+  cartStore.updateProductsById(props.productId, itemNumber.value);
 };
 
 const incItemNum = () => {
   itemNumber.value += 1;
-  emit("count-data", itemNumber.value);
+  cartStore.updateProductsById(props.productId, itemNumber.value);
+
+  // emit("count-data", itemNumber.value);
 };
 </script>
 

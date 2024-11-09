@@ -51,7 +51,6 @@ filterStore.$subscribe((mutation, state) => {
   fetchData();
 });
 
-
 //**** */
 
 const props = defineProps<MyProps>();
@@ -345,7 +344,6 @@ sortStore.$subscribe((_, state) => {
       </div>
 
       <Filter
-        @data-fetched="recieveDataFetched"
         :filterData="filtersType"
         :previousFilterCriterias="filterCriterias"
       ></Filter>

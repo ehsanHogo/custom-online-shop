@@ -9,7 +9,6 @@ import {
 import { onBeforeMount, ref, toRef } from "vue";
 import qs from "qs";
 import { useRoute, useRouter } from "vue-router";
-import { useTestStore } from "../../store/useTestStore";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
@@ -90,8 +89,6 @@ onBeforeMount(() => {
     updatePath();
   }
 });
-
-
 </script>
 
 <template>

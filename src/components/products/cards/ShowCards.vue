@@ -5,6 +5,7 @@ import {
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../../types/interfaces";
+import useCartStore from "../../../store/useCartStore";
 interface CardData {
   name?: string;
   price?: string;
@@ -13,6 +14,8 @@ interface CardData {
   id: string;
   count: number;
 }
+//store
+const cartStore = useCartStore();
 
 const emit = defineEmits(["shopping-data"]);
 
@@ -44,35 +47,61 @@ const extractTextFromString = (htmlString: string) => {
 const addFirstItem = () => {
   changeToCounter.value = true;
   MyCount.value += 1;
-  passShoppingData({
+
+  cartStore.addProduct({
     name: props.name,
     image: props.imageUrl,
     count: 1,
     price: props.price,
     id: props.id,
   });
+  // passShoppingData({
+  //   name: props.name,
+  //   image: props.imageUrl,
+  //   count: 1,
+  //   price: props.price,
+  //   id: props.id,
+  // });
 };
 
 const fatherCount = toRef(props, "count");
 const MyCount = ref(fatherCount.value);
 
 const changeToCounter = ref(fatherCount.value !== 0);
-const updateCount = (data: number) => {
-  MyCount.value = data;
+// const updateCount = (data: number) => {
+//   // MyCount.value = data;
 
+//   if (data === 0) {
+//     changeToCounter.value = false;
+//   }
 
-  if (data === 0) {
-    changeToCounter.value = false;
-  }
+//   passShoppingData({
+//     name: props.name,
+//     image: props.imageUrl,
+//     count: MyCount.value,
+//     price: props.price,
+//     id: props.id,
+//   });
+// };
 
-  passShoppingData({
-    name: props.name,
-    image: props.imageUrl,
-    count: MyCount.value,
-    price: props.price,
-    id: props.id,
+cartStore.$subscribe((mutation, state) => {
+  const events = Array.isArray(mutation.events)
+    ? mutation.events
+    : [mutation.events];
+
+  events.forEach((event) => {
+    if (
+      (event.type === "delete" || event.type === "set") &&
+      event.oldValue.id === props.id
+    ) {
+      // if(event)
+      changeToCounter.value = false;
+    }
   });
-};
+  console.log(mutation.events);
+
+  // console.log(state.products);
+});
 </script>
 
 <template>
@@ -111,8 +140,7 @@ const updateCount = (data: number) => {
       </button>
       <div dir="rtl">
         <AddRemoveProduct
-          :first-count="MyCount"
-          @count-data="updateCount"
+          :productId="props.id"
           v-if="changeToCounter"
         ></AddRemoveProduct>
       </div>
