@@ -18,6 +18,19 @@ const { sortField } = storeToRefs(sortStore);
 
 const filterStore = useFilterStore();
 
+const pageStore = usePageStore();
+
+const pageData = storeToRefs(pageStore);
+
+watch(pageData.currentPage, (val) => {
+  console.log(val);
+  fetchData();
+});
+
+///******* */
+
+// subscribe
+
 filterStore.$subscribe((mutation, state) => {
   // shoeld update
   console.log("mutation ", mutation);
@@ -36,7 +49,11 @@ filterStore.$subscribe((mutation, state) => {
   fetchData();
 });
 
-///******* */
+// pageStore.$subscribe((_, state) => {
+//   console.log(state.currentPage);
+// });
+
+//**** */
 
 const props = defineProps<MyProps>();
 //shopping
@@ -93,6 +110,7 @@ import { useRoute, useRouter } from "vue-router";
 import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../../store/useFilterStore";
+import usePageStore from "../../store/usePageData";
 
 const loading = ref(true);
 
@@ -110,13 +128,13 @@ const filterCriterias = ref<FiltersQueryType>({
 });
 
 const recieveDataFetched = (filterData: FiltersQueryType) => {
-  currentPage.value = 1;
+  // currentPage.value = 1;
 
-  pageData.value = {
-    page: 1,
-    startIndex: 0,
-    endIndex: 2,
-  };
+  // pageData. = {
+  //   page: 1,
+  //   startIndex: 0,
+  //   endIndex: 2,
+  // };
   filterCriterias.value.filters = filterData.filters;
   filterCriterias.value.onlyExist = filterData.onlyExist;
 
@@ -149,8 +167,8 @@ const fetchData = async () => {
     splitQuery: "&",
   };
 
-  if (currentPage.value !== 1) {
-    baseQuery += `&page=${currentPage.value}`;
+  if (pageData.currentPage.value !== 1) {
+    baseQuery += `&page=${pageData.currentPage.value}`;
   }
 
   if (filterCriterias.value.sortField === "none") {
@@ -192,24 +210,25 @@ const fetchData = async () => {
   }
 };
 
-const currentPage = ref(1); // recieve update from child
-const pageData = ref<PageType>({ page: 1, startIndex: 0, endIndex: 2 });
-const receivePageData = (data: PageType) => {
-  currentPage.value = data.page;
-  pageData.value = data;
-  fetchPage.value += 1;
+// const currentPage = ref(1); // recieve update from child
 
-  updatePath();
+// const pageData = ref<PageType>({ page: 1, startIndex: 0, endIndex: 2 });
+// const receivePageData = (data: PageType) => {
+//   currentPage.value = data.page;
+//   pageData.value = data;
+//   fetchPage.value += 1;
 
-  fetchData();
-};
+//   updatePath();
+
+//   fetchData();
+// };
 
 const updatePath = () => {
   const obj = {
     fillterSort: qs.stringify(filterCriterias.value as FiltersQueryType, {
       allowEmptyArrays: true,
     }),
-    page: qs.stringify(pageData.value as PageType),
+    page: qs.stringify(pageData),
     cart: qs.stringify(childShoppingList.value as ShoppingCartListType, {
       allowEmptyArrays: true,
     }),
@@ -323,8 +342,6 @@ sortStore.$subscribe((_, state) => {
           :numberOfPages="numberOfPage"
           :stepNum="3"
           :lastPage="lastPage"
-          @data-page="receivePageData"
-          :prevPages="pageData"
         ></Pagination>
       </div>
 

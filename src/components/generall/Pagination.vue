@@ -1,78 +1,63 @@
 <script setup lang="ts">
-import { computed, ref, toRef, watch } from "vue";
+import { computed, Ref, ref, toRef, watch } from "vue";
 import { PageType } from "../../types/interfaces";
+import usePageStore from "../../store/usePageData";
+import { storeToRefs } from "pinia";
 
 interface MyProps {
   numberOfPages: number;
   stepNum: number;
 
-  prevPages: PageType;
 }
+
+//store
+
+const pageStore = usePageStore();
+
+//***** */
 const props = defineProps<MyProps>();
 
 const emit = defineEmits(["data-page"]);
 
-const sendDataToParent = (pageData: PageType) => {
-  emit("data-page", pageData);
-};
+
 // manual setting
-
-const fatherPageData = toRef(props, "prevPages");
-const currentPage = ref(fatherPageData.value.page);
-
 const totalPage = toRef(props, "numberOfPages");
 
 const stepSize = props.stepNum;
 
-const firstPageIndex = ref(fatherPageData.value.startIndex);
-const lastPageIndex = ref(fatherPageData.value.endIndex);
 
-watch(fatherPageData, (newVal) => {
-  if (newVal.page === 1) {
-    currentPage.value = 1;
-    firstPageIndex.value = 0;
-    lastPageIndex.value = stepSize - 1;
-  }
-});
+
+const { currentPage } = storeToRefs(pageStore);
+const { startIndex } = storeToRefs(pageStore);
+const { endIndex } = storeToRefs(pageStore);
+
+
 
 // general
 
 const pages = computed(() => {
-
   return [...Array(totalPage.value)].map((_, i) => i + 1);
 });
 
 const changePage = (page: number) => {
   if (page === 1) {
     // Reset to the first set of pages
-    firstPageIndex.value = 0;
-    lastPageIndex.value = Math.min(stepSize - 1, totalPage.value);
+    startIndex.value = 0;
+    endIndex.value = Math.min(stepSize - 1, totalPage.value);
   } else if (page === totalPage.value) {
     // Show the last set of pages
-    firstPageIndex.value = Math.max(0, totalPage.value - stepSize - 1);
-    lastPageIndex.value = totalPage.value - 2;
+    startIndex.value = Math.max(0, totalPage.value - stepSize - 1);
+    endIndex.value = totalPage.value - 2;
   }
   currentPage.value = page;
 };
 
-watch(currentPage, (newval, _) => {
-  console.log("new page : ", newval);
-
-  sendDataToParent({
-    page: newval,
-    startIndex: firstPageIndex.value,
-    endIndex: lastPageIndex.value,
-  });
-});
 
 const nextPage = () => {
   if (currentPage.value < totalPage.value) {
-    if (currentPage.value + 1 > pages.value[lastPageIndex.value]) {
-      firstPageIndex.value += stepSize;
-      lastPageIndex.value = Math.min(
-        totalPage.value - 1,
-        lastPageIndex.value + stepSize
-      );
+    if (currentPage.value + 1 > pages.value[endIndex.value]) {
+      startIndex.value += stepSize;
+      endIndex.value = Math.min(totalPage.value - 1, endIndex.value + stepSize);
     }
 
     currentPage.value++;
@@ -81,9 +66,9 @@ const nextPage = () => {
 
 const prevPage = () => {
   if (currentPage.value > 1) {
-    if (currentPage.value - 1 < pages.value[firstPageIndex.value]) {
-      lastPageIndex.value = firstPageIndex.value - 1;
-      firstPageIndex.value = Math.max(0, firstPageIndex.value - stepSize);
+    if (currentPage.value - 1 < pages.value[startIndex.value]) {
+      endIndex.value = startIndex.value - 1;
+      startIndex.value = Math.max(0, startIndex.value - stepSize);
     }
 
     currentPage.value--;
@@ -93,8 +78,8 @@ const prevPage = () => {
 // Slice pages to display in pagination bar
 const slicePages = computed<number[]>(() => {
   return pages.value.slice(
-    Math.max(1, firstPageIndex.value),
-    Math.min(lastPageIndex.value + 1, totalPage.value - 1)
+    Math.max(1, startIndex.value),
+    Math.min(endIndex.value + 1, totalPage.value - 1)
   );
 });
 </script>
@@ -113,7 +98,7 @@ const slicePages = computed<number[]>(() => {
         <b> 1</b>
       </button>
 
-      <div v-if="firstPageIndex !== 0 && pages[stepNum - 1] < totalPage">
+      <div v-if="startIndex !== 0 && pages[stepNum - 1] < totalPage">
         <b>...</b>
       </div>
 
@@ -128,7 +113,7 @@ const slicePages = computed<number[]>(() => {
       </button>
       <div
         v-if="
-          pages[lastPageIndex] !== totalPage - 1 &&
+          pages[endIndex] !== totalPage - 1 &&
           totalPage > 1 &&
           pages[stepNum - 1] < totalPage
         "

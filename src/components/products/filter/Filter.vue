@@ -19,20 +19,13 @@ interface MyProps {
 
 //store
 const filterStore = useFilterStore();
-const {onlyExist} = storeToRefs(filterStore)
+const { onlyExist } = storeToRefs(filterStore);
 //**** */
-
-// const emit = defineEmits(["data-fetched"]);
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 
 const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
-
-// const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
-
-
-console.log("father", fatherFilterCriterias.value.onlyExist);
 
 const filterCriterias = ref<FilterItemType[]>(
   fatherFilterCriterias.value.filters
@@ -66,19 +59,9 @@ const setOpen = (index: number) => {
   filterButtons.value[index].open = !filterButtons.value[index].open;
 };
 
-// watch(onlyExist, (newVal) => {
-//   emit("data-fetched", { filters: filterCriterias.value, onlyExist: newVal });
-// });
-
 const deleteAllFilter = () => {
-  filterStore.$reset()
-  // emit("data-fetched", {
-  //   filters: filterCriterias.value,
-  //   onlyExist: onlyExist.value,
-  // });
+  filterStore.$reset();
 };
-
-//store
 </script>
 
 <template>

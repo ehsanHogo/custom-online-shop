@@ -1,4 +1,3 @@
-
 export type SortType =
   | "price-cheap"
   | "price-expensive"
@@ -42,7 +41,6 @@ export interface FilterItemOptions {
   open: boolean;
 }
 
-
 export interface FilterItemType {
   filterType: string;
   filterCriteria: string;
@@ -80,20 +78,17 @@ export interface ShoppingProductType {
 export interface ShoppingCartListType {
   products: ShoppingProductType[];
 
-  firstRefresh : boolean
+  firstRefresh: boolean;
 }
-
-
 
 export interface PathObjectType {
-  fillterSort: string,
-  page: number,
-  cart: string,
+  fillterSort: string;
+  page: number;
+  cart: string;
 }
 
-
 export interface PageType {
-  page:number
-  startIndex:number
-  endIndex:number
+  currentPage: number;
+  startIndex: number;
+  endIndex: number;
 }
