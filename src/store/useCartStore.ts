@@ -6,7 +6,12 @@ const useCartStore = defineStore("cart", {
     products: [],
     firstRefresh: false,
   }),
-  getters: {},
+  getters: {
+    getCountById: (state) => {
+      return (productId: string) =>
+        state.products.find((product) => product.id === productId)?.count || 0;
+    },
+  },
 
   actions: {
     updateProductsById(pId: string, pCount: number) {

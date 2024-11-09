@@ -14,7 +14,7 @@ const props = defineProps<MyProps>();
 // const emit = defineEmits(["count-data"]);
 
 // const fatherCount = toRef(props, "firstCount");
-const itemNumber = ref(1);
+const itemNumber = ref(cartStore.getCountById(props.productId));
 
 const decItemNum = () => {
   if (itemNumber.value - 1 >= 0) itemNumber.value -= 1;

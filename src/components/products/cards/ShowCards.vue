@@ -17,12 +17,6 @@ interface CardData {
 //store
 const cartStore = useCartStore();
 
-const emit = defineEmits(["shopping-data"]);
-
-const passShoppingData = (data: ShoppingProductType) => {
-  emit("shopping-data", data);
-};
-
 const props = withDefaults(defineProps<CardData>(), {
   name: "",
   price: "",
@@ -46,7 +40,6 @@ const extractTextFromString = (htmlString: string) => {
 
 const addFirstItem = () => {
   changeToCounter.value = true;
-  MyCount.value += 1;
 
   cartStore.addProduct({
     name: props.name,
@@ -55,19 +48,16 @@ const addFirstItem = () => {
     price: props.price,
     id: props.id,
   });
-  // passShoppingData({
-  //   name: props.name,
-  //   image: props.imageUrl,
-  //   count: 1,
-  //   price: props.price,
-  //   id: props.id,
-  // });
 };
 
-const fatherCount = toRef(props, "count");
-const MyCount = ref(fatherCount.value);
+// const fatherCount = toRef(props, "count");
+const calCount = () => {
+  const result = cartStore.getCountById(props.id);
 
-const changeToCounter = ref(fatherCount.value !== 0);
+  return result === 0 ? false : true;
+};
+const changeToCounter = ref(calCount());
+
 // const updateCount = (data: number) => {
 //   // MyCount.value = data;
 
