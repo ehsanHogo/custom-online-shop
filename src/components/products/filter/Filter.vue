@@ -71,12 +71,7 @@ const setOpen = (index: number) => {
 // });
 
 const deleteAllFilter = () => {
-  filterCriterias.value = [];
-
-  filterButtons.value = filterButtons.value.map((item) => {
-    return { name: item.name, open: false };
-  });
-  onlyExist.value = false;
+  filterStore.$reset()
   // emit("data-fetched", {
   //   filters: filterCriterias.value,
   //   onlyExist: onlyExist.value,

@@ -2,28 +2,42 @@
 import { ref } from "vue";
 import { FilterItemShowing, FilterItemType } from "../../../types/interfaces";
 import useFilterStore from "../../../store/useFilterStore";
+import { storeToRefs } from "pinia";
 interface MyProps {
   filterColorData: FilterItemShowing[];
   selectedFilters: FilterItemType[];
 }
 const props = defineProps<MyProps>();
-const filterList = ref(
-  props.filterColorData.map((item) => ({
-    ...item,
-    open:
-      props.selectedFilters.filter((fil) => {
-        return fil.criteriaId === item.id;
-      }).length === 0
-        ? false
-        : true,
-  }))
-);
 
 //store
 
 const filterStore = useFilterStore();
+const { filters } = storeToRefs(filterStore);
 
-// const emit = defineEmits(["data-criteria"]);
+const updateFilterList = () => {
+  return props.filterColorData.map((item) => ({
+    ...item,
+    open:
+      filters.value.filter((fil) => {
+        return fil.criteriaId === item.id;
+      }).length === 0
+        ? false
+        : true,
+  }));
+};
+
+const filterList = ref(updateFilterList());
+
+filterStore.$subscribe((mutation, _) => {
+  const events = Array.isArray(mutation.events)
+    ? mutation.events
+    : [mutation.events];
+  events.forEach((event) => {
+    if (event.key !== "onlyExist") {
+      filterList.value = updateFilterList();
+    }
+  });
+});
 
 
 
@@ -35,11 +49,8 @@ const updateOpenFlag = (index: number) => {
       filterCriteria: filterList.value[index].name,
       criteriaId: filterList.value[index].id,
     });
-
   } else {
-
     filterStore.deleteFilter(filterList.value[index].id);
-
   }
 };
 </script>
