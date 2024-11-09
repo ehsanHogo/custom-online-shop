@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
 import { ShoppingProductType } from "../../types/interfaces";
 import useCartStore from "../../store/useCartStore";

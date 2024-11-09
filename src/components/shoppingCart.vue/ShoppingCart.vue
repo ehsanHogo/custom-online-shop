@@ -4,53 +4,37 @@ import ShopppingAlerts from "./ShopppingAlerts.vue";
 import ShoppingList from "./ShoppingList.vue";
 import {
   ShoppingCartListType,
-  ShoppingProductType,
 } from "../../types/interfaces";
-import { onBeforeMount, ref, toRef } from "vue";
+import { onBeforeMount } from "vue";
 import qs from "qs";
 import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import useCartStore from "../../store/useCartStore";
 
-interface MyProps {
-  shoppingList: ShoppingCartListType;
-}
-const props = defineProps<MyProps>();
 
-const emit = defineEmits(["shopping-data", "filter-sort-page-data"]);
-const passShoppingData = (data: ShoppingProductType) => {
-  updateShoppingList(data);
+
+const cartStore = useCartStore();
+const { products, firstRefresh } = storeToRefs(cartStore);
+
+cartStore.$subscribe(() => {
   updatePath();
-  emit("shopping-data", childShoppingList.value);
-};
+});
 
-const shoppingListRef = toRef(props, "shoppingList");
-const childShoppingList = ref(shoppingListRef.value);
-
-const firstRefresh = ref(props.shoppingList.firstRefresh);
-
-const updateShoppingList = (data: ShoppingProductType) => {
-  const resultIndex = childShoppingList.value.products.findIndex(
-    (item) => item.id === data.id
-  );
-  if (resultIndex === -1) {
-    childShoppingList.value.products =
-      childShoppingList.value.products.concat(data);
-  } else {
-    if (data.count === 0) {
-      childShoppingList.value.products.splice(resultIndex, 1);
-    } else {
-      childShoppingList.value.products[resultIndex].count = data.count;
-    }
-  }
-};
 
 const router = useRouter();
 
 const route = useRoute();
 const updatePath = () => {
   const obj = {
-    cart: qs.stringify(childShoppingList.value as ShoppingCartListType, {
-      allowEmptyArrays: true,
-    }),
+    cart: qs.stringify(
+      {
+        products: products.value,
+        firstRefresh: firstRefresh.value,
+      } as ShoppingCartListType,
+      {
+        allowEmptyArrays: true,
+      }
+    ),
   };
 
   router.replace({
@@ -70,23 +54,18 @@ onBeforeMount(() => {
     Object.keys(cartObj).length !== 0
   ) {
     if (cartObj.products[0] === "") {
-      childShoppingList.value.products = [];
+      products.value = [];
     } else {
-      childShoppingList.value.products = (
-        cartObj as ShoppingCartListType
-      ).products.map((item) => {
-        return { ...item, count: +item.count };
-      });
+      products.value = (cartObj as ShoppingCartListType).products.map(
+        (item) => {
+          return { ...item, count: +item.count };
+        }
+      );
     }
 
-    emit("shopping-data", childShoppingList.value);
     firstRefresh.value = false;
   } else {
-    console.log("hererrer");
-    console.log(shoppingListRef.value);
 
-    childShoppingList.value = shoppingListRef.value;
-    updatePath();
   }
 });
 </script>
@@ -104,9 +83,6 @@ onBeforeMount(() => {
       <ShoppingRegistration></ShoppingRegistration>
       <ShopppingAlerts></ShopppingAlerts>
     </div>
-    <ShoppingList
-      @shopping-data="passShoppingData"
-      :shoppingList="childShoppingList"
-    ></ShoppingList>
+    <ShoppingList></ShoppingList>
   </div>
 </template>

@@ -4,7 +4,7 @@ import { ShoppingCartListType, ShoppingProductType } from "../types/interfaces";
 const useCartStore = defineStore("cart", {
   state: (): ShoppingCartListType => ({
     products: [],
-    firstRefresh: false,
+    firstRefresh: true,
   }),
   getters: {
     getCountById: (state) => {

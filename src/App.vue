@@ -25,7 +25,7 @@ const updateShoppingList = (data: ShoppingCartListType) => {
     <Header></Header>
     <Cattegories class="pt-5"></Cattegories>
     <router-view
-      @shopping-data="updateShoppingList"
+
       :shoppingList="shoppingList"
     />
     <Footer></Footer>

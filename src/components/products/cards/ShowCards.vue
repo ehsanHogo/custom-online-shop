@@ -8,7 +8,6 @@ interface CardData {
   description?: string;
   imageUrl?: string;
   id: string;
-  count: number;
 }
 //store
 const cartStore = useCartStore();

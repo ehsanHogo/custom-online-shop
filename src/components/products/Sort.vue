@@ -19,11 +19,7 @@ const { sortField } = storeToRefs(sortStore);
 
 //****** */
 
-// const props = defineProps<MyProps>();
 
-// const fatherSort = toRef(props, "prevSort");
-
-// console.log("sort : ", fatherSort.value);
 
 const sortItems: SortItems[] = [
   { name: "پرفروش ترین", sortName: "none" },

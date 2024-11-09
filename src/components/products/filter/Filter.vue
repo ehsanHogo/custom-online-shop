@@ -26,23 +26,6 @@ const changeOnlyExist = ref(onlyExist.value);
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 
-// const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
-
-// const filterCriterias = ref<FilterItemType[]>(
-//   fatherFilterCriterias.value.filters
-// );
-
-// const selectedFilterColorCriterias = computed<FilterItemType[]>(() => {
-//   return filterCriterias.value.filter((item) => {
-//     return item.filterType === "color";
-//   });
-// });
-
-// const selectedFilterSizeCriterias = computed<FilterItemType[]>(() => {
-//   return filterCriterias.value.filter((item) => {
-//     return item.filterType === "size";
-//   });
-// });
 
 const filterButtons = ref<FilterItemOptions[]>([
   { name: "برند", open: false },
@@ -64,7 +47,7 @@ const deleteAllFilter = () => {
   filterStore.reset();
 };
 
-watch(changeOnlyExist, (newVal) => {
+watch(changeOnlyExist, () => {
   filterStore.changeOnlyExist();
 });
 </script>

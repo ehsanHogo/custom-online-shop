@@ -6,14 +6,7 @@ import { storeToRefs } from "pinia";
 
 //store
 const cartStore = useCartStore();
-
 const { products } = storeToRefs(cartStore);
-
-const emit = defineEmits(["shopping-data"]);
-
-const passShoppingData = (data: ShoppingProductType) => {
-  emit("shopping-data", data);
-};
 </script>
 <template>
   <div class="col-span-2 p-5" dir="rtl">
@@ -30,7 +23,6 @@ const passShoppingData = (data: ShoppingProductType) => {
             :image="item.image"
             :count="item.count"
             :id="item.id"
-            @shopping-data="passShoppingData"
           ></ShoppingProduct>
         </li>
       </ul>
