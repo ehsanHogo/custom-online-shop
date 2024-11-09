@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import Filter from "./filter/Filter.vue";
 import ShowCards from "./cards/ShowCards.vue";
-import {
-  onBeforeMount,
-  ref,
-  toRef,
-  watch,
-} from "vue";
+import { onBeforeMount, ref, toRef, watch } from "vue";
 import Sort from "./Sort.vue";
 import Pagination from "../generall/Pagination.vue";
 import CardSkeleton from "./cards/CardSkeleton.vue";
@@ -15,6 +10,13 @@ import qs from "qs";
 interface MyProps {
   shoppingList: ShoppingCartListType;
 }
+
+//store
+
+const sortStore = useSortStore();
+const { sortField } = storeToRefs(sortStore);
+
+///******* */
 
 const props = defineProps<MyProps>();
 //shopping
@@ -68,6 +70,8 @@ import {
   PageType,
 } from "../../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
+import useSortStore from "../../store/useSortStore";
+import { storeToRefs } from "pinia";
 
 const loading = ref(true);
 
@@ -212,15 +216,6 @@ const findImageUrl = (imageId: string) => {
   }
 };
 
-const sortField = ref<SortType>("none");
-const receiveSortData = (data: SortType) => {
-  sortField.value = data;
-
-  filterCriterias.value.sortField = data;
-
-  updatePath();
-};
-
 onBeforeMount(() => {
   const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
@@ -269,9 +264,10 @@ onBeforeMount(() => {
   fetchData();
 });
 
-watch(sortField, (newVal) => {
-  filterCriterias.value.sortField = newVal;
+sortStore.$subscribe((_, state) => {
+  filterCriterias.value.sortField = state.sortField;
   fetchData();
+  localStorage.setItem("cart", JSON.stringify(state));
 });
 </script>
 
@@ -281,7 +277,7 @@ watch(sortField, (newVal) => {
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
       >
-        <Sort @data-sort="receiveSortData" :prevSort="sortField"></Sort>
+        <Sort :prevSort="sortField"></Sort>
 
         <div v-if="loading" class="col-span-3 grid grid-cols-3 gap-3">
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>

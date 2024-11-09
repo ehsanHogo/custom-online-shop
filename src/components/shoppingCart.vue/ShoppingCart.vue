@@ -3,13 +3,13 @@ import ShoppingRegistration from "./ShoppingRegistration.vue";
 import ShopppingAlerts from "./ShopppingAlerts.vue";
 import ShoppingList from "./ShoppingList.vue";
 import {
-  FiltersQueryType,
   ShoppingCartListType,
   ShoppingProductType,
 } from "../../types/interfaces";
-import { onBeforeMount, ref, toRef, watch } from "vue";
+import { onBeforeMount, ref, toRef } from "vue";
 import qs from "qs";
 import { useRoute, useRouter } from "vue-router";
+import { useTestStore } from "../../store/useTestStore";
 
 interface MyProps {
   shoppingList: ShoppingCartListType;
@@ -90,6 +90,8 @@ onBeforeMount(() => {
     updatePath();
   }
 });
+
+
 </script>
 
 <template>

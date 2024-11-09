@@ -2,17 +2,26 @@
 import { ref, toRef } from "vue";
 import { SortType } from "../../types/interfaces";
 
+import useSortStore from "../../store/useSortStore";
+import { storeToRefs } from "pinia";
 
 interface MyProps {
   prevSort: SortType;
 }
 
-const emit = defineEmits(["data-sort"]);
+// const emit = defineEmits(["data-sort"]);
 
 interface SortItems {
   name: string;
   sortName: SortType;
 }
+
+//store
+
+const sortStore = useSortStore();
+const { sortField } = storeToRefs(sortStore);
+
+//****** */
 
 const props = defineProps<MyProps>();
 
@@ -21,7 +30,6 @@ const fatherSort = toRef(props, "prevSort");
 console.log("sort : ", fatherSort.value);
 
 const sortItems: SortItems[] = [
-
   { name: "پرفروش ترین", sortName: "none" },
   { name: "جدیدترین", sortName: "new-created" },
   { name: "گران ترین", sortName: "price-expensive" },
@@ -29,17 +37,19 @@ const sortItems: SortItems[] = [
 ];
 
 const selectedSortItem = ref(
-  sortItems.findIndex((item) => item.sortName === fatherSort.value) + 1
+  sortItems.findIndex((item) => item.sortName === sortField.value) + 1
 );
 
 const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
-  sendDataToParrent(sortItems[index]);
+
+  sortStore.updateSortField(sortItems[index].sortName);
+  // sendDataToParrent(sortItems[index]);
 };
 
-const sendDataToParrent = (newSortItem: SortItems) => {
-  emit("data-sort", newSortItem.sortName);
-};
+// const sendDataToParrent = (newSortItem: SortItems) => {
+//   emit("data-sort", newSortItem.sortName);
+// };
 </script>
 
 <template>
