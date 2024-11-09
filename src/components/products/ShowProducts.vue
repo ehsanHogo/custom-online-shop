@@ -46,12 +46,11 @@ filterStore.$subscribe((mutation, state) => {
     }
   });
 
+  pageStore.$reset();
+
   fetchData();
 });
 
-// pageStore.$subscribe((_, state) => {
-//   console.log(state.currentPage);
-// });
 
 //**** */
 
