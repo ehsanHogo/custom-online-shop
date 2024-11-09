@@ -3,7 +3,6 @@ import { ref } from "vue";
 import useCartStore from "../../store/useCartStore";
 
 interface MyProps {
-  // firstCount: number;
   productId: string;
 }
 
@@ -11,9 +10,6 @@ interface MyProps {
 const cartStore = useCartStore();
 
 const props = defineProps<MyProps>();
-// const emit = defineEmits(["count-data"]);
-
-// const fatherCount = toRef(props, "firstCount");
 const itemNumber = ref(cartStore.getCountById(props.productId));
 
 const decItemNum = () => {

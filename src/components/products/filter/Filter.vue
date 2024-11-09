@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, toRef, watch } from "vue";
+import { ref, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
 import {
   FilterItemOptions,
-  FilterItemType,
-  FiltersQueryType,
   FilterType,
 } from "../../../types/interfaces";
 import useFilterStore from "../../../store/useFilterStore";
@@ -14,7 +12,6 @@ import { storeToRefs } from "pinia";
 
 interface MyProps {
   filterData: FilterType[];
-  // previousFilterCriterias: FiltersQueryType;
 }
 
 //store

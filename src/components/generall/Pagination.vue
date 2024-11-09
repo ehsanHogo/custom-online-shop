@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { computed, Ref, ref, toRef, watch } from "vue";
-import { PageType } from "../../types/interfaces";
+import { computed, toRef } from "vue";
 import usePageStore from "../../store/usePageData";
 import { storeToRefs } from "pinia";
 
 interface MyProps {
   numberOfPages: number;
   stepNum: number;
-
 }
 
 //store
@@ -19,19 +17,14 @@ const props = defineProps<MyProps>();
 
 const emit = defineEmits(["data-page"]);
 
-
 // manual setting
 const totalPage = toRef(props, "numberOfPages");
 
 const stepSize = props.stepNum;
 
-
-
 const { currentPage } = storeToRefs(pageStore);
 const { startIndex } = storeToRefs(pageStore);
 const { endIndex } = storeToRefs(pageStore);
-
-
 
 // general
 
@@ -51,7 +44,6 @@ const changePage = (page: number) => {
   }
   currentPage.value = page;
 };
-
 
 const nextPage = () => {
   if (currentPage.value < totalPage.value) {

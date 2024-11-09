@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, toRef } from "vue";
+import { ref } from "vue";
 import { SortType } from "../../types/interfaces";
 
 import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
 
-interface MyProps {}
+
 
 interface SortItems {
   name: string;

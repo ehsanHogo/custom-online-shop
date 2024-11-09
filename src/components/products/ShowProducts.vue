@@ -42,18 +42,18 @@ const { products, firstRefresh } = storeToRefs(cartStore);
 
 // subscribe & watch
 
-cartStore.$subscribe((mutation, state) => {
+cartStore.$subscribe((_) => {
   updatePath();
 });
 
-filterStore.$subscribe((mutation, state) => {
+filterStore.$subscribe((mutation, _) => {
   console.log("mutation ", mutation);
 
   updatePath();
   fetchData();
 });
 
-sortStore.$subscribe((_, state) => {
+sortStore.$subscribe((_) => {
   updatePath();
   fetchData();
 });

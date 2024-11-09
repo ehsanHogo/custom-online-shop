@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ShoppingProductType } from "../../types/interfaces";
 import ShoppingProduct from "./ShoppingProduct.vue";
 import useCartStore from "../../store/useCartStore";
 import { storeToRefs } from "pinia";

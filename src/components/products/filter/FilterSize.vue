@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { FilterItemShowing, FilterItemType } from "../../../types/interfaces";
+import { FilterItemShowing } from "../../../types/interfaces";
 import useFilterStore from "../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
 interface MyProps {
