@@ -9,8 +9,6 @@ interface MyProps {
   prevSort: SortType;
 }
 
-// const emit = defineEmits(["data-sort"]);
-
 interface SortItems {
   name: string;
   sortName: SortType;
@@ -44,12 +42,7 @@ const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
 
   sortStore.updateSortField(sortItems[index].sortName);
-  // sendDataToParrent(sortItems[index]);
 };
-
-// const sendDataToParrent = (newSortItem: SortItems) => {
-//   emit("data-sort", newSortItem.sortName);
-// };
 </script>
 
 <template>

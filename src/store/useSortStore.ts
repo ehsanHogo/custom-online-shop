@@ -10,7 +10,7 @@ interface State {
     sortField: "none",
   }),
   getters: {
-    getCounter: (state) => {
+    getSortField: (state) => {
       state.sortField;
     },
   },

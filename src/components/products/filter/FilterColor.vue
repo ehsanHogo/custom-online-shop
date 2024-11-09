@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-  FilterItemShowing,
-  FilterItemType,
-} from "../../../types/interfaces";
+import { FilterItemShowing, FilterItemType } from "../../../types/interfaces";
+import useFilterStore from "../../../store/useFilterStore";
 interface MyProps {
   filterColorData: FilterItemShowing[];
   selectedFilters: FilterItemType[];
@@ -21,50 +19,38 @@ const filterList = ref(
   }))
 );
 
-const emit = defineEmits(["data-criteria"]);
+//store
+
+const filterStore = useFilterStore();
+
+// const emit = defineEmits(["data-criteria"]);
 
 
-const sendDatatoParrent = (
-  criteria: string,
-  criteriaType: string,
-  criteriaId: string,
-  action: string
-) => {
-  emit("data-criteria", criteria, criteriaType, criteriaId, action);
-};
 
 const updateOpenFlag = (index: number) => {
-
-
   filterList.value[index].open = !filterList.value[index].open;
   if (filterList.value[index].open === true) {
-    sendDatatoParrent(
-      filterList.value[index].name,
-      "color",
-      filterList.value[index].id,
-      "add"
-    );
+    filterStore.addFilter({
+      filterType: "color",
+      filterCriteria: filterList.value[index].name,
+      criteriaId: filterList.value[index].id,
+    });
+
   } else {
-    sendDatatoParrent(
-      filterList.value[index].name,
-      "color",
-      filterList.value[index].id,
-      "remove"
-    );
+
+    filterStore.deleteFilter(filterList.value[index].id);
+
   }
-
 };
-
 </script>
 
 <template>
-  
   <div class="h-[200px] overflow-y-auto pr-4">
     <ul>
       <li
         v-for="(item, index) in filterList"
         :key="index"
-        class="flex justify-between "
+        class="flex justify-between"
       >
         <button
           @click="updateOpenFlag(index)"
@@ -77,6 +63,4 @@ const updateOpenFlag = (index: number) => {
       </li>
     </ul>
   </div>
-
-
 </template>

@@ -9,23 +9,30 @@ import {
   FiltersQueryType,
   FilterType,
 } from "../../../types/interfaces";
+import useFilterStore from "../../../store/useFilterStore";
+import { storeToRefs } from "pinia";
 
 interface MyProps {
   filterData: FilterType[];
   previousFilterCriterias: FiltersQueryType;
 }
 
-const emit = defineEmits(["data-fetched"]);
+//store
+const filterStore = useFilterStore();
+const {onlyExist} = storeToRefs(filterStore)
+//**** */
+
+// const emit = defineEmits(["data-fetched"]);
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
 
 const fatherFilterCriterias = toRef(props, "previousFilterCriterias");
 
-const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
+// const onlyExist = ref(fatherFilterCriterias.value.onlyExist);
+
 
 console.log("father", fatherFilterCriterias.value.onlyExist);
-
 
 const filterCriterias = ref<FilterItemType[]>(
   fatherFilterCriterias.value.filters
@@ -59,36 +66,9 @@ const setOpen = (index: number) => {
   filterButtons.value[index].open = !filterButtons.value[index].open;
 };
 
-watch(onlyExist, (newVal) => {
-  emit("data-fetched", { filters: filterCriterias.value, onlyExist: newVal });
-});
-
-const recieveCriteria = (
-  criteria: string,
-  criteriaType: string,
-  criteriaId: string,
-  action: string
-) => {
-
-
-  if (action === "add") {
-    filterCriterias.value.push({
-      filterType: criteriaType,
-      filterCriteria: criteria,
-      criteriaId: criteriaId,
-    });
-  } else if (action === "remove") {
-    filterCriterias.value = filterCriterias.value.filter((item) => {
-      return item.criteriaId !== criteriaId;
-    });
-  }
-
-
-  emit("data-fetched", {
-    filters: filterCriterias.value,
-    onlyExist: onlyExist.value,
-  });
-};
+// watch(onlyExist, (newVal) => {
+//   emit("data-fetched", { filters: filterCriterias.value, onlyExist: newVal });
+// });
 
 const deleteAllFilter = () => {
   filterCriterias.value = [];
@@ -97,11 +77,13 @@ const deleteAllFilter = () => {
     return { name: item.name, open: false };
   });
   onlyExist.value = false;
-  emit("data-fetched", {
-    filters: filterCriterias.value,
-    onlyExist: onlyExist.value,
-  });
+  // emit("data-fetched", {
+  //   filters: filterCriterias.value,
+  //   onlyExist: onlyExist.value,
+  // });
 };
+
+//store
 </script>
 
 <template>
@@ -131,7 +113,6 @@ const deleteAllFilter = () => {
           <p>{{ filterButton.name }}</p>
         </button>
         <FilterSize
-          @data-criteria="recieveCriteria"
           :filterSizeData="props.filterData[1].option_values"
           v-if="
             filterButtons[index].name === 'اندازه' &&
@@ -142,7 +123,6 @@ const deleteAllFilter = () => {
         ></FilterSize>
 
         <FilterColor
-          @data-criteria="recieveCriteria"
           :filterColorData="props.filterData[0].option_values"
           v-if="
             filterButtons[index].name === 'رنگ' &&

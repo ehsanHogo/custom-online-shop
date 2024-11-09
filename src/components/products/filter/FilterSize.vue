@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-  FilterItemShowing,
-  FilterItemType,
-} from "../../../types/interfaces";
+import { FilterItemShowing, FilterItemType } from "../../../types/interfaces";
+import useFilterStore from "../../../store/useFilterStore";
 interface MyProps {
   filterSizeData: FilterItemShowing[];
   selectedFilters: FilterItemType[];
@@ -21,39 +19,26 @@ const filterList = ref(
   }))
 );
 
-const emit = defineEmits(["data-criteria"]);
 
-const sendDatatoParrent = (
-  criteria: string,
-  criteriaType: string,
-  criteriaId: string,
-  action: string
-) => {
-  emit("data-criteria", criteria, criteriaType, criteriaId, action);
-};
+//store 
+const filterStore = useFilterStore();
+
+
 
 const updateOpenFlag = (index: number) => {
-
-
   filterList.value[index].open = !filterList.value[index].open;
   if (filterList.value[index].open === true) {
-    sendDatatoParrent(
-      filterList.value[index].name,
-      "size",
-      filterList.value[index].id,
-      "add"
-    );
+    filterStore.addFilter({
+      filterType: "size",
+      filterCriteria: filterList.value[index].name,
+      criteriaId: filterList.value[index].id,
+    });
+
   } else {
-    sendDatatoParrent(
-      filterList.value[index].name,
-      "size",
-      filterList.value[index].id,
-      "remove"
-    );
+    filterStore.deleteFilter(filterList.value[index].id);
+
   }
 };
-
-
 </script>
 
 <template>

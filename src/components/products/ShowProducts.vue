@@ -16,6 +16,26 @@ interface MyProps {
 const sortStore = useSortStore();
 const { sortField } = storeToRefs(sortStore);
 
+const filterStore = useFilterStore();
+
+filterStore.$subscribe((mutation, state) => {
+  // shoeld update
+  console.log("mutation ", mutation);
+
+  const events = Array.isArray(mutation.events)
+    ? mutation.events
+    : [mutation.events];
+  events.forEach((event) => {
+    if (event.key === "onlyExist") {
+      filterCriterias.value.onlyExist = state.onlyExist;
+    } else {
+      filterCriterias.value.filters = state.filters;
+    }
+  });
+
+  fetchData();
+});
+
 ///******* */
 
 const props = defineProps<MyProps>();
@@ -72,6 +92,7 @@ import {
 import { useRoute, useRouter } from "vue-router";
 import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
+import useFilterStore from "../../store/useFilterStore";
 
 const loading = ref(true);
 
