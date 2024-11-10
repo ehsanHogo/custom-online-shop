@@ -5,8 +5,6 @@ import { SortType } from "../../types/interfaces";
 import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
 
-
-
 interface SortItems {
   name: string;
   sortName: SortType;
@@ -18,8 +16,6 @@ const sortStore = useSortStore();
 const { sortField } = storeToRefs(sortStore);
 
 //****** */
-
-
 
 const sortItems: SortItems[] = [
   { name: "پرفروش ترین", sortName: "none" },
@@ -34,7 +30,6 @@ const selectedSortItem = ref(
 
 const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
-
   sortStore.updateSortField(sortItems[index].sortName);
 };
 </script>

@@ -42,13 +42,14 @@ const { products, firstRefresh } = storeToRefs(cartStore);
 
 // subscribe & watch
 
-cartStore.$subscribe((_) => {
+cartStore.$subscribe((mutation, state) => {
+  console.log(mutation);
+
   updatePath();
 });
 
 filterStore.$subscribe((mutation, _) => {
   console.log("mutation ", mutation);
-
   updatePath();
   fetchData();
 });
@@ -58,19 +59,53 @@ sortStore.$subscribe((_) => {
   fetchData();
 });
 
-watch(currentPage, (val) => {
-  console.log(val);
+watch(currentPage, () => {
+  // console.log(val);
   updatePath();
   fetchData();
 });
 
 //**** */
 
-//shopping
-
+//router
 const router = useRouter();
-
 const route = useRoute();
+
+const updatePath = () => {
+  const obj = {
+    fillterSort: qs.stringify(
+      {
+        filters: filters.value,
+        onlyExist: onlyExist.value,
+        sortField: sortField.value,
+      } as FiltersQueryType,
+      {
+        allowEmptyArrays: true,
+      }
+    ),
+    page: qs.stringify({
+      currentPage: currentPage.value,
+      startIndex: startIndex.value,
+      endIndex: endIndex.value,
+    } as PageType),
+    cart: qs.stringify(
+      {
+        products: products.value,
+        firstRefresh: firstRefresh.value,
+      } as ShoppingCartListType,
+      {
+        allowEmptyArrays: true,
+      }
+    ),
+  };
+
+  router.push({
+    path: "/custom-online-shop/",
+    query: obj,
+  });
+};
+
+//data showing
 
 const loading = ref(true);
 
@@ -78,16 +113,31 @@ const showData = ref<DataFetchType[]>([]);
 
 const includedFetched = ref<IncludedFetchType[]>([]);
 
-//filter
+const findImageUrl = (imageId: string) => {
+  if (imageId === null || imageId === undefined) {
+    return "";
+  }
+
+  const resultItem = includedFetched.value.filter((item) => {
+    return item.id === imageId;
+  });
+
+  if (resultItem.length === 0) {
+    return "";
+  } else {
+    return resultItem[0].attributes.original_url;
+  }
+};
+
+//filter types
 const filtersType = ref<FilterType[]>([]);
 
-//page
-
-const lastPage = ref(1);
+//page props
 
 const numberOfPage = ref(1);
 const numberOfProductsInPage = 9;
 
+// fetching data based on filter, sort and page
 const fetchData = async () => {
   loading.value = true;
 
@@ -147,62 +197,14 @@ const fetchData = async () => {
   }
 };
 
-const updatePath = () => {
-  const obj = {
-    fillterSort: qs.stringify(
-      {
-        filters: filters.value,
-        onlyExist: onlyExist.value,
-        sortField: sortField.value,
-      } as FiltersQueryType,
-      {
-        allowEmptyArrays: true,
-      }
-    ),
-    page: qs.stringify({
-      currentPage: currentPage.value,
-      startIndex: startIndex.value,
-      endIndex: endIndex.value,
-    } as PageType),
-    cart: qs.stringify(
-      {
-        products: products.value,
-        firstRefresh: firstRefresh.value,
-      } as ShoppingCartListType,
-      {
-        allowEmptyArrays: true,
-      }
-    ),
-  };
-
-  router.push({
-    path: "/custom-online-shop/",
-    query: obj,
-  });
-};
-
-const findImageUrl = (imageId: string) => {
-  if (imageId === null || imageId === undefined) {
-    return "";
-  }
-
-  const resultItem = includedFetched.value.filter((item) => {
-    return item.id === imageId;
-  });
-
-  if (resultItem.length === 0) {
-    return "";
-  } else {
-    return resultItem[0].attributes.original_url;
-  }
-};
+// initialization
 
 onBeforeMount(() => {
   const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
   const pageObj = qs.parse(qs.parse(route.query)["page"]);
+  console.log(cartObj);
 
-  console.log("refresh : ", firstRefresh.value);
   if (
     fillterSortObj !== null &&
     fillterSortObj !== undefined &&
@@ -219,8 +221,6 @@ onBeforeMount(() => {
     currentPage.value = +pageObj.currentPage;
     startIndex.value = +pageObj.startIndex;
     endIndex.value = +pageObj.endIndex;
-
-    console.log("father page ", currentPage.value);
 
     if (firstRefresh.value) {
       console.log(cartObj.products);
@@ -264,11 +264,7 @@ onBeforeMount(() => {
           :id="item.id"
         ></ShowCards>
 
-        <Pagination
-          :numberOfPages="numberOfPage"
-          :stepNum="3"
-          :lastPage="lastPage"
-        ></Pagination>
+        <Pagination :numberOfPages="numberOfPage" :stepNum="3"></Pagination>
       </div>
 
       <Filter :filterData="filtersType"></Filter>

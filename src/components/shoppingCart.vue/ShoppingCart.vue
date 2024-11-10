@@ -2,27 +2,24 @@
 import ShoppingRegistration from "./ShoppingRegistration.vue";
 import ShopppingAlerts from "./ShopppingAlerts.vue";
 import ShoppingList from "./ShoppingList.vue";
-import {
-  ShoppingCartListType,
-} from "../../types/interfaces";
+import { ShoppingCartListType } from "../../types/interfaces";
 import { onBeforeMount } from "vue";
 import qs from "qs";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import useCartStore from "../../store/useCartStore";
 
-
-
+///store
 const cartStore = useCartStore();
 const { products, firstRefresh } = storeToRefs(cartStore);
 
+//subscriber
 cartStore.$subscribe(() => {
   updatePath();
 });
 
-
+//router
 const router = useRouter();
-
 const route = useRoute();
 const updatePath = () => {
   const obj = {
@@ -43,6 +40,7 @@ const updatePath = () => {
   });
 };
 
+//initialization
 onBeforeMount(() => {
   const cartObj = qs.parse(qs.parse(route.query)["cart"]);
   console.log("refresh : ", firstRefresh.value);
@@ -65,7 +63,6 @@ onBeforeMount(() => {
 
     firstRefresh.value = false;
   } else {
-
   }
 });
 </script>

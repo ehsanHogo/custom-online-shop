@@ -15,8 +15,6 @@ const pageStore = usePageStore();
 //***** */
 const props = defineProps<MyProps>();
 
-const emit = defineEmits(["data-page"]);
-
 // manual setting
 const totalPage = toRef(props, "numberOfPages");
 

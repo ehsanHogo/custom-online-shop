@@ -5,8 +5,6 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const newPathWithQuery = computed(() => {
-  console.log(route.query);
-
   return {
     path: "/custom-online-shop/shopping-cart",
     query: { ...route.query },
@@ -19,7 +17,6 @@ const newPathWithQuery = computed(() => {
     :to="newPathWithQuery"
     class="flex justify-start items-center gap-1 text-myGray-9"
   >
-    
     <b class="text-sm">سبد خرید</b>
 
     <div class="flex items-center">
@@ -30,7 +27,6 @@ const newPathWithQuery = computed(() => {
         <b> 0</b>
       </div>
     </div>
-    
   </router-link>
   <button class="flex justify-start items-center gap-1 text-myGray-9">
     <b class="text-sm">ورود | ثبت نام</b>
