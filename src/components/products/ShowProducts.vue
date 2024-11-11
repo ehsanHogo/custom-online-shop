@@ -204,9 +204,28 @@ const fetchData = async () => {
 // initialization
 
 onBeforeMount(() => {
-  const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
-  const cartObj = qs.parse(qs.parse(route.query)["cart"]);
-  const pageObj = qs.parse(qs.parse(route.query)["page"]);
+  // const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
+  const fillterSortParam = qs.parse(route.query as unknown as string)[
+    "fillterSort"
+  ];
+  const fillterSortObj =
+    fillterSortParam && typeof fillterSortParam === "string"
+      ? (qs.parse(fillterSortParam) as unknown as FiltersQueryType)
+      : ({} as unknown as FiltersQueryType);
+
+  const cartObjParam = qs.parse(route.query as unknown as string)["cart"];
+  // const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+  const cartObj =
+    cartObjParam && typeof cartObjParam === "string"
+      ? qs.parse(cartObjParam) as unknown as ShoppingCartListType
+      : {} as unknown as ShoppingCartListType;
+
+  const pageObjParam = qs.parse(route.query as unknown as string)["page"];
+  // const pageObj = qs.parse(qs.parse(route.query)["page"]);
+  const pageObj =
+    pageObjParam && typeof pageObjParam === "string"
+      ? qs.parse(pageObjParam)
+      : {};
   console.log(cartObj);
 
   if (
@@ -214,8 +233,14 @@ onBeforeMount(() => {
     fillterSortObj !== undefined &&
     Object.keys(fillterSortObj).length !== 0
   ) {
-    if (fillterSortObj.filters[0] === "") fillterSortObj.filters = [];
-    if (fillterSortObj.onlyExist === "false") fillterSortObj.onlyExist = false;
+    if (
+      fillterSortObj.filters &&
+      Array.isArray(fillterSortObj.filters) &&
+      (fillterSortObj.filters[0] as unknown) === ""
+    )
+      fillterSortObj.filters = [];
+    if ((fillterSortObj.onlyExist as unknown) === "false")
+      fillterSortObj.onlyExist = false;
     else fillterSortObj.onlyExist = true;
 
     filters.value = (fillterSortObj as FiltersQueryType).filters;
@@ -237,7 +262,11 @@ onBeforeMount(() => {
 
     if (firstRefresh.value) {
       console.log(cartObj.products);
-      if (cartObj.products[0] === "") {
+      if (
+        cartObj.products &&
+        Array.isArray(cartObj.products) &&
+        cartObj.products[0] as unknown=== ""
+      ) {
         cartStore.setProducts([]);
       } else {
         cartStore.setProducts(
