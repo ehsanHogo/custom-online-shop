@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { FilterItemType } from "../types/interfaces";
 import { useUpdateAllPageData } from "../composables/useUpdatePageData";
+import usePageStore from "./usePageData";
 
 export interface FiltersType {
   filters: FilterItemType[];
@@ -13,33 +14,42 @@ const useFilterStore = defineStore("filters", {
     onlyExist: false,
   }),
   getters: {},
-
   actions: {
+    // Helper function to update filters and reset page data
+    updateFilters(action: () => void) {
+      action(); // Perform the specific filter update
+      const pageStore = usePageStore();
+      pageStore.resetPageData(); // Reset page data
+    },
+
     addFilter(filter: FilterItemType) {
-      this.filters.push(filter);
-      const { resetPageData } = useUpdateAllPageData();
-      resetPageData();
+      this.updateFilters(() => {
+        this.filters.push(filter);
+      });
     },
 
     deleteFilter(filterId: string) {
-      this.filters = this.filters.filter((item) => {
-        return item.criteriaId !== filterId;
+      this.updateFilters(() => {
+        this.filters = this.filters.filter(
+          (item) => item.criteriaId !== filterId
+        );
       });
-      const { resetPageData } = useUpdateAllPageData();
-      resetPageData();
     },
+
     changeOnlyExist() {
-      this.onlyExist = !this.onlyExist;
-      const { resetPageData } = useUpdateAllPageData();
-      resetPageData();
+      this.updateFilters(() => {
+        this.onlyExist = !this.onlyExist;
+      });
     },
+
     reset() {
-      this.filters = [];
-      this.onlyExist = false;
-      const { resetPageData } = useUpdateAllPageData();
-      resetPageData();
+      this.updateFilters(() => {
+        this.filters = [];
+        this.onlyExist = false;
+      });
     },
   },
+
 });
 
 export default useFilterStore;

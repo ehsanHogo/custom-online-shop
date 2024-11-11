@@ -70,7 +70,7 @@ watch(currentPage, () => {
 
 // composable
 
-const { updateAllPageData, resetPageData } = useUpdateAllPageData();
+// const { updateAllPageData, resetPageData } = useUpdateAllPageData();
 //router
 const router = useRouter();
 const route = useRoute();
@@ -223,13 +223,13 @@ onBeforeMount(() => {
     sortField.value = (fillterSortObj as FiltersQueryType).sortField;
 
     if (pageObj.currentPage && pageObj.startIndex && pageObj.endIndex) {
-      updateAllPageData(
+      pageStore.updateAllPageData(
         +pageObj.currentPage,
         +pageObj.startIndex,
         +pageObj.endIndex
       );
     } else {
-      resetPageData();
+      pageStore.resetPageData();
     }
 
     if (firstRefresh.value) {
