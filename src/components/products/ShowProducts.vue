@@ -22,6 +22,7 @@ import { storeToRefs } from "pinia";
 import useFilterStore from "../../store/useFilterStore";
 import usePageStore from "../../store/usePageData";
 import useCartStore from "../../store/useCartStore";
+import { useUpdateAllPageData } from "../../composables/useUpdatePageData";
 
 //store
 
@@ -67,6 +68,9 @@ watch(currentPage, () => {
 
 //**** */
 
+// composable
+
+const { updateAllPageData } = useUpdateAllPageData();
 //router
 const router = useRouter();
 const route = useRoute();
@@ -106,7 +110,7 @@ const updatePath = () => {
 };
 
 //data showing
-
+const stepNum = 3;
 const loading = ref(true);
 
 const showData = ref<DataFetchType[]>([]);
@@ -218,10 +222,11 @@ onBeforeMount(() => {
     onlyExist.value = (fillterSortObj as FiltersQueryType).onlyExist;
     sortField.value = (fillterSortObj as FiltersQueryType).sortField;
 
-    currentPage.value = +pageObj.currentPage;
-    startIndex.value = +pageObj.startIndex;
-    endIndex.value = +pageObj.endIndex;
-
+    updateAllPageData(
+      pageObj.currentPage ? +pageObj.currentPage : 1,
+      pageObj.startIndex ? +pageObj.startIndex : 0,
+      pageObj.endIndex ? +pageObj.endIndex : stepNum - 1
+    );
     if (firstRefresh.value) {
       console.log(cartObj.products);
       if (cartObj.products[0] === "") {
@@ -264,7 +269,10 @@ onBeforeMount(() => {
           :id="item.id"
         ></ShowCards>
 
-        <Pagination :numberOfPages="numberOfPage" :stepNum="3"></Pagination>
+        <Pagination
+          :numberOfPages="numberOfPage"
+          :stepNum="stepNum"
+        ></Pagination>
       </div>
 
       <Filter :filterData="filtersType"></Filter>
