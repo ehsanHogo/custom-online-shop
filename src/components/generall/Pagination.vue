@@ -2,6 +2,7 @@
 import { computed, toRef } from "vue";
 import usePageStore from "../../store/usePageData";
 import { storeToRefs } from "pinia";
+import { useUpdateAllPageData } from "../../composables/useUpdatePageData";
 
 interface MyProps {
   numberOfPages: number;
@@ -13,6 +14,11 @@ interface MyProps {
 const pageStore = usePageStore();
 
 //***** */
+
+//composable
+
+const { updateAllPageData, updateCurrentPageData } = useUpdateAllPageData();
+
 const props = defineProps<MyProps>();
 
 // setting with fetched data from parrent
@@ -81,23 +87,6 @@ const slicePages = computed<number[]>(() => {
     Math.min(endIndex.value + 1, totalPage.value - 1)
   );
 });
-
-// update store data
-const updateAllPageData = (
-  curPage: number,
-  startIdx: number,
-  endIdx: number
-) => {
-  pageStore.setPage({
-    currentPage: curPage,
-    startIndex: startIdx,
-    endIndex: endIdx,
-  });
-};
-
-const updateCurrentPageData = (currPage: number) => {
-  pageStore.setCurrentPage(currPage);
-};
 </script>
 
 <template>
