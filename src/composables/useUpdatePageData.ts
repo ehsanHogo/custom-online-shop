@@ -19,8 +19,14 @@ export const useUpdateAllPageData = () => {
     pageStore.setCurrentPage(currPage);
   };
 
+
+  const resetPageData = () =>{
+    pageStore.$reset();
+  }
+
   return {
     updateAllPageData,
     updateCurrentPageData,
+    resetPageData
   };
 };

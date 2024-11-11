@@ -70,7 +70,7 @@ watch(currentPage, () => {
 
 // composable
 
-const { updateAllPageData } = useUpdateAllPageData();
+const { updateAllPageData, resetPageData } = useUpdateAllPageData();
 //router
 const router = useRouter();
 const route = useRoute();
@@ -222,11 +222,16 @@ onBeforeMount(() => {
     onlyExist.value = (fillterSortObj as FiltersQueryType).onlyExist;
     sortField.value = (fillterSortObj as FiltersQueryType).sortField;
 
-    updateAllPageData(
-      pageObj.currentPage ? +pageObj.currentPage : 1,
-      pageObj.startIndex ? +pageObj.startIndex : 0,
-      pageObj.endIndex ? +pageObj.endIndex : stepNum - 1
-    );
+    if (pageObj.currentPage && pageObj.startIndex && pageObj.endIndex) {
+      updateAllPageData(
+        +pageObj.currentPage,
+        +pageObj.startIndex,
+        +pageObj.endIndex
+      );
+    } else {
+      resetPageData();
+    }
+
     if (firstRefresh.value) {
       console.log(cartObj.products);
       if (cartObj.products[0] === "") {

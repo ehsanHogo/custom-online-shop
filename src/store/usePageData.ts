@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import { PageType } from "../types/interfaces";
 
+
+const stepNum = 3
 const usePageStore = defineStore("currentPage", {
   state: (): PageType => ({
     currentPage: 1,
     startIndex: 0,
-    endIndex: 2,
+    endIndex: stepNum - 1,
+    
   }),
   getters: {},
 

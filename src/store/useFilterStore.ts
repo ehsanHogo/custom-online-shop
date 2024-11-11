@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { FilterItemType } from "../types/interfaces";
-import usePageStore from "./usePageData";
+import { useUpdateAllPageData } from "../composables/useUpdatePageData";
 
 export interface FiltersType {
   filters: FilterItemType[];
@@ -16,28 +16,28 @@ const useFilterStore = defineStore("filters", {
 
   actions: {
     addFilter(filter: FilterItemType) {
-      const pageStore = usePageStore();
       this.filters.push(filter);
-      pageStore.$reset();
+      const { resetPageData } = useUpdateAllPageData();
+      resetPageData();
     },
 
     deleteFilter(filterId: string) {
-      const pageStore = usePageStore();
       this.filters = this.filters.filter((item) => {
         return item.criteriaId !== filterId;
       });
-      pageStore.$reset();
+      const { resetPageData } = useUpdateAllPageData();
+      resetPageData();
     },
     changeOnlyExist() {
-      const pageStore = usePageStore();
       this.onlyExist = !this.onlyExist;
-      pageStore.$reset();
+      const { resetPageData } = useUpdateAllPageData();
+      resetPageData();
     },
     reset() {
-      const pageStore = usePageStore();
       this.filters = [];
       this.onlyExist = false;
-      pageStore.$reset();
+      const { resetPageData } = useUpdateAllPageData();
+      resetPageData();
     },
   },
 });
