@@ -5,7 +5,7 @@ import HeaderShopBrand from "./HeaderShopBrand.vue";
 </script>
 
 <template>
-  <div class="flex bg-slate-300 px-10 py-3 justify-around">
+  <div class="flex px-10 py-3 justify-around">
     <HeaderUserAccount></HeaderUserAccount>
     <HeaderSearchBar></HeaderSearchBar>
     <HeaderShopBrand></HeaderShopBrand>
