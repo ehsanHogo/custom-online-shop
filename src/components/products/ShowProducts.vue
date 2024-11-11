@@ -204,7 +204,6 @@ const fetchData = async () => {
 // initialization
 
 onBeforeMount(() => {
-  // const fillterSortObj = qs.parse(qs.parse(route.query)["fillterSort"]);
   const fillterSortParam = qs.parse(route.query as unknown as string)[
     "fillterSort"
   ];
@@ -214,14 +213,14 @@ onBeforeMount(() => {
       : ({} as unknown as FiltersQueryType);
 
   const cartObjParam = qs.parse(route.query as unknown as string)["cart"];
-  // const cartObj = qs.parse(qs.parse(route.query)["cart"]);
+
   const cartObj =
     cartObjParam && typeof cartObjParam === "string"
-      ? qs.parse(cartObjParam) as unknown as ShoppingCartListType
-      : {} as unknown as ShoppingCartListType;
+      ? (qs.parse(cartObjParam) as unknown as ShoppingCartListType)
+      : ({} as unknown as ShoppingCartListType);
 
   const pageObjParam = qs.parse(route.query as unknown as string)["page"];
-  // const pageObj = qs.parse(qs.parse(route.query)["page"]);
+
   const pageObj =
     pageObjParam && typeof pageObjParam === "string"
       ? qs.parse(pageObjParam)
@@ -245,7 +244,6 @@ onBeforeMount(() => {
 
     filters.value = (fillterSortObj as FiltersQueryType).filters;
     onlyExist.value = (fillterSortObj as FiltersQueryType).onlyExist;
-    // sortField.value = (fillterSortObj as FiltersQueryType).sortField;
     sortStore.updateSortField(
       (fillterSortObj as FiltersQueryType).sortField as SortType
     );
@@ -265,7 +263,7 @@ onBeforeMount(() => {
       if (
         cartObj.products &&
         Array.isArray(cartObj.products) &&
-        cartObj.products[0] as unknown=== ""
+        (cartObj.products[0] as unknown) === ""
       ) {
         cartStore.setProducts([]);
       } else {
