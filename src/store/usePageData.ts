@@ -15,6 +15,10 @@ const usePageStore = defineStore("currentPage", {
       this.startIndex = p.startIndex;
       this.endIndex = p.endIndex;
     },
+
+    setCurrentPage(curPage: number) {
+      this.currentPage = curPage;
+    },
   },
 });
 

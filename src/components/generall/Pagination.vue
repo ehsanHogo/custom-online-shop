@@ -15,9 +15,9 @@ const pageStore = usePageStore();
 //***** */
 const props = defineProps<MyProps>();
 
-// manual setting
+// setting with fetched data from parrent
 const totalPage = toRef(props, "numberOfPages");
-
+// set by parrent interest
 const stepSize = props.stepNum;
 
 const { currentPage } = storeToRefs(pageStore);
@@ -33,35 +33,44 @@ const pages = computed(() => {
 const changePage = (page: number) => {
   if (page === 1) {
     // Reset to the first set of pages
-    startIndex.value = 0;
-    endIndex.value = Math.min(stepSize - 1, totalPage.value);
+    updateAllPageData(page, 0, Math.min(stepSize - 1, totalPage.value));
   } else if (page === totalPage.value) {
     // Show the last set of pages
-    startIndex.value = Math.max(0, totalPage.value - stepSize - 1);
-    endIndex.value = totalPage.value - 2;
+    updateAllPageData(
+      page,
+      Math.max(0, totalPage.value - stepSize - 1),
+      totalPage.value - 2
+    );
+  } else {
+    updateCurrentPageData(page);
   }
-  currentPage.value = page;
 };
 
 const nextPage = () => {
   if (currentPage.value < totalPage.value) {
     if (currentPage.value + 1 > pages.value[endIndex.value]) {
-      startIndex.value += stepSize;
-      endIndex.value = Math.min(totalPage.value - 1, endIndex.value + stepSize);
+      updateAllPageData(
+        currentPage.value + 1,
+        startIndex.value + stepSize,
+        Math.min(totalPage.value - 1, endIndex.value + stepSize)
+      );
+    } else {
+      updateCurrentPageData(currentPage.value + 1);
     }
-
-    currentPage.value++;
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) {
     if (currentPage.value - 1 < pages.value[startIndex.value]) {
-      endIndex.value = startIndex.value - 1;
-      startIndex.value = Math.max(0, startIndex.value - stepSize);
+      updateAllPageData(
+        currentPage.value - 1,
+        Math.max(0, startIndex.value - stepSize),
+        startIndex.value - 1
+      );
+    } else {
+      updateCurrentPageData(currentPage.value - 1);
     }
-
-    currentPage.value--;
   }
 };
 
@@ -72,6 +81,23 @@ const slicePages = computed<number[]>(() => {
     Math.min(endIndex.value + 1, totalPage.value - 1)
   );
 });
+
+// update store data
+const updateAllPageData = (
+  curPage: number,
+  startIdx: number,
+  endIdx: number
+) => {
+  pageStore.setPage({
+    currentPage: curPage,
+    startIndex: startIdx,
+    endIndex: endIdx,
+  });
+};
+
+const updateCurrentPageData = (currPage: number) => {
+  pageStore.setCurrentPage(currPage);
+};
 </script>
 
 <template>
