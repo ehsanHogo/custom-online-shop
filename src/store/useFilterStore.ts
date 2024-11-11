@@ -42,14 +42,13 @@ const useFilterStore = defineStore("filters", {
       });
     },
 
-    reset() {
+    resetAllFilter() {
       this.updateFilters(() => {
         this.filters = [];
         this.onlyExist = false;
       });
     },
   },
-
 });
 
 export default useFilterStore;

@@ -3,10 +3,7 @@ import { ref, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
-import {
-  FilterItemOptions,
-  FilterType,
-} from "../../../types/interfaces";
+import { FilterItemOptions, FilterType } from "../../../types/interfaces";
 import useFilterStore from "../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
 
@@ -17,12 +14,11 @@ interface MyProps {
 //store
 const filterStore = useFilterStore();
 const { onlyExist } = storeToRefs(filterStore);
-const changeOnlyExist = ref(onlyExist.value);
+
 //**** */
 
 const props = defineProps<MyProps>();
 const sendingToday = ref(false);
-
 
 const filterButtons = ref<FilterItemOptions[]>([
   { name: "برند", open: false },
@@ -41,12 +37,12 @@ const setOpen = (index: number) => {
 };
 
 const deleteAllFilter = () => {
-  filterStore.reset();
+  filterStore.resetAllFilter();
 };
 
-watch(changeOnlyExist, () => {
+const onExistSwitchChange = () => {
   filterStore.changeOnlyExist();
-});
+};
 </script>
 
 <template>
@@ -66,10 +62,12 @@ watch(changeOnlyExist, () => {
       >
         <button class="flex justify-between w-full" @click="setOpen(index)">
           <VaSwitch size="small" v-if="index === 3" v-model="sendingToday" />
+
           <VaSwitch
             size="small"
             v-else-if="index === 4"
-            v-model="changeOnlyExist"
+            :model-value="onlyExist"
+            @update:modelValue="onExistSwitchChange"
           />
           <img
             v-else

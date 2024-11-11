@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { FilterItemShowing } from "../../../types/interfaces";
 import useFilterStore from "../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
 interface MyProps {
   filterColorData: FilterItemShowing[];
-
 }
 const props = defineProps<MyProps>();
 
@@ -14,7 +13,7 @@ const props = defineProps<MyProps>();
 const filterStore = useFilterStore();
 const { filters } = storeToRefs(filterStore);
 
-const updateFilterList = () => {
+const updateFilterList = computed(() => {
   return props.filterColorData.map((item) => ({
     ...item,
     open:
@@ -24,22 +23,9 @@ const updateFilterList = () => {
         ? false
         : true,
   }));
-};
-
-const filterList = ref(updateFilterList());
-
-filterStore.$subscribe((mutation, _) => {
-  const events = Array.isArray(mutation.events)
-    ? mutation.events
-    : [mutation.events];
-  events.forEach((event) => {
-    if (event.key !== "onlyExist") {
-      filterList.value = updateFilterList();
-    }
-  });
 });
 
-
+const filterList = ref(updateFilterList); // for reactivity of open flag
 
 const updateOpenFlag = (index: number) => {
   filterList.value[index].open = !filterList.value[index].open;
