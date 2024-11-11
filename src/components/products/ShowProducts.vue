@@ -15,6 +15,7 @@ import {
   FiltersQueryType,
   ShoppingCartListType,
   PageType,
+  SortType,
 } from "../../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
 import useSortStore from "../../store/useSortStore";
@@ -22,7 +23,6 @@ import { storeToRefs } from "pinia";
 import useFilterStore from "../../store/useFilterStore";
 import usePageStore from "../../store/usePageData";
 import useCartStore from "../../store/useCartStore";
-
 
 //store
 
@@ -220,7 +220,10 @@ onBeforeMount(() => {
 
     filters.value = (fillterSortObj as FiltersQueryType).filters;
     onlyExist.value = (fillterSortObj as FiltersQueryType).onlyExist;
-    sortField.value = (fillterSortObj as FiltersQueryType).sortField;
+    // sortField.value = (fillterSortObj as FiltersQueryType).sortField;
+    sortStore.updateSortField(
+      (fillterSortObj as FiltersQueryType).sortField as SortType
+    );
 
     if (pageObj.currentPage && pageObj.startIndex && pageObj.endIndex) {
       pageStore.updateAllPageData(
