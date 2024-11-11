@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { FilterItemType } from "../types/interfaces";
-import { useUpdateAllPageData } from "../composables/useUpdatePageData";
+
 import usePageStore from "./usePageData";
 
 export interface FiltersType {

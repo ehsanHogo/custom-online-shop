@@ -22,7 +22,7 @@ import { storeToRefs } from "pinia";
 import useFilterStore from "../../store/useFilterStore";
 import usePageStore from "../../store/usePageData";
 import useCartStore from "../../store/useCartStore";
-import { useUpdateAllPageData } from "../../composables/useUpdatePageData";
+
 
 //store
 

@@ -2,7 +2,6 @@
 import { computed, toRef } from "vue";
 import usePageStore from "../../store/usePageData";
 import { storeToRefs } from "pinia";
-import { useUpdateAllPageData } from "../../composables/useUpdatePageData";
 
 interface MyProps {
   numberOfPages: number;
@@ -16,8 +15,6 @@ const pageStore = usePageStore();
 //***** */
 
 //composable
-
-const { updateAllPageData, updateCurrentPageData } = useUpdateAllPageData();
 
 const props = defineProps<MyProps>();
 
@@ -39,29 +36,33 @@ const pages = computed(() => {
 const changePage = (page: number) => {
   if (page === 1) {
     // Reset to the first set of pages
-    updateAllPageData(page, 0, Math.min(stepSize - 1, totalPage.value));
+    pageStore.updateAllPageData(
+      page,
+      0,
+      Math.min(stepSize - 1, totalPage.value)
+    );
   } else if (page === totalPage.value) {
     // Show the last set of pages
-    updateAllPageData(
+    pageStore.updateAllPageData(
       page,
       Math.max(0, totalPage.value - stepSize - 1),
       totalPage.value - 2
     );
   } else {
-    updateCurrentPageData(page);
+    pageStore.setCurrentPage(page);
   }
 };
 
 const nextPage = () => {
   if (currentPage.value < totalPage.value) {
     if (currentPage.value + 1 > pages.value[endIndex.value]) {
-      updateAllPageData(
+      pageStore.updateAllPageData(
         currentPage.value + 1,
         startIndex.value + stepSize,
         Math.min(totalPage.value - 1, endIndex.value + stepSize)
       );
     } else {
-      updateCurrentPageData(currentPage.value + 1);
+      pageStore.setCurrentPage(currentPage.value + 1);
     }
   }
 };
@@ -69,13 +70,13 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) {
     if (currentPage.value - 1 < pages.value[startIndex.value]) {
-      updateAllPageData(
+      pageStore.updateAllPageData(
         currentPage.value - 1,
         Math.max(0, startIndex.value - stepSize),
         startIndex.value - 1
       );
     } else {
-      updateCurrentPageData(currentPage.value - 1);
+      pageStore.setCurrentPage(currentPage.value - 1);
     }
   }
 };
