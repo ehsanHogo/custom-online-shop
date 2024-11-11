@@ -52,16 +52,18 @@ onBeforeMount(() => {
     Object.keys(cartObj).length !== 0
   ) {
     if (cartObj.products[0] === "") {
-      products.value = [];
+      // products.value = [];
+      cartStore.setProducts([]);
     } else {
-      products.value = (cartObj as ShoppingCartListType).products.map(
-        (item) => {
+      cartStore.setProducts(
+        (cartObj as ShoppingCartListType).products.map((item) => {
           return { ...item, count: +item.count };
-        }
+        })
       );
     }
 
-    firstRefresh.value = false;
+    // firstRefresh.value = false;
+    cartStore.setFirstrefresh(false);
   } else {
   }
 });

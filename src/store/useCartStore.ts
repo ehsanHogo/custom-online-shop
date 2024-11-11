@@ -27,6 +27,14 @@ const useCartStore = defineStore("cart", {
     addProduct(p: ShoppingProductType) {
       this.products.push(p);
     },
+
+    setProducts(p: ShoppingProductType[]) {
+      this.products = p;
+    },
+
+    setFirstrefresh(f: boolean) {
+      this.firstRefresh = f;
+    },
   },
 });
 

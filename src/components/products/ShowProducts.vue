@@ -238,16 +238,16 @@ onBeforeMount(() => {
     if (firstRefresh.value) {
       console.log(cartObj.products);
       if (cartObj.products[0] === "") {
-        products.value = [];
+        cartStore.setProducts([]);
       } else {
-        products.value = (cartObj as ShoppingCartListType).products.map(
-          (item) => {
+        cartStore.setProducts(
+          (cartObj as ShoppingCartListType).products.map((item) => {
             return { ...item, count: +item.count };
-          }
+          })
         );
       }
 
-      firstRefresh.value = false;
+      cartStore.setFirstrefresh(false);
     } else {
     }
   }
