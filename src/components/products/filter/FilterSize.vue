@@ -26,17 +26,6 @@ const updateFilterList = computed(() => {
 });
 const filterList = ref(updateFilterList);
 
-// filterStore.$subscribe((mutation, _) => {
-//   const events = Array.isArray(mutation.events)
-//     ? mutation.events
-//     : [mutation.events];
-//   events.forEach((event) => {
-//     if (event.key !== "onlyExist") {
-//       filterList = updateFilterList();
-//     }
-//   });
-// });
-
 const updateOpenFlag = (index: number) => {
   filterList.value[index].open = !filterList.value[index].open;
   if (filterList.value[index].open === true) {

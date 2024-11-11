@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
@@ -22,8 +22,8 @@ const sendingToday = ref(false);
 
 const filterButtons = ref<FilterItemOptions[]>([
   { name: "برند", open: false },
-  { name: "اندازه", open: filterStore.filters.length !== 0 },
-  { name: "رنگ", open: filterStore.filters.length !== 0 },
+  { name: "اندازه", open: false },
+  { name: "رنگ", open: false },
   { name: "ارسال امروز", open: false },
   { name: "فقط کالاهای موجود", open: false },
 
@@ -31,6 +31,9 @@ const filterButtons = ref<FilterItemOptions[]>([
   { name: "مدل", open: false },
   { name: "طرح", open: false },
 ]);
+
+console.log(filterButtons.value[2].name);
+console.log(filterButtons.value[2].open);
 
 const setOpen = (index: number) => {
   filterButtons.value[index].open = !filterButtons.value[index].open;
