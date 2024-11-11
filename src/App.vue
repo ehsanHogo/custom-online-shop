@@ -3,6 +3,11 @@ import Header from "./components/header/TheHeader.vue";
 import Footer from "./components/footer/TheFooter.vue";
 
 import Cattegories from "./components/products/filter/Cattegories.vue";
+
+
+
+
+
 </script>
 
 <template>

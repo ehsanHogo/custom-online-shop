@@ -43,11 +43,11 @@ const { products, firstRefresh } = storeToRefs(cartStore);
 
 // subscribe & watch
 
-cartStore.$subscribe((mutation, state) => {
-  console.log(mutation);
+// cartStore.$subscribe((mutation, state) => {
+//   console.log(mutation);
 
-  updatePath();
-});
+//   updatePath();
+// });
 
 filterStore.$subscribe((mutation, _) => {
   console.log("mutation ", mutation);
@@ -258,25 +258,11 @@ onBeforeMount(() => {
       pageStore.resetPageData();
     }
 
-    if (firstRefresh.value) {
-      console.log(cartObj.products);
-      if (
-        cartObj.products &&
-        Array.isArray(cartObj.products) &&
-        (cartObj.products[0] as unknown) === ""
-      ) {
-        cartStore.setProducts([]);
-      } else {
-        cartStore.setProducts(
-          (cartObj as ShoppingCartListType).products.map((item) => {
-            return { ...item, count: +item.count };
-          })
-        );
-      }
+    // if (firstRefresh.value) {
 
-      cartStore.setFirstrefresh(false);
-    } else {
-    }
+    //   cartStore.setFirstrefresh(false);
+    // } else {
+    // }
   }
   fetchData();
 });

@@ -3,7 +3,7 @@ import { ShoppingCartListType, ShoppingProductType } from "../types/interfaces";
 
 const useCartStore = defineStore("cart", {
   state: (): ShoppingCartListType => ({
-    products: [],
+    products: JSON.parse(localStorage.getItem("cart") || "[]"),
     firstRefresh: true,
   }),
   getters: {
@@ -22,18 +22,27 @@ const useCartStore = defineStore("cart", {
       } else {
         this.products[resultIndex].count = pCount;
       }
+
+      this.saveToLocalStorage();
     },
 
     addProduct(p: ShoppingProductType) {
       this.products.push(p);
+      this.saveToLocalStorage();
     },
 
     setProducts(p: ShoppingProductType[]) {
       this.products = p;
+      this.saveToLocalStorage();
     },
 
     setFirstrefresh(f: boolean) {
       this.firstRefresh = f;
+      this.saveToLocalStorage();
+    },
+
+    saveToLocalStorage() {
+      localStorage.setItem("cart", JSON.stringify(this.products));
     },
   },
 });
