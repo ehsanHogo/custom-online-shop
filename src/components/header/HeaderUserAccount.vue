@@ -1,23 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
 import useCartStore from "../../store/useCartStore";
-
-const route = useRoute();
-
-const newPathWithQuery = computed(() => {
-  return {
-    path: "/custom-online-shop/shopping-cart",
-    query: { ...route.query },
-  };
-});
 
 const cartStore = useCartStore();
 </script>
 
 <template>
   <router-link
-    :to="newPathWithQuery"
+    :to="{ name: 'shopping-cart' }"
     class="flex justify-start items-center gap-1 text-myGray-9"
   >
     <b class="text-sm">سبد خرید</b>
