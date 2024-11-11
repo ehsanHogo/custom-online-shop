@@ -13,7 +13,6 @@ import {
   IncludedFetchType,
   QueryType,
   FiltersQueryType,
-  ShoppingCartListType,
   PageType,
   SortType,
 } from "../../types/interfaces";
@@ -22,7 +21,6 @@ import useSortStore from "../../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../../store/useFilterStore";
 import usePageStore from "../../store/usePageData";
-import useCartStore from "../../store/useCartStore";
 
 //store
 
@@ -35,19 +33,10 @@ const { filters, onlyExist } = storeToRefs(filterStore);
 //page store
 const pageStore = usePageStore();
 const { currentPage, startIndex, endIndex } = storeToRefs(pageStore);
-//cart store
-const cartStore = useCartStore();
-const { products, firstRefresh } = storeToRefs(cartStore);
 
 ///******* */
 
 // subscribe & watch
-
-// cartStore.$subscribe((mutation, state) => {
-//   console.log(mutation);
-
-//   updatePath();
-// });
 
 filterStore.$subscribe((mutation, _) => {
   console.log("mutation ", mutation);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { ref } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
