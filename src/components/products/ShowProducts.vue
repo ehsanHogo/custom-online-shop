@@ -92,15 +92,6 @@ const updatePath = () => {
       startIndex: startIndex.value,
       endIndex: endIndex.value,
     } as PageType),
-    cart: qs.stringify(
-      {
-        products: products.value,
-        firstRefresh: firstRefresh.value,
-      } as ShoppingCartListType,
-      {
-        allowEmptyArrays: true,
-      }
-    ),
   };
 
   router.push({
@@ -212,20 +203,12 @@ onBeforeMount(() => {
       ? (qs.parse(fillterSortParam) as unknown as FiltersQueryType)
       : ({} as unknown as FiltersQueryType);
 
-  const cartObjParam = qs.parse(route.query as unknown as string)["cart"];
-
-  const cartObj =
-    cartObjParam && typeof cartObjParam === "string"
-      ? (qs.parse(cartObjParam) as unknown as ShoppingCartListType)
-      : ({} as unknown as ShoppingCartListType);
-
   const pageObjParam = qs.parse(route.query as unknown as string)["page"];
 
   const pageObj =
     pageObjParam && typeof pageObjParam === "string"
       ? qs.parse(pageObjParam)
       : {};
-  console.log(cartObj);
 
   if (
     fillterSortObj !== null &&
@@ -257,12 +240,6 @@ onBeforeMount(() => {
     } else {
       pageStore.resetPageData();
     }
-
-    // if (firstRefresh.value) {
-
-    //   cartStore.setFirstrefresh(false);
-    // } else {
-    // }
   }
   fetchData();
 });
