@@ -10,21 +10,19 @@ import useSortStore from "../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
-import { useUpdatePath } from "../composables/useUpdatePath";
 import { useProductListStore } from "../store/useProductListStore";
-import { useFetchData } from "../composables/useFetchData";
 import { useFindImageUrl } from "../composables/useFindImageUrl";
 import { useInitializeStores } from "../composables/useInitializeStores";
+import { useHandleStoreUpdate } from "../composables/useHandleStoreUpdate";
 
-const ProductPath = "/custom-online-shop/";
 //store
 
 //sort store
 const sortStore = useSortStore();
-const { sortField } = storeToRefs(sortStore);
+
 //filter store
 const filterStore = useFilterStore();
-const { allFilter } = storeToRefs(filterStore);
+
 //page store
 const pageStore = usePageStore();
 const { pageData } = storeToRefs(pageStore);
@@ -32,77 +30,33 @@ const { pageData } = storeToRefs(pageStore);
 const productListStore = useProductListStore();
 ///******* */
 // composables
-const { updatePath } = useUpdatePath();
-const { fetchData } = useFetchData();
+
 const { findImageUrl } = useFindImageUrl();
 const { initializeStores } = useInitializeStores();
+const { handleStoreUpdate } = useHandleStoreUpdate();
 // subscribe & watch
 
 filterStore.$subscribe((mutation, _) => {
-  console.log("mutation ", mutation);
-  const events = Array.isArray(mutation.events)
-    ? mutation.events
-    : [mutation.events];
-  events.forEach((item) => {
-    if (item.key !== "filtersType") {
-      updatePath(ProductPath, {
-        sortField: sortField.value,
-        filters: allFilter.value.filters,
-        onlyExist: allFilter.value.onlyExist,
-        currentPage: pageData.value.currentPage,
-        startIndex: pageData.value.startIndex,
-        endIndex: pageData.value.endIndex,
-      });
-      fetchData({
-        allFilter: allFilter.value,
-        sortField: sortField.value,
-        pageData: pageData.value,
-      });
-    }
-  });
+  const isKeyFiltered = Array.isArray(mutation.events)
+    ? mutation.events.some((event) => event.key !== "filtersType")
+    : mutation.events.key !== "filtersType";
+
+  if (isKeyFiltered) {
+    handleStoreUpdate();
+  }
 });
 
 sortStore.$subscribe((_) => {
-  updatePath(ProductPath, {
-    sortField: sortField.value,
-    filters: allFilter.value.filters,
-    onlyExist: allFilter.value.onlyExist,
-    currentPage: pageData.value.currentPage,
-    startIndex: pageData.value.startIndex,
-    endIndex: pageData.value.endIndex,
-  });
-  fetchData({
-    allFilter: allFilter.value,
-    sortField: sortField.value,
-    pageData: pageData.value,
-  });
+  handleStoreUpdate();
 });
 
 watch(pageData.value, () => {
   // console.log(val);
-  updatePath(ProductPath, {
-    sortField: sortField.value,
-    filters: allFilter.value.filters,
-    onlyExist: allFilter.value.onlyExist,
-    currentPage: pageData.value.currentPage,
-    startIndex: pageData.value.startIndex,
-    endIndex: pageData.value.endIndex,
-  });
-  fetchData({
-    allFilter: allFilter.value,
-    sortField: sortField.value,
-    pageData: pageData.value,
-  });
+  handleStoreUpdate();
 });
 
 onBeforeMount(() => {
   initializeStores();
-
-  fetchData({
-    allFilter: allFilter.value,
-    sortField: sortField.value,
-    pageData: pageData.value,
-  });
 });
 </script>
 

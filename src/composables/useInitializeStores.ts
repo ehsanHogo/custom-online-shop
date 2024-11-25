@@ -15,6 +15,9 @@ export function useInitializeStores() {
   const pageStore = usePageStore();
   const sortStore = useSortStore();
 
+
+
+
   const initializeStores = () => {
     const query = qs.parse(route.query as unknown as string);
 
@@ -23,6 +26,9 @@ export function useInitializeStores() {
 
     handleFiltersAndSorting(filterSortParam);
     handlePagination(pageParam);
+
+
+
   };
 
   const handleFiltersAndSorting = (filterSortParam: any) => {
@@ -51,13 +57,12 @@ export function useInitializeStores() {
       //   allFilter.value.onlyExist = filterSortObj.onlyExist;
 
       sortStore.updateSortField(filterSortObj.sortField as SortType);
+    } else {
+      filterStore.$reset();
+      sortStore.$reset();
     }
   };
 
-  /**
-   * Handles pagination logic.
-   * @param pageParam - The query object containing pagination info.
-   */
   const handlePagination = (pageParam: any) => {
     const pageObj =
       pageParam && typeof pageParam === "string" ? qs.parse(pageParam) : {};
