@@ -51,7 +51,7 @@ sortStore.$subscribe((_) => {
 });
 
 watch(pageData.value, () => {
-  // console.log(val);
+
   handleStoreUpdate();
 });
 

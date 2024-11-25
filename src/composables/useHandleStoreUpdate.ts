@@ -16,7 +16,7 @@ export function useHandleStoreUpdate() {
   //page store
   const pageStore = usePageStore();
   const { pageData } = storeToRefs(pageStore);
-  // product list store
+ 
 
   const ProductPath = "/custom-online-shop/";
   const handleStoreUpdate = () => {

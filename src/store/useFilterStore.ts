@@ -18,7 +18,7 @@ const useFilterStore = defineStore("filters", {
   }),
   getters: {},
   actions: {
-    // Helper function to update filters and reset page data
+   
     updateFilters(action: () => void) {
       action(); // Perform the specific filter update
       const pageStore = usePageStore();

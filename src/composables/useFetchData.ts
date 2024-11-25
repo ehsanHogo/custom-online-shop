@@ -22,11 +22,7 @@ interface FetchParams {
 }
 
 export function useFetchData() {
-  //   const loading = ref(false);
-  //   const showData = ref([]);
-  //   const includedFetched = ref([]);
-  //   const filtersType = ref([]);
-  //   const numberOfPage = ref(1);
+
 
   const productListStore = useProductListStore();
   const filterStore = useFilterStore();
@@ -82,17 +78,17 @@ export function useFetchData() {
       if (!res.ok) {
         throw Error("error in fetch");
       } else {
-        // filtersType.value = response.meta.filters.option_types;
+
         filterStore.setFilterType(response.meta.filters.option_types);
         productListStore.setIncludedFetched(response.included);
-        //   includedFetched.value = response.included;
+    
         productListStore.setShowData(response.data);
-        //   showData.value = response.data;
+     
 
-        // numberOfPage.value = response.meta.total_pages;
+     
         pageStore.setNumberOfPage(response.meta.total_pages);
 
-        // productListStore.setLoading(false);
+    
       }
     } catch (e) {
       console.log(e);
