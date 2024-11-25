@@ -22,6 +22,7 @@ import { storeToRefs } from "pinia";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
 import { useUpdatePath } from "../composables/UseUpdatePath";
+import { useProductListStore } from "../store/useProductListStore";
 
 const ProductPath = "/custom-online-shop/";
 //store
@@ -34,8 +35,9 @@ const filterStore = useFilterStore();
 const { filters, onlyExist } = storeToRefs(filterStore);
 //page store
 const pageStore = usePageStore();
-const { currentPage, startIndex, endIndex } = storeToRefs(pageStore);
-
+const { pageData } = storeToRefs(pageStore);
+// product list store
+const productListStore = useProductListStore();
 ///******* */
 // Update path
 const { updatePath } = useUpdatePath();
@@ -48,9 +50,9 @@ filterStore.$subscribe((mutation, _) => {
     sortField: sortField.value,
     filters: filters.value,
     onlyExist: onlyExist.value,
-    currentPage: currentPage.value,
-    startIndex: startIndex.value,
-    endIndex: endIndex.value,
+    currentPage: pageData.value.currentPage,
+    startIndex: pageData.value.startIndex,
+    endIndex: pageData.value.endIndex,
   });
   fetchData();
 });
@@ -60,22 +62,22 @@ sortStore.$subscribe((_) => {
     sortField: sortField.value,
     filters: filters.value,
     onlyExist: onlyExist.value,
-    currentPage: currentPage.value,
-    startIndex: startIndex.value,
-    endIndex: endIndex.value,
+    currentPage: pageData.value.currentPage,
+    startIndex: pageData.value.startIndex,
+    endIndex: pageData.value.endIndex,
   });
   fetchData();
 });
 
-watch(currentPage, () => {
+watch(pageData.value, () => {
   // console.log(val);
   updatePath(ProductPath, {
     sortField: sortField.value,
     filters: filters.value,
     onlyExist: onlyExist.value,
-    currentPage: currentPage.value,
-    startIndex: startIndex.value,
-    endIndex: endIndex.value,
+    currentPage: pageData.value.currentPage,
+    startIndex: pageData.value.startIndex,
+    endIndex: pageData.value.endIndex,
   });
   fetchData();
 });
@@ -91,18 +93,18 @@ const route = useRoute();
 
 //data showing
 const stepNum = 3;
-const loading = ref(true);
+// const loading = ref(true);
 
-const showData = ref<DataFetchType[]>([]);
+// const showData = ref<DataFetchType[]>([]);
 
-const includedFetched = ref<IncludedFetchType[]>([]);
+// const includedFetched = ref<IncludedFetchType[]>([]);
 
 const findImageUrl = (imageId: string) => {
   if (imageId === null || imageId === undefined) {
     return "";
   }
 
-  const resultItem = includedFetched.value.filter((item) => {
+  const resultItem = productListStore.includedFetched.filter((item) => {
     return item.id === imageId;
   });
 
@@ -118,14 +120,14 @@ const filtersType = ref<FilterType[]>([]);
 
 //page props
 
-const numberOfPage = ref(1);
-const numberOfProductsInPage = 9;
+// const numberOfPage = ref(1);
+// const numberOfProductsInPage = 9;
 
 // fetching data based on filter, sort and page
 const fetchData = async () => {
-  loading.value = true;
+  productListStore.setLoading(true);
 
-  let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${numberOfProductsInPage}&include=images`;
+  let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${pageStore.numberOfProductsInPage}&include=images`;
   const mainQuery: QueryType = {
     include: {
       images: "include=images",
@@ -138,8 +140,8 @@ const fetchData = async () => {
     splitQuery: "&",
   };
 
-  if (currentPage.value !== 1) {
-    baseQuery += `&page=${currentPage.value}`;
+  if (pageData.value.currentPage !== 1) {
+    baseQuery += `&page=${pageData.value.currentPage}`;
   }
 
   if (sortField.value === "none") {
@@ -169,12 +171,15 @@ const fetchData = async () => {
       throw Error("error in fetch");
     } else {
       filtersType.value = response.meta.filters.option_types;
-      includedFetched.value = response.included;
-      showData.value = response.data;
+      productListStore.setIncludedFetched(response.included);
+      //   includedFetched.value = response.included;
+      productListStore.setShowData(response.data);
+      //   showData.value = response.data;
 
-      numberOfPage.value = response.meta.total_pages;
+      // numberOfPage.value = response.meta.total_pages;
+      pageStore.setNumberOfPage(response.meta.total_pages);
 
-      loading.value = false;
+      productListStore.setLoading(false);
     }
   } catch (e) {
     console.log(e);
@@ -242,12 +247,15 @@ onBeforeMount(() => {
       >
         <Sort></Sort>
 
-        <div v-if="loading" class="col-span-3 grid grid-cols-3 gap-3">
+        <div
+          v-if="productListStore.loading"
+          class="col-span-3 grid grid-cols-3 gap-3"
+        >
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
         </div>
         <ShowCards
-          v-if="!loading"
-          v-for="(item, index) in showData"
+          v-if="!productListStore.loading"
+          v-for="(item, index) in productListStore.showData"
           :key="index"
           :name="item.attributes.slug"
           :price="item.attributes.display_price"
@@ -257,8 +265,7 @@ onBeforeMount(() => {
         ></ShowCards>
 
         <Pagination
-          :numberOfPages="numberOfPage"
-          :stepNum="stepNum"
+
         ></Pagination>
       </div>
 
