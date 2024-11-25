@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import AddRemoveProduct from "../../generall/AddRemoveProduct.vue";
+import AddRemoveProduct from "../../Common/AddRemoveProduct.vue";
 import useCartStore from "../../../store/useCartStore";
 interface CardData {
   name?: string;
@@ -81,7 +81,7 @@ cartStore.$subscribe((mutation) => {
     <div class="flex justify-between">
       <b>{{ props.name }}</b>
       <button>
-        <img src="../../../assets/body/heart.png" alt="heart icon" />
+        <img src="../../../assets/images/body/heart.png" alt="heart icon" />
       </button>
     </div>
 
@@ -99,7 +99,7 @@ cartStore.$subscribe((mutation) => {
         <p class="text-white">افزودن به سبد خرید</p>
 
         <img
-          src="../../../assets/body/shopping cart/shopping-cart.png"
+          src="../../../assets/images/body/shopping cart/shopping-cart.png"
           alt="shopping cart"
         />
       </button>

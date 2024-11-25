@@ -33,7 +33,7 @@
       <div class="flex justify-between">
         <div class="flex gap-1">
           <img
-            src="../../assets/body/shopping cart/receipt-disscount.png"
+            src="../../assets/images/body/shopping cart/receipt-disscount.png"
             alt=""
           />
           <p class="text-myGray-9">مجموع تخفیف روی کالاها</p>
@@ -64,7 +64,7 @@
         class="bg-redp flex gap-3 w-[50%] p-3 justify-center items-center rounded-sm"
       >
         <b class="text-white">ثبت سفارش</b>
-        <img src="../../assets/body/shopping cart/Vector.png" alt="" />
+        <img src="../../assets/images/body/shopping cart/Vector.png" alt="" />
       </button>
     </div>
   </div>

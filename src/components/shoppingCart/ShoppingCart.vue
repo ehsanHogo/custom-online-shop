@@ -7,7 +7,7 @@ import ShoppingList from "./ShoppingList.vue";
 <template>
   <div class="flex justify-center pt-5">
     <img
-      src="../../assets/body/shopping cart/steper.png"
+      src="../../assets/images/body/shopping cart/steper.png"
       alt="shopping progress"
     />
   </div>

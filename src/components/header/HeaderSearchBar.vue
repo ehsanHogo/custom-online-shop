@@ -2,7 +2,7 @@
   <div
     class="flex justify-between px-2 items-center gap-3 border border-[#AFAFAF] rounded-md w-[50%] my-2"
   >
-    <img src="../../assets/header/search-normal.png" alt="search logo" />
+    <img src="../../assets/images/header/search-normal.png" alt="search logo" />
     <input
       type="text"
       class="w-[70%] outline-none bg-inherit text-black"

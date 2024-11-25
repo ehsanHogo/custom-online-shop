@@ -5,7 +5,7 @@
   >
     <div class="flex justify-start w-full">
       <img
-        src="../../assets/body/shopping cart/info-circle.png"
+        src="../../assets/images/body/shopping cart/info-circle.png"
         alt="info logo"
       />
     </div>

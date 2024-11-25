@@ -10,11 +10,11 @@
   >
     <div class="flex flex-col">
       <img
-        src="../../assets/siteBrand/custom-brand-name.png"
+        src="../../assets/images/siteBrand/custom-brand-name.png"
         alt="online shop brand"
       />
       <b class="text-nowrap">فروشگاه اینترنتی</b>
     </div>
-    <img src="../../assets/siteBrand/LOGO.png" alt="online shop logo" />
+    <img src="../../assets/images/siteBrand/LOGO.png" alt="online shop logo" />
   </router-link>
 </template>

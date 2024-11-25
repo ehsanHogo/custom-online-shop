@@ -93,7 +93,7 @@ const slicePages = computed<number[]>(() => {
 <template>
   <div class="flex justify-center items-center gap-5 col-span-3">
     <button @click="nextPage">
-      <img src="../../assets/body/arrow-left.png" alt="left arrow" />
+      <img src="../../assets/images/body/arrow-left.png" alt="left arrow" />
     </button>
     <div class="flex gap-3 border border-myGray-4 rounded-lg p-3" dir="rtl">
       <button
@@ -138,7 +138,7 @@ const slicePages = computed<number[]>(() => {
     </div>
 
     <button @click="prevPage">
-      <img src="../../assets/body/arrow-right.png" alt="right arrow" />
+      <img src="../../assets/images/body/arrow-right.png" alt="right arrow" />
     </button>
   </div>
 </template>

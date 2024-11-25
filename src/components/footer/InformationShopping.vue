@@ -7,18 +7,18 @@
     </div>
     <div class="flex gap-8 mt-2">
       <img
-        src="../../assets/footer/ettehadie.png"
+        src="../../assets/images/footer/ettehadie.png"
         alt="ettehadie"
         class="w-20 h-30"
       />
       <img
-        src="../../assets/footer/sabt-melly.png"
+        src="../../assets/images/footer/sabt-melly.png"
         alt="sabt melly"
         class="w-20 h-30"
       />
 
       <img
-        src="../../assets/footer/e-namad.png"
+        src="../../assets/images/footer/e-namad.png"
         alt="e nammad"
         class="w-20 h-30"
       />

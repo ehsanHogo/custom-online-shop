@@ -12,7 +12,7 @@ const cartStore = useCartStore();
     <b class="text-sm">سبد خرید</b>
 
     <div class="flex items-center">
-      <img src="../../assets/header/shopping-cart.png" alt="shopping cart" />
+      <img src="../../assets/images/header/shopping-cart.png" alt="shopping cart" />
       <div
         class="bg-Tint-5 rounded-xl w-6 h-6 flex justify-center items-center relative -translate-x-2 -translate-y-2 pt-1"
       >
@@ -22,6 +22,6 @@ const cartStore = useCartStore();
   </router-link>
   <button class="flex justify-start items-center gap-1 text-myGray-9">
     <b class="text-sm">ورود | ثبت نام</b>
-    <img src="../../assets/header/Login.png" alt="login logo" />
+    <img src="../../assets/images/header/Login.png" alt="login logo" />
   </button>
 </template>

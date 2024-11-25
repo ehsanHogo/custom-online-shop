@@ -74,7 +74,7 @@ const onExistSwitchChange = () => {
           />
           <img
             v-else
-            src="../../../assets/body/arrow-down.png"
+            src="../../../assets/images/body/arrow-down.png"
             alt="arrow down"
           />
 

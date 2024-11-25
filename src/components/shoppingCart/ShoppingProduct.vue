@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AddRemoveProduct from "../generall/AddRemoveProduct.vue";
+import AddRemoveProduct from "../Common/AddRemoveProduct.vue";
 import { ShoppingProductType } from "../../types/interfaces";
 import useCartStore from "../../store/useCartStore";
 
@@ -18,7 +18,7 @@ const handleDelete = () => {
     <div class="flex justify-evenly items-center">
       <button @click="handleDelete">
         <img
-          src="../../assets/body/shopping cart/close-square.png"
+          src="../../assets/images/body/shopping cart/close-square.png"
           alt="delete product"
         />
       </button>
@@ -35,7 +35,7 @@ const handleDelete = () => {
       <AddRemoveProduct :productId="props.id"></AddRemoveProduct>
     </div>
     <div class="flex justify-end gap-3 mt-3">
-      <img src="../../assets/body/shopping cart/truck-fast.png" alt="" />
+      <img src="../../assets/images/body/shopping cart/truck-fast.png" alt="" />
       <b class="text-myGray-9">ارسال از سه روز آینده</b>
     </div>
   </div>
