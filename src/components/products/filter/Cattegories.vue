@@ -21,7 +21,10 @@ const categories: string[] = [
     </button>
     <button class="bg-redp flex p-2 rounded-sm">
       <p class="text-white">!خودت طراحیش کن</p>
-      <img src="../../../assets/images/body/magicpen.png" alt="magic pen icon" />
+      <img
+        src="../../../assets/images/body/products/magicpen.png"
+        alt="magic pen icon"
+      />
     </button>
   </div>
 </template>

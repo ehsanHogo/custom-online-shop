@@ -81,7 +81,10 @@ cartStore.$subscribe((mutation) => {
     <div class="flex justify-between">
       <b>{{ props.name }}</b>
       <button>
-        <img src="../../../assets/images/body/heart.png" alt="heart icon" />
+        <img
+          src="../../../assets/images/body/products/heart.png"
+          alt="heart icon"
+        />
       </button>
     </div>
 
