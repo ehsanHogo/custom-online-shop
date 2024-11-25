@@ -98,10 +98,12 @@ export function useFetchData() {
         // numberOfPage.value = response.meta.total_pages;
         pageStore.setNumberOfPage(response.meta.total_pages);
 
-        productListStore.setLoading(false);
+        // productListStore.setLoading(false);
       }
     } catch (e) {
       console.log(e);
+    } finally {
+      productListStore.loading = false;
     }
   };
 

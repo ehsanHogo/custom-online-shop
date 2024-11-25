@@ -6,9 +6,6 @@ import Sort from "../components/products/Sort.vue";
 import Pagination from "../components/Common/Pagination.vue";
 import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
 
-import qs from "qs";
-import { FiltersQueryType, SortType } from "../types/interfaces";
-import { useRoute } from "vue-router";
 import useSortStore from "../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../store/useFilterStore";
@@ -17,6 +14,7 @@ import { useUpdatePath } from "../composables/useUpdatePath";
 import { useProductListStore } from "../store/useProductListStore";
 import { useFetchData } from "../composables/useFetchData";
 import { useFindImageUrl } from "../composables/useFindImageUrl";
+import { useInitializeStores } from "../composables/useInitializeStores";
 
 const ProductPath = "/custom-online-shop/";
 //store
@@ -33,10 +31,11 @@ const { pageData } = storeToRefs(pageStore);
 // product list store
 const productListStore = useProductListStore();
 ///******* */
-// Update path
+// composables
 const { updatePath } = useUpdatePath();
 const { fetchData } = useFetchData();
 const { findImageUrl } = useFindImageUrl();
+const { initializeStores } = useInitializeStores();
 // subscribe & watch
 
 filterStore.$subscribe((mutation, _) => {
@@ -96,64 +95,9 @@ watch(pageData.value, () => {
   });
 });
 
-//**** */
-
-// composable
-
-// const { updateAllPageData, resetPageData } = useUpdateAllPageData();
-//router
-// const router = useRouter();
-const route = useRoute();
-
-// initialization
-
 onBeforeMount(() => {
-  const fillterSortParam = qs.parse(route.query as unknown as string)[
-    "fillterSort"
-  ];
-  const fillterSortObj =
-    fillterSortParam && typeof fillterSortParam === "string"
-      ? (qs.parse(fillterSortParam) as unknown as FiltersQueryType)
-      : ({} as unknown as FiltersQueryType);
+  initializeStores();
 
-  const pageObjParam = qs.parse(route.query as unknown as string)["page"];
-
-  const pageObj =
-    pageObjParam && typeof pageObjParam === "string"
-      ? qs.parse(pageObjParam)
-      : {};
-
-  if (
-    fillterSortObj !== null &&
-    fillterSortObj !== undefined &&
-    Object.keys(fillterSortObj).length !== 0
-  ) {
-    if (
-      fillterSortObj.filters &&
-      Array.isArray(fillterSortObj.filters) &&
-      (fillterSortObj.filters[0] as unknown) === ""
-    )
-      fillterSortObj.filters = [];
-    if ((fillterSortObj.onlyExist as unknown) === "false")
-      fillterSortObj.onlyExist = false;
-    else fillterSortObj.onlyExist = true;
-
-    allFilter.value.filters = (fillterSortObj as FiltersQueryType).filters;
-    allFilter.value.onlyExist = (fillterSortObj as FiltersQueryType).onlyExist;
-    sortStore.updateSortField(
-      (fillterSortObj as FiltersQueryType).sortField as SortType
-    );
-
-    if (pageObj.currentPage && pageObj.startIndex && pageObj.endIndex) {
-      pageStore.updateAllPageData(
-        +pageObj.currentPage,
-        +pageObj.startIndex,
-        +pageObj.endIndex
-      );
-    } else {
-      pageStore.resetPageData();
-    }
-  }
   fetchData({
     allFilter: allFilter.value,
     sortField: sortField.value,

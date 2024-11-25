@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
-import { AllFiltersType, FilterItemType, FilterType } from "../types/interfaces";
+import {
+  AllFiltersType,
+  FilterItemType,
+  FilterType,
+} from "../types/interfaces";
 
 import usePageStore from "./usePageData";
-
-
 
 const useFilterStore = defineStore("filters", {
   state: () => ({
@@ -44,6 +46,12 @@ const useFilterStore = defineStore("filters", {
     },
     setFilterType(val: FilterType[]) {
       this.filtersType = val;
+    },
+
+    setAllFilter(val: AllFiltersType) {
+      this.updateFilters(() => {
+        this.allFilter = val;
+      });
     },
 
     resetAllFilter() {
