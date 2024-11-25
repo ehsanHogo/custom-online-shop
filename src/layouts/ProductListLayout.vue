@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Filter from "./filter/Filter.vue";
-import ShowCards from "./cards/ShowCards.vue";
+import Filter from "../components/products/filter/Filter.vue";
+import ShowCards from "../components/products/cards/ShowCards.vue";
 import { onBeforeMount, ref, watch } from "vue";
-import Sort from "./Sort.vue";
-import Pagination from "../Common/Pagination.vue";
-import CardSkeleton from "./cards/CardSkeleton.vue";
+import Sort from "../components/products/Sort.vue";
+import Pagination from "../components/Common/Pagination.vue";
+import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
 
 import qs from "qs";
 import {
@@ -15,12 +15,12 @@ import {
   FiltersQueryType,
   PageType,
   SortType,
-} from "../../types/interfaces";
+} from "../types/interfaces";
 import { useRoute, useRouter } from "vue-router";
-import useSortStore from "../../store/useSortStore";
+import useSortStore from "../store/useSortStore";
 import { storeToRefs } from "pinia";
-import useFilterStore from "../../store/useFilterStore";
-import usePageStore from "../../store/usePageData";
+import useFilterStore from "../store/useFilterStore";
+import usePageStore from "../store/usePageData";
 
 //store
 
