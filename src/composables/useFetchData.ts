@@ -1,10 +1,4 @@
-import { ref } from "vue";
-import {
-  AllFiltersType,
-  FilterItemType,
-  FilterType,
-  PageType,
-} from "../types/interfaces";
+import { AllFiltersType, PageType } from "../types/interfaces";
 import { useProductListStore } from "../store/useProductListStore";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";

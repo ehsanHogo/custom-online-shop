@@ -1,10 +1,6 @@
 import qs from "qs";
 import { useRoute } from "vue-router";
-import {
-  AllFiltersType,
-  FiltersQueryType,
-  SortType,
-} from "../types/interfaces";
+import { FiltersQueryType, SortType } from "../types/interfaces";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
 import useSortStore from "../store/useSortStore";
@@ -15,9 +11,6 @@ export function useInitializeStores() {
   const pageStore = usePageStore();
   const sortStore = useSortStore();
 
-
-
-
   const initializeStores = () => {
     const query = qs.parse(route.query as unknown as string);
 
@@ -26,9 +19,6 @@ export function useInitializeStores() {
 
     handleFiltersAndSorting(filterSortParam);
     handlePagination(pageParam);
-
-
-
   };
 
   const handleFiltersAndSorting = (filterSortParam: any) => {

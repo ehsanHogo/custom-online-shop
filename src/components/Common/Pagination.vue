@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { computed, toRef } from "vue";
+import { computed } from "vue";
 import usePageStore from "../../store/usePageData";
 import { storeToRefs } from "pinia";
-
-interface MyProps {
-  numberOfPages: number;
-  stepNum: number;
-}
 
 //store
 
@@ -14,16 +9,7 @@ const pageStore = usePageStore();
 
 //***** */
 
-//composable
-
-// const props = defineProps<MyProps>();
-
-// setting with fetched data from parrent
-// const numberOfPage = toRef(props, "numberOfPages");
-// set by parrent interest
-// const stepNum.value = props.stepNum;
-
-const { pageData , numberOfPage, stepNum} = storeToRefs(pageStore);
+const { pageData, numberOfPage, stepNum } = storeToRefs(pageStore);
 
 // general
 
@@ -57,7 +43,10 @@ const nextPage = () => {
       pageStore.updateAllPageData(
         pageData.value.currentPage + 1,
         pageData.value.startIndex + stepNum.value,
-        Math.min(numberOfPage.value - 1, pageData.value.endIndex + stepNum.value)
+        Math.min(
+          numberOfPage.value - 1,
+          pageData.value.endIndex + stepNum.value
+        )
       );
     } else {
       pageStore.setCurrentPage(pageData.value.currentPage + 1);
@@ -108,7 +97,9 @@ const slicePages = computed<number[]>(() => {
         <b> 1</b>
       </button>
 
-      <div v-if="pageData.startIndex !== 0 && pages[stepNum - 1] < numberOfPage">
+      <div
+        v-if="pageData.startIndex !== 0 && pages[stepNum - 1] < numberOfPage"
+      >
         <b>...</b>
       </div>
 
