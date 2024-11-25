@@ -13,7 +13,7 @@ interface MyProps {
 
 //store
 const filterStore = useFilterStore();
-const { onlyExist } = storeToRefs(filterStore);
+const { allFilter } = storeToRefs(filterStore);
 
 //**** */
 
@@ -69,7 +69,7 @@ const onExistSwitchChange = () => {
           <VaSwitch
             size="small"
             v-else-if="index === 4"
-            :model-value="onlyExist"
+            :model-value="allFilter.onlyExist"
             @update:modelValue="onExistSwitchChange"
           />
           <img

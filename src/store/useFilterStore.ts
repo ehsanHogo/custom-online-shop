@@ -1,17 +1,18 @@
 import { defineStore } from "pinia";
-import { FilterItemType } from "../types/interfaces";
+import { AllFiltersType, FilterItemType, FilterType } from "../types/interfaces";
 
 import usePageStore from "./usePageData";
 
-export interface FiltersType {
-  filters: FilterItemType[];
-  onlyExist: boolean;
-}
+
 
 const useFilterStore = defineStore("filters", {
-  state: (): FiltersType => ({
-    filters: [],
-    onlyExist: false,
+  state: () => ({
+    allFilter: {
+      filters: [],
+      onlyExist: false,
+    } as AllFiltersType,
+
+    filtersType: [] as FilterType[],
   }),
   getters: {},
   actions: {
@@ -24,13 +25,13 @@ const useFilterStore = defineStore("filters", {
 
     addFilter(filter: FilterItemType) {
       this.updateFilters(() => {
-        this.filters.push(filter);
+        this.allFilter.filters.push(filter);
       });
     },
 
     deleteFilter(filterId: string) {
       this.updateFilters(() => {
-        this.filters = this.filters.filter(
+        this.allFilter.filters = this.allFilter.filters.filter(
           (item) => item.criteriaId !== filterId
         );
       });
@@ -38,14 +39,17 @@ const useFilterStore = defineStore("filters", {
 
     changeOnlyExist() {
       this.updateFilters(() => {
-        this.onlyExist = !this.onlyExist;
+        this.allFilter.onlyExist = !this.allFilter.onlyExist;
       });
+    },
+    setFilterType(val: FilterType[]) {
+      this.filtersType = val;
     },
 
     resetAllFilter() {
       this.updateFilters(() => {
-        this.filters = [];
-        this.onlyExist = false;
+        this.allFilter.filters = [];
+        this.allFilter.onlyExist = false;
       });
     },
   },

@@ -11,13 +11,13 @@ const props = defineProps<MyProps>();
 //store
 const filterStore = useFilterStore();
 
-const { filters } = storeToRefs(filterStore);
+const { allFilter } = storeToRefs(filterStore);
 
 const updateFilterList = computed(() => {
   return props.filterSizeData.map((item) => ({
     ...item,
     open:
-      filters.value.filter((fil) => {
+      allFilter.value.filters.filter((fil) => {
         return fil.criteriaId === item.id;
       }).length === 0
         ? false

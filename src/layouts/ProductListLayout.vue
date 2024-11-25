@@ -1,28 +1,22 @@
 <script setup lang="ts">
 import Filter from "../components/products/filter/Filter.vue";
 import ShowCards from "../components/products/cards/ShowCards.vue";
-import { onBeforeMount, ref, watch } from "vue";
+import { onBeforeMount, watch } from "vue";
 import Sort from "../components/products/Sort.vue";
 import Pagination from "../components/Common/Pagination.vue";
 import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
 
 import qs from "qs";
-import {
-  FilterType,
-  DataFetchType,
-  IncludedFetchType,
-  QueryType,
-  FiltersQueryType,
-  PageType,
-  SortType,
-} from "../types/interfaces";
-import { useRoute, useRouter } from "vue-router";
+import { FiltersQueryType, SortType } from "../types/interfaces";
+import { useRoute } from "vue-router";
 import useSortStore from "../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
-import { useUpdatePath } from "../composables/UseUpdatePath";
+import { useUpdatePath } from "../composables/useUpdatePath";
 import { useProductListStore } from "../store/useProductListStore";
+import { useFetchData } from "../composables/useFetchData";
+import { useFindImageUrl } from "../composables/useFindImageUrl";
 
 const ProductPath = "/custom-online-shop/";
 //store
@@ -32,7 +26,7 @@ const sortStore = useSortStore();
 const { sortField } = storeToRefs(sortStore);
 //filter store
 const filterStore = useFilterStore();
-const { filters, onlyExist } = storeToRefs(filterStore);
+const { allFilter } = storeToRefs(filterStore);
 //page store
 const pageStore = usePageStore();
 const { pageData } = storeToRefs(pageStore);
@@ -41,45 +35,65 @@ const productListStore = useProductListStore();
 ///******* */
 // Update path
 const { updatePath } = useUpdatePath();
-
+const { fetchData } = useFetchData();
+const { findImageUrl } = useFindImageUrl();
 // subscribe & watch
 
 filterStore.$subscribe((mutation, _) => {
   console.log("mutation ", mutation);
-  updatePath(ProductPath, {
-    sortField: sortField.value,
-    filters: filters.value,
-    onlyExist: onlyExist.value,
-    currentPage: pageData.value.currentPage,
-    startIndex: pageData.value.startIndex,
-    endIndex: pageData.value.endIndex,
+  const events = Array.isArray(mutation.events)
+    ? mutation.events
+    : [mutation.events];
+  events.forEach((item) => {
+    if (item.key !== "filtersType") {
+      updatePath(ProductPath, {
+        sortField: sortField.value,
+        filters: allFilter.value.filters,
+        onlyExist: allFilter.value.onlyExist,
+        currentPage: pageData.value.currentPage,
+        startIndex: pageData.value.startIndex,
+        endIndex: pageData.value.endIndex,
+      });
+      fetchData({
+        allFilter: allFilter.value,
+        sortField: sortField.value,
+        pageData: pageData.value,
+      });
+    }
   });
-  fetchData();
 });
 
 sortStore.$subscribe((_) => {
   updatePath(ProductPath, {
     sortField: sortField.value,
-    filters: filters.value,
-    onlyExist: onlyExist.value,
+    filters: allFilter.value.filters,
+    onlyExist: allFilter.value.onlyExist,
     currentPage: pageData.value.currentPage,
     startIndex: pageData.value.startIndex,
     endIndex: pageData.value.endIndex,
   });
-  fetchData();
+  fetchData({
+    allFilter: allFilter.value,
+    sortField: sortField.value,
+    pageData: pageData.value,
+  });
 });
 
 watch(pageData.value, () => {
   // console.log(val);
   updatePath(ProductPath, {
     sortField: sortField.value,
-    filters: filters.value,
-    onlyExist: onlyExist.value,
+    filters: allFilter.value.filters,
+    onlyExist: allFilter.value.onlyExist,
     currentPage: pageData.value.currentPage,
     startIndex: pageData.value.startIndex,
     endIndex: pageData.value.endIndex,
   });
-  fetchData();
+  fetchData({
+    allFilter: allFilter.value,
+    sortField: sortField.value,
+    pageData: pageData.value,
+  });
 });
 
 //**** */
@@ -90,101 +104,6 @@ watch(pageData.value, () => {
 //router
 // const router = useRouter();
 const route = useRoute();
-
-//data showing
-const stepNum = 3;
-// const loading = ref(true);
-
-// const showData = ref<DataFetchType[]>([]);
-
-// const includedFetched = ref<IncludedFetchType[]>([]);
-
-const findImageUrl = (imageId: string) => {
-  if (imageId === null || imageId === undefined) {
-    return "";
-  }
-
-  const resultItem = productListStore.includedFetched.filter((item) => {
-    return item.id === imageId;
-  });
-
-  if (resultItem.length === 0) {
-    return "";
-  } else {
-    return resultItem[0].attributes.original_url;
-  }
-};
-
-//filter types
-const filtersType = ref<FilterType[]>([]);
-
-//page props
-
-// const numberOfPage = ref(1);
-// const numberOfProductsInPage = 9;
-
-// fetching data based on filter, sort and page
-const fetchData = async () => {
-  productListStore.setLoading(true);
-
-  let baseQuery = `https://demo.spreecommerce.org/api/v2/storefront/products?per_page=${pageStore.numberOfProductsInPage}&include=images`;
-  const mainQuery: QueryType = {
-    include: {
-      images: "include=images",
-    },
-    sort: {
-      priceAsc: "sort=price",
-      priceDec: "sort=-price",
-      createdAsc: "sort=-created_at",
-    },
-    splitQuery: "&",
-  };
-
-  if (pageData.value.currentPage !== 1) {
-    baseQuery += `&page=${pageData.value.currentPage}`;
-  }
-
-  if (sortField.value === "none") {
-  } else if (sortField.value === "price-cheap") {
-    baseQuery += mainQuery.splitQuery + mainQuery.sort.priceAsc;
-  } else if (sortField.value === "price-expensive") {
-    baseQuery += mainQuery.splitQuery + mainQuery.sort.priceDec;
-  } else if (sortField.value === "new-created") {
-    baseQuery += mainQuery.splitQuery + mainQuery.sort.createdAsc;
-  }
-
-  if (filters.value.length !== 0) {
-    filters.value.forEach((item) => {
-      baseQuery += `&filter[options][${item.filterType}]=${item.filterCriteria}`;
-    });
-  }
-
-  if (onlyExist.value) {
-    baseQuery += `&filter[in_stock]=true`;
-  }
-
-  try {
-    const res = await fetch(`${baseQuery}`, { method: "GET" });
-    const response = await res.json();
-
-    if (!res.ok) {
-      throw Error("error in fetch");
-    } else {
-      filtersType.value = response.meta.filters.option_types;
-      productListStore.setIncludedFetched(response.included);
-      //   includedFetched.value = response.included;
-      productListStore.setShowData(response.data);
-      //   showData.value = response.data;
-
-      // numberOfPage.value = response.meta.total_pages;
-      pageStore.setNumberOfPage(response.meta.total_pages);
-
-      productListStore.setLoading(false);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 // initialization
 
@@ -219,8 +138,8 @@ onBeforeMount(() => {
       fillterSortObj.onlyExist = false;
     else fillterSortObj.onlyExist = true;
 
-    filters.value = (fillterSortObj as FiltersQueryType).filters;
-    onlyExist.value = (fillterSortObj as FiltersQueryType).onlyExist;
+    allFilter.value.filters = (fillterSortObj as FiltersQueryType).filters;
+    allFilter.value.onlyExist = (fillterSortObj as FiltersQueryType).onlyExist;
     sortStore.updateSortField(
       (fillterSortObj as FiltersQueryType).sortField as SortType
     );
@@ -235,7 +154,11 @@ onBeforeMount(() => {
       pageStore.resetPageData();
     }
   }
-  fetchData();
+  fetchData({
+    allFilter: allFilter.value,
+    sortField: sortField.value,
+    pageData: pageData.value,
+  });
 });
 </script>
 
@@ -264,12 +187,10 @@ onBeforeMount(() => {
           :id="item.id"
         ></ShowCards>
 
-        <Pagination
-
-        ></Pagination>
+        <Pagination></Pagination>
       </div>
 
-      <Filter :filterData="filtersType"></Filter>
+      <Filter :filterData="filterStore.filtersType"></Filter>
     </div>
   </div>
 </template>

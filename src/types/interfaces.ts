@@ -93,13 +93,16 @@ export interface PageType {
   endIndex: number;
 }
 
+export interface UpdatePathParams {
+  sortField: SortType;
+  filters: FilterItemType[];
+  onlyExist: boolean;
+  currentPage: number;
+  startIndex: number;
+  endIndex: number;
+}
 
-
-
-
-export interface UpdatePathParams {sortField: SortType,
-filters: FilterItemType[],
-onlyExist: boolean,
-currentPage: number,
-startIndex: number,
-endIndex: number}
+export interface AllFiltersType {
+  filters: FilterItemType[];
+  onlyExist: boolean;
+}
