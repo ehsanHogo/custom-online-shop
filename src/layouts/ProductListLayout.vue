@@ -21,7 +21,9 @@ import useSortStore from "../store/useSortStore";
 import { storeToRefs } from "pinia";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
+import { useUpdatePath } from "../composables/UseUpdatePath";
 
+const ProductPath = "/custom-online-shop/";
 //store
 
 //sort store
@@ -35,23 +37,46 @@ const pageStore = usePageStore();
 const { currentPage, startIndex, endIndex } = storeToRefs(pageStore);
 
 ///******* */
+// Update path
+const { updatePath } = useUpdatePath();
 
 // subscribe & watch
 
 filterStore.$subscribe((mutation, _) => {
   console.log("mutation ", mutation);
-  updatePath();
+  updatePath(ProductPath, {
+    sortField: sortField.value,
+    filters: filters.value,
+    onlyExist: onlyExist.value,
+    currentPage: currentPage.value,
+    startIndex: startIndex.value,
+    endIndex: endIndex.value,
+  });
   fetchData();
 });
 
 sortStore.$subscribe((_) => {
-  updatePath();
+  updatePath(ProductPath, {
+    sortField: sortField.value,
+    filters: filters.value,
+    onlyExist: onlyExist.value,
+    currentPage: currentPage.value,
+    startIndex: startIndex.value,
+    endIndex: endIndex.value,
+  });
   fetchData();
 });
 
 watch(currentPage, () => {
   // console.log(val);
-  updatePath();
+  updatePath(ProductPath, {
+    sortField: sortField.value,
+    filters: filters.value,
+    onlyExist: onlyExist.value,
+    currentPage: currentPage.value,
+    startIndex: startIndex.value,
+    endIndex: endIndex.value,
+  });
   fetchData();
 });
 
@@ -61,33 +86,8 @@ watch(currentPage, () => {
 
 // const { updateAllPageData, resetPageData } = useUpdateAllPageData();
 //router
-const router = useRouter();
+// const router = useRouter();
 const route = useRoute();
-
-const updatePath = () => {
-  const obj = {
-    fillterSort: qs.stringify(
-      {
-        filters: filters.value,
-        onlyExist: onlyExist.value,
-        sortField: sortField.value,
-      } as FiltersQueryType,
-      {
-        allowEmptyArrays: true,
-      }
-    ),
-    page: qs.stringify({
-      currentPage: currentPage.value,
-      startIndex: startIndex.value,
-      endIndex: endIndex.value,
-    } as PageType),
-  };
-
-  router.push({
-    path: "/custom-online-shop/",
-    query: obj,
-  });
-};
 
 //data showing
 const stepNum = 3;
