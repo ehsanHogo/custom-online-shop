@@ -49,7 +49,9 @@ const onExistSwitchChange = () => {
 </script>
 
 <template>
-  <div class="col-span-1 border rounded-sm p-5 flex flex-col gap-5 h-fit">
+  <div
+    class="col-span-1 border rounded-sm flex flex-col gap-5 h-fit max-md:hidden md:px-3 md:py-4 xl:p-5"
+  >
     <div class="flex justify-between">
       <button @click="deleteAllFilter">
         <b class="text-redp">حذف فیلتر ها</b>
