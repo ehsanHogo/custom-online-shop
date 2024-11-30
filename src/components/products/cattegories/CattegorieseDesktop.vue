@@ -11,11 +11,11 @@ const categories: string[] = [
 </script>
 
 <template>
-  <div class="flex justify-around">
+  <div class="flex w-full justify-between">
     <button
+      class="text-myGray-9"
       v-for="(cat, index) in categories"
       :key="index"
-      class="text-myGray-9 flex-col mb-5"
     >
       <b class=""> {{ cat }}</b>
     </button>

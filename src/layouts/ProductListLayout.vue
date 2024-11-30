@@ -53,15 +53,26 @@ sortStore.$subscribe((_) => {
   handleStoreUpdate();
 });
 
-watch(pageData.value, () => {
+pageStore.$subscribe((_) => {
   handleStoreUpdate();
 });
+// watch(pageData.value, () => {
+//   handleStoreUpdate();
+// });
 
 const isDesktop = ref(window.innerWidth >= 768);
 
 // Function to check the viewport size
 const checkViewport = () => {
-  isDesktop.value = window.innerWidth >= 768;
+  if (window.innerWidth >= 768) {
+    isDesktop.value = true;
+
+    pageStore.setNumberOfProductsInPage(9);
+  } else {
+    isDesktop.value = false;
+
+    pageStore.setNumberOfProductsInPage(10);
+  }
 };
 
 // Lifecycle hooks
@@ -79,18 +90,18 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="p-3">
+  <div class="md:p-3 flex flex-col items-center">
     <CattegorieseDesktop v-if="isDesktop" class="pt-5"></CattegorieseDesktop>
     <CattegoriesMobile v-else class="pt-5"></CattegoriesMobile>
-    <div class="grid grid-cols-4 p-5 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 p-5 gap-4">
       <div
-        class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"
+        class="col-span-2 md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-3 auto-rows-min justify-center md:justify-start items-center md:items-start"
       >
         <Sort></Sort>
 
         <div
           v-if="productListStore.loading"
-          class="col-span-3 grid grid-cols-3 gap-3"
+          class="col-span-2 md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-3"
         >
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
         </div>
