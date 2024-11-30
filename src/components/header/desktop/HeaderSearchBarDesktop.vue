@@ -23,10 +23,10 @@ const handleSearchInput = (e: Event) => {
     </button>
     <input
       type="text"
-      class="w-[70%] outline-none bg-inherit text-black"
+      placeholder="جستجو"
+      class="w-[70%] outline-none bg-inherit text-black placeholder:text-redp"
       dir="rtl"
       @input="handleSearchInput"
     />
-    <button v-if="!isFocused" class="text-redp"><b>جستجو</b></button>
   </div>
 </template>
