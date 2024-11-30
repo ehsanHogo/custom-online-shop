@@ -23,14 +23,13 @@ const handleSearchInput = (e: Event) => {
     </button>
 
     <div class="flex items-center justify-end w-full relative">
-      <!-- <div v-if="!isFocused" class="flex justify-center items-center"> -->
       <img
         v-if="!isFocused"
         src="../../../assets/images/header/custom-brand-name.png"
         alt="online shop brand"
         class="w-14 h-fit absolute -translate-x-16"
       />
-      <!-- </div> -->
+
       <input
         type="text"
         placeholder="جستجو در "
@@ -39,8 +38,5 @@ const handleSearchInput = (e: Event) => {
         @input="handleSearchInput"
       />
     </div>
-    <!-- <button class="text-redp"> -->
-
-    <!-- </button> -->
   </div>
 </template>

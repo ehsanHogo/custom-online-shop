@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Filter from "../components/products/filter/Filter.vue";
+import Filter from "../components/products/filter/desktop/Filter.vue";
 import ShowCards from "../components/products/cards/ShowCards.vue";
-import { onBeforeMount, watch } from "vue";
+import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 import Sort from "../components/products/Sort.vue";
 import Pagination from "../components/Common/Pagination.vue";
 import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
@@ -14,7 +14,10 @@ import { useProductListStore } from "../store/useProductListStore";
 import { useFindImageUrl } from "../composables/useFindImageUrl";
 import { useInitializeStores } from "../composables/useInitializeStores";
 import { useHandleStoreUpdate } from "../composables/useHandleStoreUpdate";
-
+// import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
+import Cattegories from "../components/products/cattegories/Cattegories.vue";
+import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
+import CattegoriesMobile from "../components/products/cattegories/CattegoriesMobile.vue";
 //store
 
 //sort store
@@ -51,8 +54,23 @@ sortStore.$subscribe((_) => {
 });
 
 watch(pageData.value, () => {
-
   handleStoreUpdate();
+});
+
+const isDesktop = ref(window.innerWidth >= 768);
+
+// Function to check the viewport size
+const checkViewport = () => {
+  isDesktop.value = window.innerWidth >= 768;
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  window.addEventListener("resize", checkViewport);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", checkViewport);
 });
 
 onBeforeMount(() => {
@@ -61,7 +79,9 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="p-5">
+  <div class="p-3">
+    <CattegorieseDesktop v-if="isDesktop" class="pt-5"></CattegorieseDesktop>
+    <CattegoriesMobile v-else class="pt-5"></CattegoriesMobile>
     <div class="grid grid-cols-4 p-5 gap-4">
       <div
         class="col-span-3 grid grid-cols-3 gap-3 auto-rows-min justify-start items-start"

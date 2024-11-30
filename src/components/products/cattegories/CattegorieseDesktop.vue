@@ -15,9 +15,9 @@ const categories: string[] = [
     <button
       v-for="(cat, index) in categories"
       :key="index"
-      class="text-myGray-9"
+      class="text-myGray-9 flex-col mb-5"
     >
-      <b> {{ cat }}</b>
+      <b class=""> {{ cat }}</b>
     </button>
     <button class="bg-redp flex p-2 rounded-sm">
       <p class="text-white">!خودت طراحیش کن</p>

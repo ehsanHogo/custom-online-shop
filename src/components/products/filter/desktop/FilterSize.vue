@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { FilterItemShowing } from "../../../types/interfaces";
-import useFilterStore from "../../../store/useFilterStore";
+import { FilterItemShowing } from "../../../../types/interfaces";
+import useFilterStore from "../../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
 interface MyProps {
   filterSizeData: FilterItemShowing[];

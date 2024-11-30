@@ -3,8 +3,8 @@ import { ref } from "vue";
 import FilterSize from "./FilterSize.vue";
 
 import FilterColor from "./FilterColor.vue";
-import { FilterItemOptions, FilterType } from "../../../types/interfaces";
-import useFilterStore from "../../../store/useFilterStore";
+import { FilterItemOptions, FilterType } from "../../../../types/interfaces";
+import useFilterStore from "../../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
 
 interface MyProps {
@@ -76,7 +76,7 @@ const onExistSwitchChange = () => {
           />
           <img
             v-else
-            src="../../../assets/images/body/products/arrow-down.png"
+            src="../../../../assets/images/body/products/arrow-down.png"
             alt="arrow down"
           />
 
