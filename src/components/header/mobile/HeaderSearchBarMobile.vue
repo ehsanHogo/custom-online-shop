@@ -33,8 +33,8 @@ const handleSearchInput = (e: Event) => {
       <!-- </div> -->
       <input
         type="text"
-        placeholder="جستجو در"
-        class="w-[80%] outline-none bg-inherit text-black placeholder:text-redp"
+        placeholder="جستجو در "
+        class="w-full outline-none bg-inherit text-black placeholder:text-redp"
         dir="rtl"
         @input="handleSearchInput"
       />
