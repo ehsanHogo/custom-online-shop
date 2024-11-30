@@ -70,47 +70,49 @@ cartStore.$subscribe((mutation) => {
 </script>
 
 <template>
-  <div
-    class="max-w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[425px] justify-around"
-  >
-    <img
-      class="rounded-sm h-[200px]"
-      :src="props.imageUrl"
-      alt="product picture"
-    />
-    <div class="flex justify-between">
-      <b>{{ props.name }}</b>
-      <button>
-        <img
-          src="../../../assets/images/body/products/heart.png"
-          alt="heart icon"
-        />
-      </button>
-    </div>
+  <div class="w-full h-full flex justify-center">
+    <div
+      class="w-[250px] md:w-[180px] lg:w-[240px] xl:w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[425px] justify-around"
+    >
+      <img
+        class="rounded-sm h-[200px]"
+        :src="props.imageUrl"
+        alt="product picture"
+      />
+      <div class="flex justify-between">
+        <b>{{ props.name }}</b>
+        <button>
+          <img
+            src="../../../assets/images/body/products/heart.png"
+            alt="heart icon"
+          />
+        </button>
+      </div>
 
-    <p class="truncate ...">
-      {{ extractTextFromString(props.description) }}
-    </p>
-    <b>{{ props.price }} </b>
+      <p class="truncate ...">
+        {{ extractTextFromString(props.description) }}
+      </p>
+      <b>{{ props.price }} </b>
 
-    <div class="flex justify-end">
-      <button
-        v-if="!changeToCounter"
-        @click="addFirstItem"
-        class="bg-redp flex justify-center items-center p-2 w-fit rounded-sm gap-2"
-      >
-        <p class="text-white">افزودن به سبد خرید</p>
+      <div class="flex justify-end">
+        <button
+          v-if="!changeToCounter"
+          @click="addFirstItem"
+          class="bg-redp flex justify-center items-center p-2 w-fit rounded-sm gap-2"
+        >
+          <p class="text-white">افزودن به سبد خرید</p>
 
-        <img
-          src="../../../assets/images/body/shopping cart/shopping-cart.png"
-          alt="shopping cart"
-        />
-      </button>
-      <div dir="rtl">
-        <AddRemoveProduct
-          :productId="props.id"
-          v-if="changeToCounter"
-        ></AddRemoveProduct>
+          <img
+            src="../../../assets/images/body/shopping cart/shopping-cart.png"
+            alt="shopping cart"
+          />
+        </button>
+        <div dir="rtl">
+          <AddRemoveProduct
+            :productId="props.id"
+            v-if="changeToCounter"
+          ></AddRemoveProduct>
+        </div>
       </div>
     </div>
   </div>

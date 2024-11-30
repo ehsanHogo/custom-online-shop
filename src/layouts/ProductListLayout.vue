@@ -93,18 +93,21 @@ onBeforeMount(() => {
   <div class="md:p-3 flex flex-col items-center">
     <CattegorieseDesktop v-if="isDesktop" class="pt-5"></CattegorieseDesktop>
     <CattegoriesMobile v-else class="pt-5"></CattegoriesMobile>
-    <div class="grid grid-cols-2 md:grid-cols-4 p-5 gap-4">
+    <div
+      class="flex flex-col xsm:grid xsm:grid-cols-2 md:grid-cols-4 py-5 px-8 gap-4 w-full"
+    >
       <div
-        class="col-span-2 md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-3 auto-rows-min justify-center md:justify-start items-center md:items-start"
+        class="flex flex-col justify-center w-full xsm:col-span-2 xsm:grid-cols-2 xsm:gap-5 xsm:auto-rows-min xsm:justify-center xsm:grid md:col-span-3 md:grid-cols-3 md:gap-3 md:justify-start items-center md:items-start"
       >
         <Sort></Sort>
 
         <div
           v-if="productListStore.loading"
-          class="col-span-2 md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-3"
+          class="xsm:col-span-2 xsm:grid xsm:grid-cols-2 xsm:gap-6 xsm:w-full md:col-span-3 md:grid-cols-3 md:gap-3"
         >
           <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
         </div>
+
         <ShowCards
           v-if="!productListStore.loading"
           v-for="(item, index) in productListStore.showData"

@@ -36,7 +36,7 @@ const changeItem = (index: number) => {
 
 <template>
   <div
-    class="justify-start flex gap-5 col-span-2 md:col-span-3 mb-3 items-start h-min"
+    class="justify-start flex gap-5 xsm:col-span-2 md:col-span-3 mb-3 items-start h-min"
     dir="rtl"
   >
     <button

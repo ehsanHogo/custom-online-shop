@@ -81,7 +81,9 @@ const slicePages = computed<number[]>(() => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center gap-5 col-span-2 md:col-span-3">
+  <div
+    class="flex justify-center items-center gap-5 xsm:col-span-2 md:col-span-3"
+  >
     <button @click="nextPage">
       <img
         src="../../assets/images/body/products/arrow-left.png"
