@@ -39,6 +39,10 @@ export default {
         primaryShade6: "#641C23",
         // white: "#fff",
       },
+
+      screens: {
+        md: "820px",
+      },
     },
   },
   plugins: [],

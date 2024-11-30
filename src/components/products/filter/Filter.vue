@@ -78,7 +78,7 @@ const onExistSwitchChange = () => {
             alt="arrow down"
           />
 
-          <p>{{ filterButton.name }}</p>
+          <p class="">{{ filterButton.name }}</p>
         </button>
         <FilterSize
           :filterSizeData="props.filterData[1].option_values"
