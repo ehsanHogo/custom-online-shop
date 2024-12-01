@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Filter from "../components/products/filter/desktop/Filter.vue";
+import Filter from "../components/products/filter/desktop/FilterDesktop.vue";
 import ShowCards from "../components/products/cards/ShowCards.vue";
 import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 import Sort from "../components/products/Sort.vue";
@@ -21,6 +21,8 @@ import CattegoriesMobile from "../components/products/cattegories/CattegoriesMob
 import SortDesktop from "../components/products/sort/SortDesktop.vue";
 import SortMobile from "../components/products/sort/SortMobile.vue";
 import { useModalStore } from "../store/useModalsStore";
+import FilterDesktop from "../components/products/filter/desktop/FilterDesktop.vue";
+import FiltterMobile from "../components/products/filter/mobile/FiltterMobile.vue";
 //store
 
 //sort store
@@ -107,13 +109,18 @@ onBeforeMount(() => {
         <SortDesktop v-if="isDesktop"></SortDesktop>
 
         <div class="flex gap-4 col-span-2 max-xsm:mb-3" dir="rtl" v-else>
-          <button class="flex gap-1 justify-center items-center">
+          <button
+            @click="() => modalsStore.toggleFilterModal()"
+            class="flex gap-1 justify-center items-center"
+          >
             <img
               src="../assets/images/body/products/setting.png"
               alt="filter icon"
             />
             <p>فیلتر</p>
           </button>
+
+          <FiltterMobile :filterData="filterStore.filtersType"></FiltterMobile>
 
           <button
             @click="() => modalsStore.toggleSortModal()"
@@ -149,7 +156,10 @@ onBeforeMount(() => {
         <Pagination></Pagination>
       </div>
 
-      <Filter :filterData="filterStore.filtersType"></Filter>
+      <FilterDesktop
+        v-if="isDesktop"
+        :filterData="filterStore.filtersType"
+      ></FilterDesktop>
     </div>
   </div>
 </template>
