@@ -18,6 +18,9 @@ import { useHandleStoreUpdate } from "../composables/useHandleStoreUpdate";
 import Cattegories from "../components/products/cattegories/Cattegories.vue";
 import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
 import CattegoriesMobile from "../components/products/cattegories/CattegoriesMobile.vue";
+import SortDesktop from "../components/products/sort/SortDesktop.vue";
+import SortMobile from "../components/products/sort/SortMobile.vue";
+import { useModalStore } from "../store/useModalsStore";
 //store
 
 //sort store
@@ -75,6 +78,8 @@ const checkViewport = () => {
   }
 };
 
+const modalsStore = useModalStore();
+
 // Lifecycle hooks
 onMounted(() => {
   window.addEventListener("resize", checkViewport);
@@ -99,7 +104,29 @@ onBeforeMount(() => {
       <div
         class="flex flex-col justify-center w-full xsm:col-span-2 xsm:grid-cols-2 xsm:gap-5 xsm:auto-rows-min xsm:justify-center xsm:grid md:col-span-3 md:grid-cols-3 md:gap-3 md:justify-start items-center md:items-start"
       >
-        <Sort></Sort>
+        <SortDesktop v-if="isDesktop"></SortDesktop>
+
+        <div class="flex gap-4 col-span-2" dir="rtl" v-else>
+          <button class="flex gap-1 justify-center items-center">
+            <img
+              src="../assets/images/body/products/setting.png"
+              alt="filter icon"
+            />
+            <p>فیلتر</p>
+          </button>
+
+          <button
+            @click="() => modalsStore.toggleSortModal()"
+            class="flex gap-1 justify-center items-center"
+          >
+            <img
+              src="../assets/images/body/products/sort.png"
+              alt="sort icon"
+            />
+            <p>{{ modalsStore.selectedSort }}</p>
+          </button>
+          <SortMobile></SortMobile>
+        </div>
 
         <div
           v-if="productListStore.loading"
