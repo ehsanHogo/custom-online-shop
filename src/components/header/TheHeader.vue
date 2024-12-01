@@ -38,7 +38,9 @@ onUnmounted(() => {
   </div>
 
   <div v-else class="flex p-10 justify-between gap-5 items-center">
-    <img src="../../assets/images/header/LOGO.png" alt="online shop logo" />
+    <router-link :to="{ name: 'products' }">
+      <img src="../../assets/images/header/LOGO.png" alt="online shop logo"
+    /></router-link>
     <HeaderSearchBarMobile></HeaderSearchBarMobile>
     <HeaderMenuMobile></HeaderMenuMobile>
   </div>

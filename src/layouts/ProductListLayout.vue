@@ -106,7 +106,7 @@ onBeforeMount(() => {
       >
         <SortDesktop v-if="isDesktop"></SortDesktop>
 
-        <div class="flex gap-4 col-span-2" dir="rtl" v-else>
+        <div class="flex gap-4 col-span-2 max-xsm:mb-3" dir="rtl" v-else>
           <button class="flex gap-1 justify-center items-center">
             <img
               src="../assets/images/body/products/setting.png"
