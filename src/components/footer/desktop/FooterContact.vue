@@ -1,25 +1,29 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SocialMediaLinks from "../SocialMediaLinks.vue";
+</script>
 <template>
   <div class="flex bg-primaryShade6 w-full h-36 justify-around">
     <div class="flex flex-col justify-center gap-4">
       <p class="text-white">ما را در شبکه های اجتماعی دنبال کنید</p>
-      <div class="flex justify-center items-center gap-3">
+
+      <SocialMediaLinks></SocialMediaLinks>
+      <!-- <div class="flex justify-center items-center gap-3">
         <button>
-          <img src="../../assets/images/footer/facebook.png" alt="facebook icon" />
+          <img src="../../../assets/images/footer/facebook.png" alt="facebook icon" />
         </button>
         <button>
-          <img src="../../assets/images/footer/pintrest.png" alt="pintrest icon" />
+          <img src="../../../assets/images/footer/pintrest.png" alt="pintrest icon" />
         </button>
         <button>
           <img
-            src="../../assets/images/footer/Instagram svg.png"
+            src="../../../assets/images/footer/Instagram svg.png"
             alt="instagram icon"
           />
         </button>
         <button>
-          <img src="../../assets/images/footer/YouTube svg.png" alt="youtube icon" />
+          <img src="../../../assets/images/footer/YouTube svg.png" alt="youtube icon" />
         </button>
-      </div>
+      </div> -->
     </div>
     <div class="flex flex-col justify-center items-center gap-4">
       <p class="text-white">

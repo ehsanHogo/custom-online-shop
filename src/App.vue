@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import Header from "./components/header/TheHeader.vue";
-import Footer from "./components/footer/TheFooter.vue";
 
-import Cattegories from "./components/products/filter/desktop/CattegorieseDesktop.vue";
-import CattegorieseDesktop from "./components/products/cattegories/CattegorieseDesktop.vue";
+import TheFooterDesktop from "./components/footer/desktop/FooterDesktop.vue";
+import FooterWrapper from "./components/footer/FooterWrapper.vue";
 </script>
 
 <template>
@@ -11,7 +10,7 @@ import CattegorieseDesktop from "./components/products/cattegories/CattegorieseD
     <Header></Header>
     <!-- <CattegorieseDesktop class="pt-5"></CattegorieseDesktop> -->
     <router-view />
-    <Footer></Footer>
+    <FooterWrapper></FooterWrapper>
   </div>
 </template>
 
