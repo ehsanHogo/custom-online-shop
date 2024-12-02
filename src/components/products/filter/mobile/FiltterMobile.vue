@@ -55,8 +55,8 @@ const modalsStore = useModalStore();
   <VaModal
     ref="modal"
     v-model="modalsStore.filterModal"
-    fullscreen
     hide-default-actions
+    size="large"
     :noDismiss="true"
   >
     <div

@@ -33,7 +33,7 @@ const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
   modalsStore.setSelectedSort(sortItems[index].name);
   sortStore.updateSortField(sortItems[index].sortName);
-  modalsStore.toggleSortModal();    
+  modalsStore.toggleSortModal();
 };
 
 const modalsStore = useModalStore();
@@ -45,21 +45,22 @@ const modalsStore = useModalStore();
   <VaModal
     ref="modal"
     v-model="modalsStore.sortModal"
-    fullscreen
+    size="large"
     hide-default-actions
     :noDismiss="true"
+    blur
   >
     <div
       class="items-between flex flex-col col-span-2 font-MyFont mt-3"
       dir="rtl"
     >
       <div class="flex gap-3 mb-2 justify-start items-center">
-        <!-- <button @click="() => modalsStore.toggleSortModal()">
+        <button @click="() => modalsStore.toggleSortModal()">
           <img
             src="../../../assets/images/body/products/close-circle.png"
             alt="close icon"
           />
-        </button> -->
+        </button>
         <p>مرتب سازی براساس</p>
       </div>
       <button

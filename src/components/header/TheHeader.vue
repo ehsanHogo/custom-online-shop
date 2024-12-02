@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import HeaderUserAccount from "./desktop/HeaderUserAccountDesktop.vue";
-import HeaderSearchBar from "./desktop/HeaderSearchBarDesktop.vue";
-import HeaderShopBrand from "./desktop/HeaderShopBrandDesktop.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import HeaderMenuMobile from "./mobile/HeaderMenuMobile.vue";
 import HeaderShopBrandDesktop from "./desktop/HeaderShopBrandDesktop.vue";
@@ -37,7 +34,7 @@ onUnmounted(() => {
     <!-- <HeaderOption></HeaderOption> -->
   </div>
 
-  <div v-else class="flex p-10 justify-between gap-5 items-center">
+  <div v-else class="flex py-4 px-10 justify-between gap-5 items-center">
     <router-link :to="{ name: 'products' }">
       <img src="../../assets/images/header/LOGO.png" alt="online shop logo"
     /></router-link>
