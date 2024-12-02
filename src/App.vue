@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import Header from "./components/header/TheHeader.vue";
 
-import TheFooterDesktop from "./components/footer/desktop/FooterDesktop.vue";
 import FooterWrapper from "./components/footer/FooterWrapper.vue";
+import HeaderWrapper from "./components/header/HeaderWrapper.vue";
 </script>
 
 <template>
   <div class="font-MyFont">
-    <Header></Header>
+    <HeaderWrapper></HeaderWrapper>
     <!-- <CattegorieseDesktop class="pt-5"></CattegorieseDesktop> -->
     <router-view />
     <FooterWrapper></FooterWrapper>

@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import Filter from "../components/products/filter/desktop/FilterDesktop.vue";
 import ShowCards from "../components/products/cards/ShowCards.vue";
-import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
-import Sort from "../components/products/Sort.vue";
+import { onBeforeMount, onMounted, onUnmounted, ref } from "vue";
 import Pagination from "../components/Common/Pagination.vue";
 import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
 
 import useSortStore from "../store/useSortStore";
-import { storeToRefs } from "pinia";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
 import { useProductListStore } from "../store/useProductListStore";
 import { useFindImageUrl } from "../composables/useFindImageUrl";
 import { useInitializeStores } from "../composables/useInitializeStores";
 import { useHandleStoreUpdate } from "../composables/useHandleStoreUpdate";
-// import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
-import Cattegories from "../components/products/cattegories/Cattegories.vue";
+
 import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
 import CattegoriesMobile from "../components/products/cattegories/CattegoriesMobile.vue";
 import SortDesktop from "../components/products/sort/SortDesktop.vue";
@@ -33,7 +29,7 @@ const filterStore = useFilterStore();
 
 //page store
 const pageStore = usePageStore();
-const { pageData } = storeToRefs(pageStore);
+// const { pageData } = storeToRefs(pageStore);
 // product list store
 const productListStore = useProductListStore();
 ///******* */
