@@ -99,7 +99,7 @@ onBeforeMount(() => {
 <template>
   <div class="md:p-3 flex flex-col items-center">
     <CattegorieseDesktop v-if="isDesktop" class="pt-5"></CattegorieseDesktop>
-    <CattegoriesMobile v-else class="pt-5"></CattegoriesMobile>
+    <CattegoriesMobile class="pt-5"></CattegoriesMobile>
     <div
       class="flex flex-col xsm:grid xsm:grid-cols-2 md:grid-cols-4 py-5 px-8 gap-4 w-full"
     >
