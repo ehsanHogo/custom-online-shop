@@ -17,8 +17,16 @@ const handleDelete = (id: string) => {
 
 <template>
   <div class="col-span-2 p-5" dir="rtl">
-    <div class="border-b border-b-myGray-4 pb-4">
-      <b class="text-myGray-9 mr-10">سبد خرید</b>
+    <div
+      class="border-b border-b-myGray-4 pb-4 flex justify-start items-center gap-3"
+    >
+      <router-link :to="{ name: 'products' }">
+        <img
+          src="../../../assets/images/body/black-arrow-right.png"
+          alt="back icon"
+        />
+      </router-link>
+      <b class="text-myGray-9">سبد خرید</b>
     </div>
 
     <div class="">

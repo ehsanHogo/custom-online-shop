@@ -71,7 +71,7 @@ const modalsStore = useModalStore();
 
           <button @click="() => modalsStore.toggleFilterModal()">
             <img
-              src="../../../../assets/images/body/products/black-arrow-right.png"
+              src="../../../../assets/images/body/black-arrow-right.png"
               alt=""
             />
           </button>
