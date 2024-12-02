@@ -9,7 +9,7 @@ import { useModalStore } from "../store/useModalsStore";
 import { onMounted, onUnmounted, ref } from "vue";
 import usePageStore from "../store/usePageData";
 import ShoppingProductDesktop from "../components/shoppingCart/desktop/ShoppingProductDesktop.vue";
-import ShoppingProductMobile from "../components/shoppingCart/desktop/ShoppingProductMobile.vue";
+import ShoppingProductMobile from "../components/shoppingCart/mobile/ShoppingProductMobile.vue";
 
 const pageStore = usePageStore();
 const isDesktop = ref(window.innerWidth >= 768);

@@ -4,21 +4,30 @@ import FooterWrapper from "./components/footer/FooterWrapper.vue";
 import HeaderWrapper from "./components/header/HeaderWrapper.vue";
 import usePageStore from "./store/usePageData";
 import { useRoute } from "vue-router";
+import useScreenStore from "./store/useScreenStore";
 
 const route = useRoute();
 const pageStore = usePageStore();
+
+const screenStore = useScreenStore();
 const isDesktop = ref(window.innerWidth >= 768);
 const showHeader = ref(true);
 // Function to check the viewport size
 const checkViewport = () => {
   if (window.innerWidth >= 768) {
-    isDesktop.value = true;
-
+    screenStore.setIsDesktop(true);
+    showHeader.value = true;
     pageStore.setNumberOfProductsInPage(9);
   } else {
-    isDesktop.value = false;
+    screenStore.setIsDesktop(false);
 
     pageStore.setNumberOfProductsInPage(10);
+
+    if (route.name === "shopping-cart") {
+      showHeader.value = false;
+    } else {
+      showHeader.value = true;
+    }
   }
 };
 
@@ -32,7 +41,7 @@ onMounted(() => {
 watch(route, (newVal) => {
   // console.log(newVal.name);
   // console.log(isDesktop);
-  if (newVal.name === "shopping-cart" && !isDesktop.value) {
+  if (newVal.name === "shopping-cart" && !screenStore.isDestop) {
     showHeader.value = false;
     console.log("dhfkjasdhfkasdhk");
   } else {
