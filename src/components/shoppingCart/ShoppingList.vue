@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import ShoppingProduct from "./ShoppingProduct.vue";
+import ShoppingProduct from "./desktop/ShoppingProductDesktop.vue";
 import useCartStore from "../../store/useCartStore";
 import { storeToRefs } from "pinia";
+import ShoppingProductDesktop from "./desktop/ShoppingProductDesktop.vue";
 
 //store
 const cartStore = useCartStore();
@@ -16,13 +17,13 @@ const { products } = storeToRefs(cartStore);
     <div class="">
       <ul v-if="products.length !== 0">
         <li v-for="item in products" :key="item.id">
-          <ShoppingProduct
+          <ShoppingProductDesktop
             :name="item.name"
             :price="item.price"
             :image="item.image"
             :count="item.count"
             :id="item.id"
-          ></ShoppingProduct>
+          ></ShoppingProductDesktop>
         </li>
       </ul>
     </div>
