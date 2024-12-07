@@ -40,13 +40,6 @@ const { initializeStores } = useInitializeStores();
 const { handleStoreUpdate } = useHandleStoreUpdate();
 // subscribe & watch
 
-// watch(
-//   () => filterStore.allFilter,
-//   () => {
-//     handleStoreUpdate();
-//   }
-// );
-
 watch(
   () => filterStore.allFilter,
   () => {
@@ -54,23 +47,6 @@ watch(
   },
   { deep: true }
 );
-
-// filterStore.$subscribe((mutation, _) => {
-//   console.log(mutation);
-
-//   const isKeyFiltered = Array.isArray(mutation.events)
-//     ? mutation.events.some(
-//         (event) =>
-//           event.key !== "filtersType" && event.key !== "selectedFilters"
-//       )
-//     : mutation.events.key !== "filtersType" &&
-//       mutation.events.key !== "selectedFilters";
-//   console.log(isKeyFiltered);
-
-//   if (isKeyFiltered) {
-//     handleStoreUpdate();
-//   }
-// });
 
 sortStore.$subscribe((_) => {
   handleStoreUpdate();
@@ -93,7 +69,7 @@ onBeforeMount(() => {
       v-if="screenStore.isDesktop"
       class="pt-5"
     ></CattegorieseDesktop>
-    <!-- <CattegoriesMobile class="pt-5"></CattegoriesMobile> -->
+
     <div
       class="flex flex-col xsm:grid xsm:grid-cols-2 md:grid-cols-4 py-5 px-8 gap-4 w-full"
     >
@@ -103,29 +79,8 @@ onBeforeMount(() => {
         <SortDesktop v-if="screenStore.isDesktop"></SortDesktop>
 
         <div class="flex gap-4 col-span-2 max-xsm:mb-3" dir="rtl" v-else>
-          <!-- <button
-            @click="() => modalsStore.toggleFilterModal()"
-            class="flex gap-1 justify-center items-center"
-          >
-            <img
-              src="../assets/images/body/products/setting.png"
-              alt="filter icon"
-            />
-            <p>فیلتر</p>
-          </button> -->
-
           <FiltterMobile :filterData="filterStore.filtersType"></FiltterMobile>
 
-          <!-- <button
-            @click="() => modalsStore.toggleSortModal()"
-            class="flex gap-1 justify-center items-center"
-          >
-            <img
-              src="../assets/images/body/products/sort.png"
-              alt="sort icon"
-            />
-            <p>{{ sortStore.sortName }}</p>
-          </button> -->
           <SortMobile></SortMobile>
         </div>
 

@@ -7,23 +7,7 @@ import SocialMediaLinks from "../SocialMediaLinks.vue";
       <p class="text-white">ما را در شبکه های اجتماعی دنبال کنید</p>
 
       <SocialMediaLinks></SocialMediaLinks>
-      <!-- <div class="flex justify-center items-center gap-3">
-        <button>
-          <img src="../../../assets/images/footer/facebook.png" alt="facebook icon" />
-        </button>
-        <button>
-          <img src="../../../assets/images/footer/pintrest.png" alt="pintrest icon" />
-        </button>
-        <button>
-          <img
-            src="../../../assets/images/footer/Instagram svg.png"
-            alt="instagram icon"
-          />
-        </button>
-        <button>
-          <img src="../../../assets/images/footer/YouTube svg.png" alt="youtube icon" />
-        </button>
-      </div> -->
+ 
     </div>
     <div class="flex flex-col justify-center items-center gap-4">
       <p class="text-white">

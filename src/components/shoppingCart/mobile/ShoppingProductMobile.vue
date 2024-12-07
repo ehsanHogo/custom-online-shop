@@ -3,8 +3,7 @@ import AddRemoveProduct from "../../Common/AddRemoveProduct.vue";
 import { ShoppingProductType } from "../../../types/interfaces";
 import useCartStore from "../../../store/useCartStore";
 import { storeToRefs } from "pinia";
-
-// const props = defineProps<ShoppingProductType>();
+import { useRouter } from "vue-router";
 
 //store
 const cartStore = useCartStore();
@@ -13,6 +12,12 @@ const { products } = storeToRefs(cartStore);
 const handleDelete = (id: string) => {
   cartStore.updateProductsById(id, 0);
 };
+
+const router = useRouter();
+
+const goBack = () => {
+  router.go(-1);
+};
 </script>
 
 <template>
@@ -20,12 +25,12 @@ const handleDelete = (id: string) => {
     <div
       class="border-b border-b-myGray-4 pb-4 flex justify-start items-center gap-3"
     >
-      <router-link :to="{ name: 'products' }">
+      <button @click="goBack">
         <img
           src="../../../assets/images/body/black-arrow-right.png"
           alt="back icon"
         />
-      </router-link>
+      </button>
       <b class="text-myGray-9">سبد خرید</b>
     </div>
 
@@ -61,8 +66,6 @@ const handleDelete = (id: string) => {
                   <b>{{ item.price }} </b>
                 </div>
               </div>
-
-              <!-- <div></div> -->
             </div>
 
             <div class="flex justify-start gap-3 mt-3">
