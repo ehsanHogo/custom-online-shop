@@ -10,9 +10,9 @@ const route = useRoute();
 const pageStore = usePageStore();
 
 const screenStore = useScreenStore();
-const isDesktop = ref(window.innerWidth >= 768);
+
 const showHeader = ref(true);
-// Function to check the viewport size
+
 const checkViewport = () => {
   if (window.innerWidth >= 768) {
     screenStore.setIsDesktop(true);
@@ -31,23 +31,18 @@ const checkViewport = () => {
   }
 };
 
-// const modalsStore = useModalStore();
-
 // Lifecycle hooks
 onMounted(() => {
+  checkViewport();
   window.addEventListener("resize", checkViewport);
 });
 
 watch(route, (newVal) => {
-  // console.log(newVal.name);
-  // console.log(isDesktop);
-  if (newVal.name === "shopping-cart" && !screenStore.isDestop) {
+  if (newVal.name === "shopping-cart" && !screenStore.isDesktop) {
     showHeader.value = false;
-    console.log("dhfkjasdhfkasdhk");
   } else {
     showHeader.value = true;
   }
-  // console.log(newVal.name);
 });
 
 onUnmounted(() => {
@@ -58,7 +53,6 @@ onUnmounted(() => {
 <template>
   <div class="font-MyFont">
     <HeaderWrapper v-if="showHeader"></HeaderWrapper>
-    <!-- <CattegorieseDesktop class="pt-5"></CattegorieseDesktop> -->
     <router-view />
     <FooterWrapper></FooterWrapper>
   </div>

@@ -2,12 +2,12 @@ import { defineStore } from "pinia";
 
 const useScreenStore = defineStore("screen", {
   state: () => ({
-    isDestop: false as boolean,
+    isDesktop: false as boolean,
   }),
 
   actions: {
     setIsDesktop(val: boolean) {
-      this.isDestop = val;
+      this.isDesktop = val;
     },
   },
 });

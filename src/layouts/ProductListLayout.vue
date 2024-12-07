@@ -19,6 +19,7 @@ import SortMobile from "../components/products/sort/SortMobile.vue";
 import { useModalStore } from "../store/useModalsStore";
 import FilterDesktop from "../components/products/filter/desktop/FilterDesktop.vue";
 import FiltterMobile from "../components/products/filter/mobile/FiltterMobile.vue";
+import useScreenStore from "../store/useScreenStore";
 //store
 
 //sort store
@@ -29,8 +30,7 @@ const filterStore = useFilterStore();
 
 //page store
 const pageStore = usePageStore();
-// const { pageData } = storeToRefs(pageStore);
-// product list store
+
 const productListStore = useProductListStore();
 ///******* */
 // composables
@@ -57,35 +57,9 @@ sortStore.$subscribe((_) => {
 pageStore.$subscribe((_) => {
   handleStoreUpdate();
 });
-// watch(pageData.value, () => {
-//   handleStoreUpdate();
-// });
-
-const isDesktop = ref(window.innerWidth >= 768);
-
-// Function to check the viewport size
-const checkViewport = () => {
-  if (window.innerWidth >= 768) {
-    isDesktop.value = true;
-
-    pageStore.setNumberOfProductsInPage(9);
-  } else {
-    isDesktop.value = false;
-
-    pageStore.setNumberOfProductsInPage(10);
-  }
-};
 
 const modalsStore = useModalStore();
-
-// Lifecycle hooks
-onMounted(() => {
-  window.addEventListener("resize", checkViewport);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkViewport);
-});
+const screenStore = useScreenStore();
 
 onBeforeMount(() => {
   initializeStores();
@@ -94,7 +68,10 @@ onBeforeMount(() => {
 
 <template>
   <div class="md:p-3 flex flex-col items-center">
-    <CattegorieseDesktop v-if="isDesktop" class="pt-5"></CattegorieseDesktop>
+    <CattegorieseDesktop
+      v-if="screenStore.isDesktop"
+      class="pt-5"
+    ></CattegorieseDesktop>
     <CattegoriesMobile class="pt-5"></CattegoriesMobile>
     <div
       class="flex flex-col xsm:grid xsm:grid-cols-2 md:grid-cols-4 py-5 px-8 gap-4 w-full"
@@ -102,7 +79,7 @@ onBeforeMount(() => {
       <div
         class="flex flex-col justify-center w-full xsm:col-span-2 xsm:grid-cols-2 xsm:gap-5 xsm:auto-rows-min xsm:justify-center xsm:grid md:col-span-3 md:grid-cols-3 md:gap-3 md:justify-start items-center md:items-start"
       >
-        <SortDesktop v-if="isDesktop"></SortDesktop>
+        <SortDesktop v-if="screenStore.isDesktop"></SortDesktop>
 
         <div class="flex gap-4 col-span-2 max-xsm:mb-3" dir="rtl" v-else>
           <button
@@ -153,7 +130,7 @@ onBeforeMount(() => {
       </div>
 
       <FilterDesktop
-        v-if="isDesktop"
+        v-if="screenStore.isDesktop"
         :filterData="filterStore.filtersType"
       ></FilterDesktop>
     </div>
