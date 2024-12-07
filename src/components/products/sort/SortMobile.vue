@@ -5,7 +5,6 @@ import { SortType } from "../../../types/interfaces";
 import useSortStore from "../../../store/useSortStore";
 import { storeToRefs } from "pinia";
 
-
 interface SortItems {
   name: string;
   sortName: SortType;
@@ -31,7 +30,7 @@ const selectedSortItem = ref(
 
 const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
-  // modalsStore.setSelectedSort(sortItems[index].name);
+
   sortStore.updateSortName(sortItems[index].name);
 
   sortStore.updateSortField(sortItems[index].sortName);
@@ -39,7 +38,6 @@ const changeItem = (index: number) => {
 };
 
 const showModal = ref(false);
-// const  cattegoriesShow = storeToRefs(modalsStore.)
 
 const toggleModal = () => {
   showModal.value = !showModal.value;

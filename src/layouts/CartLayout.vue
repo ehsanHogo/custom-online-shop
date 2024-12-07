@@ -8,8 +8,6 @@ import ShoppingProductMobile from "../components/shoppingCart/mobile/ShoppingPro
 import useScreenStore from "../store/useScreenStore";
 
 const screenStore = useScreenStore();
-
-
 </script>
 
 <template>
@@ -30,8 +28,7 @@ const screenStore = useScreenStore();
         <ShoppingRegistration></ShoppingRegistration>
         <ShopppingAlerts></ShopppingAlerts>
       </div>
-      <!-- <ShoppingList></ShoppingList>
-        -->
+
       <ShoppingProductDesktop
         v-if="screenStore.isDesktop"
       ></ShoppingProductDesktop>

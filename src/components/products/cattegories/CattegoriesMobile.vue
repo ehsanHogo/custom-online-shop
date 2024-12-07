@@ -21,7 +21,7 @@ const helpList: string[] = [
 
 
 const showModal = ref(false);
-// const  cattegoriesShow = storeToRefs(modalsStore.)
+
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
@@ -67,9 +67,3 @@ const toggleModal = () => {
   </VaModal>
 </template>
 
-<!-- 
-<VaButton
-@click="$refs.modal.show()"
->
-Show modal
-</VaButton> -->

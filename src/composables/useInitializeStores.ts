@@ -39,12 +39,12 @@ export function useInitializeStores() {
       filterSortObj.onlyExist =
         (filterSortObj.onlyExist as unknown) === "false" ? false : true;
 
-      //   allFilter.value.filters = filterSortObj.filters;
+  
       filterStore.setAllFilter({
         filters: filterSortObj.filters,
         onlyExist: filterSortObj.onlyExist,
       });
-      //   allFilter.value.onlyExist = filterSortObj.onlyExist;
+
 
       sortStore.updateSortField(filterSortObj.sortField as SortType);
     } else {
