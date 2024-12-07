@@ -103,7 +103,7 @@ onBeforeMount(() => {
               src="../assets/images/body/products/sort.png"
               alt="sort icon"
             />
-            <p>{{ modalsStore.selectedSort }}</p>
+            <p>{{ sortStore.sortName }}</p>
           </button>
           <SortMobile></SortMobile>
         </div>

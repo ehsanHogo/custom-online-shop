@@ -6,7 +6,6 @@ export const useModalStore = defineStore("modals", {
     cattegoriesModal: false,
     sortModal: false,
     filterModal: false,
-    selectedSort: "پرفروش ترین" as string,
   }),
 
   actions: {
@@ -16,9 +15,7 @@ export const useModalStore = defineStore("modals", {
     toggleSortModal() {
       this.sortModal = !this.sortModal;
     },
-    setSelectedSort(val: string) {
-      this.selectedSort = val;
-    },
+
     toggleFilterModal() {
       this.filterModal = !this.filterModal;
     },

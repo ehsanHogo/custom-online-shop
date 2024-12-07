@@ -11,7 +11,7 @@ import SelectedCart from "../../../assets/images/footer/cart-selected.png";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
-const selected = ref("user");
+const selected = ref("home");
 
 const menuItems = [
   {

@@ -31,7 +31,9 @@ const selectedSortItem = ref(
 
 const changeItem = (index: number) => {
   selectedSortItem.value = index + 1;
-  modalsStore.setSelectedSort(sortItems[index].name);
+  // modalsStore.setSelectedSort(sortItems[index].name);
+  sortStore.updateSortName(sortItems[index].name);
+
   sortStore.updateSortField(sortItems[index].sortName);
   modalsStore.toggleSortModal();
 };
