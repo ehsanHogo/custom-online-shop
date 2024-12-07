@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { SortType } from "../../../types/interfaces";
 
 import useSortStore from "../../../store/useSortStore";
@@ -42,6 +42,15 @@ const showModal = ref(false);
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };
+
+onMounted(() => {
+  if (sortStore.sortField !== "none") {
+    sortStore.updateSortName(
+      sortItems.find((item) => item.sortName === sortStore.sortField)?.name ||
+        "پرفروش ترین"
+    );
+  }
+});
 </script>
 
 <template>

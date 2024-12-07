@@ -11,7 +11,7 @@ const categories: string[] = [
 </script>
 
 <template>
-  <div class="flex w-full justify-between">
+  <div class="flex w-full justify-between px-5">
     <button
       class="text-myGray-9"
       v-for="(cat, index) in categories"

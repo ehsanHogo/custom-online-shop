@@ -4,13 +4,25 @@ import { FiltersQueryType, SortType } from "../types/interfaces";
 import useFilterStore from "../store/useFilterStore";
 import usePageStore from "../store/usePageData";
 import useSortStore from "../store/useSortStore";
-
 export function useInitializeStores() {
   const route = useRoute();
   const filterStore = useFilterStore();
   const pageStore = usePageStore();
   const sortStore = useSortStore();
+  interface SortItems {
+    name: string;
+    sortName: SortType;
+  }
+  
 
+  const sortItems: SortItems[] = [
+    { name: "پرفروش ترین", sortName: "none" },
+    { name: "جدیدترین", sortName: "new-created" },
+    { name: "گران ترین", sortName: "price-expensive" },
+    { name: "ارزان ترین", sortName: "price-cheap" },
+  ];
+
+  
   const initializeStores = () => {
     const query = qs.parse(route.query as unknown as string);
 
@@ -47,6 +59,7 @@ export function useInitializeStores() {
 
 
       sortStore.updateSortField(filterSortObj.sortField as SortType);
+      
     } else {
       filterStore.$reset();
       sortStore.$reset();

@@ -87,7 +87,16 @@ onBeforeMount(() => {
           v-if="productListStore.loading"
           class="xsm:col-span-2 xsm:grid xsm:grid-cols-2 xsm:gap-6 xsm:w-full md:col-span-3 md:grid-cols-3 md:gap-3"
         >
-          <CardSkeleton v-for="item in new Array(9)" :key="item"></CardSkeleton>
+          <CardSkeleton
+            v-if="screenStore.isDesktop"
+            v-for="item in new Array(9)"
+            :key="item"
+          ></CardSkeleton>
+          <CardSkeleton
+            v-if="!screenStore.isDesktop"
+            v-for="item in new Array(10)"
+            :key="item"
+          ></CardSkeleton>
         </div>
 
         <ShowCards
