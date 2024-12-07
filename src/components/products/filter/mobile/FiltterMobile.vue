@@ -49,6 +49,11 @@ const onExistSwitchChange = () => {
 };
 
 const modalsStore = useModalStore();
+
+const handleCloseFilter = () => {
+  modalsStore.toggleFilterModal();
+  return { name: "products" };
+};
 </script>
 
 <template>
@@ -69,12 +74,12 @@ const modalsStore = useModalStore();
         <div class="flex justify-center items-center pr-5">
           <b class="p-5">فیلتر ها</b>
 
-          <button @click="() => modalsStore.toggleFilterModal()">
+          <router-link :to="handleCloseFilter">
             <img
               src="../../../../assets/images/body/black-arrow-right.png"
               alt=""
             />
-          </button>
+          </router-link>
         </div>
       </div>
 
