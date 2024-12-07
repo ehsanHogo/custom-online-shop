@@ -15,7 +15,7 @@ import { useHandleStoreUpdate } from "../composables/useHandleStoreUpdate";
 import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
 import SortDesktop from "../components/products/sort/SortDesktop.vue";
 import SortMobile from "../components/products/sort/SortMobile.vue";
-// import { useModalStore } from "../store/useModalsStore";
+
 import FilterDesktop from "../components/products/filter/desktop/FilterDesktop.vue";
 import FiltterMobile from "../components/products/filter/mobile/FiltterMobile.vue";
 import useScreenStore from "../store/useScreenStore";
@@ -31,6 +31,8 @@ const filterStore = useFilterStore();
 const pageStore = usePageStore();
 
 const productListStore = useProductListStore();
+//screen store
+const screenStore = useScreenStore();
 ///******* */
 // composables
 
@@ -54,8 +56,6 @@ sortStore.$subscribe((_) => {
 pageStore.$subscribe((_) => {
   handleStoreUpdate();
 });
-
-const screenStore = useScreenStore();
 
 onBeforeMount(() => {
   initializeStores();

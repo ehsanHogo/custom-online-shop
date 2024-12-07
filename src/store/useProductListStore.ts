@@ -9,7 +9,7 @@ export const useProductListStore = defineStore("productList", {
     loading: false as Boolean,
   }),
 
-  // Getters (optional)
+  // Getters
   getters: {
     totalProducts(state) {
       return state.showData.length;

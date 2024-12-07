@@ -9,20 +9,7 @@ export function useInitializeStores() {
   const filterStore = useFilterStore();
   const pageStore = usePageStore();
   const sortStore = useSortStore();
-  interface SortItems {
-    name: string;
-    sortName: SortType;
-  }
-  
 
-  const sortItems: SortItems[] = [
-    { name: "پرفروش ترین", sortName: "none" },
-    { name: "جدیدترین", sortName: "new-created" },
-    { name: "گران ترین", sortName: "price-expensive" },
-    { name: "ارزان ترین", sortName: "price-cheap" },
-  ];
-
-  
   const initializeStores = () => {
     const query = qs.parse(route.query as unknown as string);
 
@@ -51,15 +38,12 @@ export function useInitializeStores() {
       filterSortObj.onlyExist =
         (filterSortObj.onlyExist as unknown) === "false" ? false : true;
 
-  
       filterStore.setAllFilter({
         filters: filterSortObj.filters,
         onlyExist: filterSortObj.onlyExist,
       });
 
-
       sortStore.updateSortField(filterSortObj.sortField as SortType);
-      
     } else {
       filterStore.$reset();
       sortStore.$reset();
