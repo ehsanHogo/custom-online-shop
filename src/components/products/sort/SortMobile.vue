@@ -4,7 +4,7 @@ import { SortType } from "../../../types/interfaces";
 
 import useSortStore from "../../../store/useSortStore";
 import { storeToRefs } from "pinia";
-// import { useModalStore } from "../../../store/useModalsStore";
+
 
 interface SortItems {
   name: string;

@@ -31,6 +31,19 @@ export interface FilterItemShowing {
   id: string;
 }
 
+export interface FilterListCheckbox {
+  name: string;
+  presentation: string;
+  id: string;
+  open: boolean;
+}
+
+export interface SelectedFilterItemType {
+  name: string;
+  type: string;
+  id: string;
+}
+
 export interface FilterType {
   name: string;
   option_values: FilterItemShowing[];

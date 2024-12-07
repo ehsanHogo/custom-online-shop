@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ShowCards from "../components/products/cards/ShowCards.vue";
-import { onBeforeMount, onMounted, onUnmounted, ref } from "vue";
+import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 import Pagination from "../components/Common/Pagination.vue";
 import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
 
@@ -40,15 +40,37 @@ const { initializeStores } = useInitializeStores();
 const { handleStoreUpdate } = useHandleStoreUpdate();
 // subscribe & watch
 
-filterStore.$subscribe((mutation, _) => {
-  const isKeyFiltered = Array.isArray(mutation.events)
-    ? mutation.events.some((event) => event.key !== "filtersType")
-    : mutation.events.key !== "filtersType";
+// watch(
+//   () => filterStore.allFilter,
+//   () => {
+//     handleStoreUpdate();
+//   }
+// );
 
-  if (isKeyFiltered) {
+watch(
+  () => filterStore.allFilter,
+  () => {
     handleStoreUpdate();
-  }
-});
+  },
+  { deep: true }
+);
+
+// filterStore.$subscribe((mutation, _) => {
+//   console.log(mutation);
+
+//   const isKeyFiltered = Array.isArray(mutation.events)
+//     ? mutation.events.some(
+//         (event) =>
+//           event.key !== "filtersType" && event.key !== "selectedFilters"
+//       )
+//     : mutation.events.key !== "filtersType" &&
+//       mutation.events.key !== "selectedFilters";
+//   console.log(isKeyFiltered);
+
+//   if (isKeyFiltered) {
+//     handleStoreUpdate();
+//   }
+// });
 
 sortStore.$subscribe((_) => {
   handleStoreUpdate();
@@ -57,7 +79,6 @@ sortStore.$subscribe((_) => {
 pageStore.$subscribe((_) => {
   handleStoreUpdate();
 });
-
 
 const screenStore = useScreenStore();
 

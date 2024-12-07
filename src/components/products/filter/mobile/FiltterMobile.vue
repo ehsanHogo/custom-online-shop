@@ -6,7 +6,8 @@ import FilterColor from "../desktop/FilterColor.vue";
 import { FilterItemOptions, FilterType } from "../../../../types/interfaces";
 import useFilterStore from "../../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
-// import { useModalStore } from "../../../../store/useModalsStore";
+import FilterColorMobile from "./FilterColorMobile.vue";
+import FilterSizeMobile from "./FilterSizeMobile.vue";
 
 interface MyProps {
   filterData: FilterType[];
@@ -44,21 +45,38 @@ const deleteAllFilter = () => {
   filterStore.resetAllFilter();
 };
 
+const onlyExist = ref(allFilter.value.onlyExist);
 const onExistSwitchChange = () => {
-  filterStore.changeOnlyExist();
+  onlyExist.value = !onlyExist.value;
 };
 
-
-
 const handleCloseFilter = () => {
+  filterStore.resetSelectedFilter();
+  onlyExist.value = false;
   toggleModal();
 };
 
 const showModal = ref(false);
-// const  cattegoriesShow = storeToRefs(modalsStore.)
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
+};
+
+const updateFilters = () => {
+  const selectedFilters = filterStore.selectedFilters.map((item) => {
+    return {
+      filterCriteria: item.name,
+      filterType: item.type,
+      criteriaId: item.id,
+    };
+  });
+
+  filterStore.setAllFilter({
+    filters: selectedFilters,
+    onlyExist: onlyExist.value,
+  });
+
+  showModal.value = false;
 };
 </script>
 
@@ -109,7 +127,7 @@ const toggleModal = () => {
             <VaSwitch
               size="small"
               v-else-if="index === 4"
-              :model-value="allFilter.onlyExist"
+              :model-value="onlyExist"
               @update:modelValue="onExistSwitchChange"
             />
             <img
@@ -120,24 +138,32 @@ const toggleModal = () => {
 
             <p class="">{{ filterButton.name }}</p>
           </button>
-          <FilterSize
+          <FilterSizeMobile
             :filterSizeData="props.filterData[1].option_values"
             v-if="
               filterButtons[index].name === 'اندازه' &&
               filterButtons[index].open &&
               props.filterData.length !== 0
             "
-          ></FilterSize>
+          ></FilterSizeMobile>
 
-          <FilterColor
+          <FilterColorMobile
             :filterColorData="props.filterData[0].option_values"
             v-if="
               filterButtons[index].name === 'رنگ' &&
               filterButtons[index].open &&
               props.filterData.length !== 0
             "
-          ></FilterColor>
+          ></FilterColorMobile>
         </div>
+      </div>
+      <div class="flex justify-center items-center">
+        <button
+          @click="updateFilters"
+          class="border bg-redp w-2/3 h-10 rounded-sm text-white"
+        >
+          <b> اعمال فیلتر</b>
+        </button>
       </div>
     </div>
   </VaModal>

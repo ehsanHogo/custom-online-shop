@@ -3,6 +3,7 @@ import {
   AllFiltersType,
   FilterItemType,
   FilterType,
+  SelectedFilterItemType,
 } from "../types/interfaces";
 
 import usePageStore from "./usePageData";
@@ -15,10 +16,10 @@ const useFilterStore = defineStore("filters", {
     } as AllFiltersType,
 
     filtersType: [] as FilterType[],
+    selectedFilters: [] as SelectedFilterItemType[],
   }),
   getters: {},
   actions: {
-   
     updateFilters(action: () => void) {
       action(); // Perform the specific filter update
       const pageStore = usePageStore();
@@ -58,7 +59,22 @@ const useFilterStore = defineStore("filters", {
       this.updateFilters(() => {
         this.allFilter.filters = [];
         this.allFilter.onlyExist = false;
+
+        this.selectedFilters = [];
       });
+    },
+
+    resetSelectedFilter() {
+      this.selectedFilters = [];
+    },
+
+    addSelectedFilters(val: SelectedFilterItemType) {
+      this.selectedFilters.push(val);
+    },
+    deleteSelectedFilters(val: string) {
+      this.selectedFilters = this.selectedFilters.filter(
+        (item) => item.id !== val
+      );
     },
   },
 });
