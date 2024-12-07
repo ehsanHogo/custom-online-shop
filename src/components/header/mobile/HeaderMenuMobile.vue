@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { useModalStore } from "../../../store/useModalsStore";
 
 const modalsStore = useModalStore();
@@ -17,4 +17,4 @@ const toggleModal = () => {
       @click="toggleModal"
     />
   </button>
-</template>
+</template> -->

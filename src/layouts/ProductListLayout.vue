@@ -16,7 +16,7 @@ import CattegorieseDesktop from "../components/products/cattegories/Cattegoriese
 import CattegoriesMobile from "../components/products/cattegories/CattegoriesMobile.vue";
 import SortDesktop from "../components/products/sort/SortDesktop.vue";
 import SortMobile from "../components/products/sort/SortMobile.vue";
-import { useModalStore } from "../store/useModalsStore";
+// import { useModalStore } from "../store/useModalsStore";
 import FilterDesktop from "../components/products/filter/desktop/FilterDesktop.vue";
 import FiltterMobile from "../components/products/filter/mobile/FiltterMobile.vue";
 import useScreenStore from "../store/useScreenStore";
@@ -58,7 +58,7 @@ pageStore.$subscribe((_) => {
   handleStoreUpdate();
 });
 
-const modalsStore = useModalStore();
+
 const screenStore = useScreenStore();
 
 onBeforeMount(() => {
@@ -72,7 +72,7 @@ onBeforeMount(() => {
       v-if="screenStore.isDesktop"
       class="pt-5"
     ></CattegorieseDesktop>
-    <CattegoriesMobile class="pt-5"></CattegoriesMobile>
+    <!-- <CattegoriesMobile class="pt-5"></CattegoriesMobile> -->
     <div
       class="flex flex-col xsm:grid xsm:grid-cols-2 md:grid-cols-4 py-5 px-8 gap-4 w-full"
     >
@@ -82,7 +82,7 @@ onBeforeMount(() => {
         <SortDesktop v-if="screenStore.isDesktop"></SortDesktop>
 
         <div class="flex gap-4 col-span-2 max-xsm:mb-3" dir="rtl" v-else>
-          <button
+          <!-- <button
             @click="() => modalsStore.toggleFilterModal()"
             class="flex gap-1 justify-center items-center"
           >
@@ -91,11 +91,11 @@ onBeforeMount(() => {
               alt="filter icon"
             />
             <p>فیلتر</p>
-          </button>
+          </button> -->
 
           <FiltterMobile :filterData="filterStore.filtersType"></FiltterMobile>
 
-          <button
+          <!-- <button
             @click="() => modalsStore.toggleSortModal()"
             class="flex gap-1 justify-center items-center"
           >
@@ -104,7 +104,7 @@ onBeforeMount(() => {
               alt="sort icon"
             />
             <p>{{ sortStore.sortName }}</p>
-          </button>
+          </button> -->
           <SortMobile></SortMobile>
         </div>
 

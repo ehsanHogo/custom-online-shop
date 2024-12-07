@@ -6,6 +6,7 @@ import HeaderUserAccountDesktop from "./desktop/HeaderUserAccountDesktop.vue";
 import HeaderSearchBarDesktop from "./desktop/HeaderSearchBarDesktop.vue";
 import HeaderSearchBarMobile from "./mobile/HeaderSearchBarMobile.vue";
 import useScreenStore from "../../store/useScreenStore";
+import CattegoriesMobile from "../products/cattegories/CattegoriesMobile.vue";
 
 const screenStore = useScreenStore();
 </script>
@@ -25,7 +26,7 @@ const screenStore = useScreenStore();
       <img src="../../assets/images/header/LOGO.png" alt="online shop logo"
     /></router-link>
     <HeaderSearchBarMobile></HeaderSearchBarMobile>
-    <HeaderMenuMobile></HeaderMenuMobile>
+    <CattegoriesMobile></CattegoriesMobile>
   </div>
 </template>
 

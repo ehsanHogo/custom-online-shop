@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useModalStore } from "../../../store/useModalsStore";
+// import { useModalStore } from "../../../store/useModalsStore";
+import { ref } from "vue";
 
 const categories: string[] = [
   "پوشاک",
@@ -18,18 +19,26 @@ const helpList: string[] = [
   "راهنمای خرید",
 ];
 
-const modalsStore = useModalStore();
 
+const showModal = ref(false);
 // const  cattegoriesShow = storeToRefs(modalsStore.)
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 
 <template>
-  <VaModal
-    ref="modal"
-    v-model="modalsStore.cattegoriesModal"
-    fullscreen
-    hide-default-actions
-  >
+  <button v-if="!showModal">
+    <img
+      src="../../../assets/images/header/menu.png"
+      alt="header menu"
+      class="w-8 h-8"
+      @click="toggleModal"
+    />
+  </button>
+
+  <VaModal ref="modal" v-model="showModal" fullscreen hide-default-actions>
     <div class="flex flex-col items-center px-5 font-MyFont">
       <button
         v-for="(cat, index) in categories"

@@ -6,7 +6,7 @@ import FilterColor from "../desktop/FilterColor.vue";
 import { FilterItemOptions, FilterType } from "../../../../types/interfaces";
 import useFilterStore from "../../../../store/useFilterStore";
 import { storeToRefs } from "pinia";
-import { useModalStore } from "../../../../store/useModalsStore";
+// import { useModalStore } from "../../../../store/useModalsStore";
 
 interface MyProps {
   filterData: FilterType[];
@@ -48,18 +48,32 @@ const onExistSwitchChange = () => {
   filterStore.changeOnlyExist();
 };
 
-const modalsStore = useModalStore();
+
 
 const handleCloseFilter = () => {
-  modalsStore.toggleFilterModal();
-  return { name: "products" };
+  toggleModal();
+};
+
+const showModal = ref(false);
+// const  cattegoriesShow = storeToRefs(modalsStore.)
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
 };
 </script>
 
 <template>
+  <button @click="toggleModal" class="flex gap-1 justify-center items-center">
+    <img
+      src="../../../../assets/images/body/products/setting.png"
+      alt="filter icon"
+    />
+    <p>فیلتر</p>
+  </button>
+
   <VaModal
     ref="modal"
-    v-model="modalsStore.filterModal"
+    v-model="showModal"
     hide-default-actions
     size="large"
     :noDismiss="true"
@@ -74,12 +88,12 @@ const handleCloseFilter = () => {
         <div class="flex justify-center items-center pr-5">
           <b class="p-5">فیلتر ها</b>
 
-          <router-link :to="handleCloseFilter">
+          <button @click="handleCloseFilter">
             <img
               src="../../../../assets/images/body/black-arrow-right.png"
               alt=""
             />
-          </router-link>
+          </button>
         </div>
       </div>
 

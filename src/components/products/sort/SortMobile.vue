@@ -4,7 +4,7 @@ import { SortType } from "../../../types/interfaces";
 
 import useSortStore from "../../../store/useSortStore";
 import { storeToRefs } from "pinia";
-import { useModalStore } from "../../../store/useModalsStore";
+// import { useModalStore } from "../../../store/useModalsStore";
 
 interface SortItems {
   name: string;
@@ -35,18 +35,26 @@ const changeItem = (index: number) => {
   sortStore.updateSortName(sortItems[index].name);
 
   sortStore.updateSortField(sortItems[index].sortName);
-  modalsStore.toggleSortModal();
+  toggleModal();
 };
 
-const modalsStore = useModalStore();
+const showModal = ref(false);
+// const  cattegoriesShow = storeToRefs(modalsStore.)
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 
 <template>
-  <div></div>
+  <button @click="toggleModal" class="flex gap-1 justify-center items-center">
+    <img src="../../../assets/images/body/products/sort.png" alt="sort icon" />
+    <p>{{ sortStore.sortName }}</p>
+  </button>
 
   <VaModal
     ref="modal"
-    v-model="modalsStore.sortModal"
+    v-model="showModal"
     size="large"
     hide-default-actions
     :noDismiss="true"
@@ -57,7 +65,7 @@ const modalsStore = useModalStore();
       dir="rtl"
     >
       <div class="flex gap-3 mb-2 justify-start items-center">
-        <button @click="() => modalsStore.toggleSortModal()">
+        <button @click="toggleModal">
           <img
             src="../../../assets/images/body/products/close-circle.png"
             alt="close icon"
