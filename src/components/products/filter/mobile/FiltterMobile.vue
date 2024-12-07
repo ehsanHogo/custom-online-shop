@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import FilterSize from "../desktop/FilterSize.vue";
 
-import FilterColor from "../desktop/FilterColor.vue";
 import { FilterItemOptions, FilterType } from "../../../../types/interfaces";
 import useFilterStore from "../../../../store/useFilterStore";
 import { storeToRefs } from "pinia";

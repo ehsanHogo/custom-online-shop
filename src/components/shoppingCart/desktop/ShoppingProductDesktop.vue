@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AddRemoveProduct from "../../Common/AddRemoveProduct.vue";
-import { ShoppingProductType } from "../../../types/interfaces";
 import useCartStore from "../../../store/useCartStore";
 import { storeToRefs } from "pinia";
 

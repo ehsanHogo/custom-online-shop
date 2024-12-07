@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-// import { useModalStore } from "../../../store/useModalsStore";
 import { ref } from "vue";
 
 const categories: string[] = [
@@ -19,9 +17,7 @@ const helpList: string[] = [
   "راهنمای خرید",
 ];
 
-
 const showModal = ref(false);
-
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
@@ -66,4 +62,3 @@ const toggleModal = () => {
     </div>
   </VaModal>
 </template>
-

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ShowCards from "../components/products/cards/ShowCards.vue";
-import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
+import { onBeforeMount, watch } from "vue";
 import Pagination from "../components/Common/Pagination.vue";
 import CardSkeleton from "../components/products/cards/CardSkeleton.vue";
 
@@ -13,7 +13,6 @@ import { useInitializeStores } from "../composables/useInitializeStores";
 import { useHandleStoreUpdate } from "../composables/useHandleStoreUpdate";
 
 import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
-import CattegoriesMobile from "../components/products/cattegories/CattegoriesMobile.vue";
 import SortDesktop from "../components/products/sort/SortDesktop.vue";
 import SortMobile from "../components/products/sort/SortMobile.vue";
 // import { useModalStore } from "../store/useModalsStore";

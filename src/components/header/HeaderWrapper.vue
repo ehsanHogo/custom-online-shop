@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import HeaderMenuMobile from "./mobile/HeaderMenuMobile.vue";
 import HeaderShopBrandDesktop from "./desktop/HeaderShopBrandDesktop.vue";
 import HeaderUserAccountDesktop from "./desktop/HeaderUserAccountDesktop.vue";
 import HeaderSearchBarDesktop from "./desktop/HeaderSearchBarDesktop.vue";

@@ -2,7 +2,6 @@
 import ShoppingRegistration from "../components/shoppingCart/ShoppingRegistration.vue";
 import ShopppingAlerts from "../components/shoppingCart/ShopppingAlerts.vue";
 import CattegorieseDesktop from "../components/products/cattegories/CattegorieseDesktop.vue";
-import usePageStore from "../store/usePageData";
 import ShoppingProductDesktop from "../components/shoppingCart/desktop/ShoppingProductDesktop.vue";
 import ShoppingProductMobile from "../components/shoppingCart/mobile/ShoppingProductMobile.vue";
 import useScreenStore from "../store/useScreenStore";
