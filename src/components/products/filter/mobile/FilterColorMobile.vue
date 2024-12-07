@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import {
   FilterItemShowing,
   FilterListCheckbox,
@@ -32,6 +32,23 @@ const updateOpenFlag = (index: number) => {
     filterStore.deleteSelectedFilters(filterList.value[index].id);
   }
 };
+
+watch(
+  () => filterStore.selectedFilters,
+  (newVal) => {
+    // handle delete all filetrs
+    if (newVal.length === 0) {
+      const updateFilterList: FilterListCheckbox[] = props.filterColorData.map(
+        (item) => ({
+          ...item,
+          open: false,
+        })
+      );
+
+      filterList.value = updateFilterList;
+    }
+  }
+);
 
 onMounted(() => {
   const updateFilterList: FilterListCheckbox[] = props.filterColorData.map(
