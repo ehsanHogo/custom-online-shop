@@ -13,8 +13,10 @@ import SocialMediaLinks from "../SocialMediaLinks.vue";
 
     <SocialMediaLinks></SocialMediaLinks>
 
-    <div class="flex justify-end px-4 text-white">
-      <p>تمام حقوق این وبسایت متعلق به فروشگاه آنلاین کاستومی می باشد</p>
+    <div class="flex justify-center px-4 text-white">
+      <p class="text-center">
+        تمام حقوق این وبسایت متعلق به فروشگاه آنلاین کاستومی می باشد
+      </p>
     </div>
   </div>
 </template>

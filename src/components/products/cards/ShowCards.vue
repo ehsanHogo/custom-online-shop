@@ -72,7 +72,7 @@ cartStore.$subscribe((mutation) => {
 <template>
   <div class="w-full h-full flex justify-center">
     <div
-      class="w-[250px] md:w-[180px] lg:w-[240px] xl:w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[425px] justify-around"
+      class="w-[250px] md:w-[180px] lg:w-[230px] xl:w-[250px] border drop-shadow-md rounded-md p-4 flex flex-col gap-3 h-[425px] justify-around"
     >
       <img
         class="rounded-sm h-[200px]"
@@ -94,7 +94,7 @@ cartStore.$subscribe((mutation) => {
       </p>
       <b>{{ props.price }} </b>
 
-      <div class="flex justify-end">
+      <div class="flex justify-center">
         <button
           v-if="!changeToCounter"
           @click="addFirstItem"

@@ -4,19 +4,15 @@ export default {
   theme: {
     fontFamily: {
       MyFont: ["iranYekan"],
-      // MyFontBold: ["yekanBold"],
     },
 
-    fontWeight: {
-      // medium: "500",
-    },
+    fontWeight: {},
 
     borderRadius: {
       none: "0",
       xs: "4px",
       sm: "8px",
-      // DEFAULT: '0.25rem',
-      // DEFAULT: '4px',
+
       md: "16px",
       lg: "24px",
 
@@ -34,15 +30,14 @@ export default {
         Tint: {
           5: "#DCACB1",
         },
-        // gray: "#434343",
+
         redp: "#A72F3B",
         primaryShade6: "#641C23",
-        // white: "#fff",
       },
 
       screens: {
-        // md: "820px",
         xsm: "545px",
+        md: "821px",
       },
     },
   },

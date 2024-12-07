@@ -14,7 +14,7 @@ const screenStore = useScreenStore();
 const showHeader = ref(true);
 
 const checkViewport = () => {
-  if (window.innerWidth >= 768) {
+  if (window.innerWidth >= 821) {
     screenStore.setIsDesktop(true);
     showHeader.value = true;
     pageStore.setNumberOfProductsInPage(9);

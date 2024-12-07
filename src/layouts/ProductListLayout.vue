@@ -74,7 +74,7 @@ onBeforeMount(() => {
       class="flex flex-col xsm:grid xsm:grid-cols-2 md:grid-cols-4 py-5 px-8 gap-4 w-full"
     >
       <div
-        class="flex flex-col justify-center w-full xsm:col-span-2 xsm:grid-cols-2 xsm:gap-5 xsm:auto-rows-min xsm:justify-center xsm:grid md:col-span-3 md:grid-cols-3 md:gap-3 md:justify-start items-center md:items-start"
+        class="flex flex-col justify-center gap-2 w-full xsm:col-span-2 xsm:grid-cols-2 xsm:gap-5 xsm:auto-rows-min xsm:justify-center xsm:grid md:col-span-3 md:grid-cols-3 md:gap-3 md:justify-start items-center md:items-start"
       >
         <SortDesktop v-if="screenStore.isDesktop"></SortDesktop>
 
